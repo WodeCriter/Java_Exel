@@ -3,7 +3,6 @@ package exel.engine.spreadsheet.cell.imp;
 import java.util.List;
 
 import exel.engine.expressions.api.Expression;
-//import shticell.expression.api.impl.UpperCaseExpression;
 import exel.engine.effectivevalue.api.EffectiveValue;
 
 
@@ -48,9 +47,9 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
     public void calculateEffectiveValue() {
         // build the expression
 
-        //Expression expression = new expression;
+        //Expression expression = new ;
 
-        effectiveValue = expression.eval();
+        //effectiveValue = expression.eval();
     }
 
     @Override
