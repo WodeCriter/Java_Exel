@@ -6,7 +6,6 @@ import exel.engine.expressions.api.Expression;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 public class PlusExpression implements Expression {
-
     private Expression left;
     private Expression right;
 

@@ -44,12 +44,15 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
     }
 
     @Override
+    //TODO: code this
     public void calculateEffectiveValue() {
         // build the expression
+        // 60 + 46 ---> 106(expression(NUM))
+        // A3 + B4 ---> 70 + 50 ----> 120
 
         //Expression expression = new ;
 
-        //effectiveValue = expression.eval();
+        //effectiveValue = expression.eval(); ----> 106(expression(NUM))
     }
 
     @Override
