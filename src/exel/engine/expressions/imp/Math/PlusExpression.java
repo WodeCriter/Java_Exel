@@ -26,4 +26,10 @@ public class PlusExpression implements Expression {
 
         return new EffectiveValueImp(CellType.NUMERIC, result);
     }
+
+    @Override
+    public CellType getFunctionResultType()
+    {
+        return CellType.NUMERIC;
+    }
 }

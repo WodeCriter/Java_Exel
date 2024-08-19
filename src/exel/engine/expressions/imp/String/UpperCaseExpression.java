@@ -17,4 +17,10 @@ public class UpperCaseExpression implements Expression {
     public EffectiveValue eval() {
         return new EffectiveValueImp(CellType.STRING, value.toUpperCase());
     }
+
+    @Override
+    public CellType getFunctionResultType()
+    {
+        return CellType.STRING;
+    }
 }

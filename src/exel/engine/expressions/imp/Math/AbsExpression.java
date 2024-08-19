@@ -22,4 +22,10 @@ public class AbsExpression implements Expression {
         double result = Math.abs(expValue.extractValueWithExpectation(Double.class));
         return new EffectiveValueImp(CellType.NUMERIC, result);
     }
+
+    @Override
+    public CellType getFunctionResultType()
+    {
+        return CellType.NUMERIC;
+    }
 }

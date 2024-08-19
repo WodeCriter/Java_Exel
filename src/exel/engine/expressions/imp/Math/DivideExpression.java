@@ -29,4 +29,10 @@ public class DivideExpression implements Expression {
         double result = leftValue.extractValueWithExpectation(Double.class) / rightNum;
         return new EffectiveValueImp(CellType.NUMERIC, result);
     }
+
+    @Override
+    public CellType getFunctionResultType()
+    {
+        return CellType.NUMERIC;
+    }
 }

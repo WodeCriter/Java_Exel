@@ -7,9 +7,9 @@ import exel.engine.spreadsheet.cell.api.CellType;
 
 public class ConcatExpression implements Expression
 {
-    private final String left, right;
+    private final Expression left, right;
 
-    public ConcatExpression(String left, String right)
+    public ConcatExpression(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;
@@ -18,6 +18,21 @@ public class ConcatExpression implements Expression
     @Override
     public EffectiveValue eval()
     {
-        return new EffectiveValueImp(CellType.STRING, left + right);
+        EffectiveValue leftValue = left.eval();
+        EffectiveValue rightValue = right.eval();
+
+        if (leftValue.getCellType() != CellType.STRING || rightValue.getCellType() != CellType.STRING )
+            throw new RuntimeException("All items should be strings");
+
+        String leftStr = leftValue.extractValueWithExpectation(String.class);
+        String rightStr = rightValue.extractValueWithExpectation(String.class);
+
+        return new EffectiveValueImp(CellType.STRING, leftStr + rightStr);
+    }
+
+    @Override
+    public CellType getFunctionResultType()
+    {
+        return CellType.STRING;
     }
 }
