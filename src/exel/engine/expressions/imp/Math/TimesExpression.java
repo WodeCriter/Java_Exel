@@ -20,7 +20,7 @@ public class TimesExpression implements Expression {
         EffectiveValue rightValue = right.eval();
 
         if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC )
-            return null; //should throw exception
+             throw new RuntimeException("Not all items are numeric values");
 
         double result = leftValue.extractValueWithExpectation(Double.class) * rightValue.extractValueWithExpectation(Double.class);
 

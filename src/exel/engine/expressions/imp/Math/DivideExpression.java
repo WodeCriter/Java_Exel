@@ -19,11 +19,14 @@ public class DivideExpression implements Expression {
         EffectiveValue leftValue = left.eval();
         EffectiveValue rightValue = right.eval();
 
-        if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC )
-            return null; //should throw exception
+        if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC)
+            throw new RuntimeException("Not all items are numeric values");
 
-        double result = leftValue.extractValueWithExpectation(Double.class) / rightValue.extractValueWithExpectation(Double.class);
+        double rightNum = rightValue.extractValueWithExpectation(Double.class);
+        if (rightNum == 0)
+            throw new RuntimeException("Cannot divide by zero");
 
+        double result = leftValue.extractValueWithExpectation(Double.class) / rightNum;
         return new EffectiveValueImp(CellType.NUMERIC, result);
     }
 }

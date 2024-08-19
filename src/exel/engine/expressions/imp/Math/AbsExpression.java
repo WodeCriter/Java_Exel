@@ -17,7 +17,7 @@ public class AbsExpression implements Expression {
         EffectiveValue expValue = exp.eval();
 
         if (expValue.getCellType() != CellType.NUMERIC)
-            return null; //should throw exception
+            throw new RuntimeException("Not all items are numeric values");
 
         double result = Math.abs(expValue.extractValueWithExpectation(Double.class));
         return new EffectiveValueImp(CellType.NUMERIC, result);
