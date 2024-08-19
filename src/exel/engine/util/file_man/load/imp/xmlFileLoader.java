@@ -1,6 +1,7 @@
 package exel.engine.util.file_man.load.imp;
 
 import exel.engine.spreadsheet.api.Sheet;
+import exel.engine.util.file_man.STLConverter.imp.STLConverter;
 import exel.engine.util.jaxb.classes.STLSheet;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -27,7 +28,7 @@ public class xmlFileLoader {
             // Unmarshal the XML content to Java object
             File file = new File(filePath);
             STLSheet sheetFromFile = (STLSheet) unmarshaller.unmarshal(file);
-            return null;
+            return STLConverter.fromSTLSheet(sheetFromFile);
         } catch (JAXBException e) {
             e.printStackTrace();
             return null; // or handle the error as appropriate
