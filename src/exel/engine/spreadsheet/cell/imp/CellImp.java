@@ -4,6 +4,7 @@ import java.util.List;
 
 import exel.engine.expressions.api.Expression;
 import exel.engine.effectivevalue.api.EffectiveValue;
+import exel.engine.expressions.imp.FunctionParser;
 
 
 public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
@@ -15,13 +16,14 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
     private final List<CellImp> dependsOn;
     private final List<CellImp> influencingOn;
 
-    public CellImp(String coordinate, String originalValue, EffectiveValue effectiveValue, int version, List<CellImp> dependsOn, List<CellImp> influencingOn) {
+    //TODO: dependsOn needs to be updated by calculateEffectiveValue()
+    public CellImp(String coordinate, String originalValue) {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
-        this.effectiveValue = effectiveValue;
-        this.version = version;
-        this.dependsOn = dependsOn;
-        this.influencingOn = influencingOn;
+        this.version = 1;
+        calculateEffectiveValue();
+        this.dependsOn = null;
+        this.influencingOn = null;
     }
     @Override
     public String getCoordinate() {
@@ -45,11 +47,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
 
     @Override
     public void calculateEffectiveValue() {
-        // build the expression
-
-        //Expression expression = new ;
-
-        //effectiveValue = expression.eval();
+        effectiveValue = FunctionParser.parseExpression(originalValue).eval();
     }
 
     @Override

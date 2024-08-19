@@ -1,4 +1,4 @@
-package exel.engine.expressions.imp;
+package exel.engine.expressions.imp.Math;
 
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;
@@ -6,7 +6,6 @@ import exel.engine.expressions.api.Expression;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 public class PlusExpression implements Expression {
-
     private Expression left;
     private Expression right;
 
@@ -19,10 +18,18 @@ public class PlusExpression implements Expression {
     public EffectiveValue eval() {
         EffectiveValue leftValue = left.eval();
         EffectiveValue rightValue = right.eval();
-        // do some checking... error handling...
-        //double result = (Double) leftValue.getValue() + (Double) rightValue.getValue();
+
+        if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC )
+            throw new RuntimeException("Not all items are numeric values");
+
         double result = leftValue.extractValueWithExpectation(Double.class) + rightValue.extractValueWithExpectation(Double.class);
 
         return new EffectiveValueImp(CellType.NUMERIC, result);
+    }
+
+    @Override
+    public CellType getFunctionResultType()
+    {
+        return CellType.NUMERIC;
     }
 }

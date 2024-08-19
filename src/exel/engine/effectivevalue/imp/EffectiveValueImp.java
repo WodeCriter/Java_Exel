@@ -4,7 +4,6 @@ import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 public class EffectiveValueImp implements EffectiveValue {
-
     private CellType cellType;
     private Object value;
 

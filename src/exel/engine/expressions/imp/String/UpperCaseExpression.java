@@ -1,4 +1,4 @@
-package exel.engine.expressions.imp;
+package exel.engine.expressions.imp.String;
 
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;
@@ -16,5 +16,11 @@ public class UpperCaseExpression implements Expression {
     @Override
     public EffectiveValue eval() {
         return new EffectiveValueImp(CellType.STRING, value.toUpperCase());
+    }
+
+    @Override
+    public CellType getFunctionResultType()
+    {
+        return CellType.STRING;
     }
 }
