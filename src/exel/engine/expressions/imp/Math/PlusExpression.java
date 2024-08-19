@@ -1,4 +1,4 @@
-package exel.engine.expressions.imp;
+package exel.engine.expressions.imp.Math;
 
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;
@@ -18,8 +18,10 @@ public class PlusExpression implements Expression {
     public EffectiveValue eval() {
         EffectiveValue leftValue = left.eval();
         EffectiveValue rightValue = right.eval();
-        // do some checking... error handling...
-        //double result = (Double) leftValue.getValue() + (Double) rightValue.getValue();
+
+        if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC )
+            return null; //should throw exception
+
         double result = leftValue.extractValueWithExpectation(Double.class) + rightValue.extractValueWithExpectation(Double.class);
 
         return new EffectiveValueImp(CellType.NUMERIC, result);
