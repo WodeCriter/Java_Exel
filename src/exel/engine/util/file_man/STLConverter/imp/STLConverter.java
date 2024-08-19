@@ -1,9 +1,14 @@
 package exel.engine.util.file_man.STLConverter.imp;
 
+import exel.engine.effectivevalue.api.EffectiveValue;
+import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.util.jaxb.classes.*;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.api.Sheet;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class STLConverter {
 
@@ -18,7 +23,12 @@ public class STLConverter {
         stlSize.setColumnWidthUnits(sheet.getCellWidth());
         stlSize.setRowsHeightUnits(sheet.getCellHeight());
 
-        //we need to initialize the layout first
+        //initialize the layout
+        stlLayout.setSTLSize(stlSize);
+        stlLayout.setRows(sheet.getNumOfRows());
+        stlLayout.setColumns(sheet.getNumOfCols());
+        stlSheet.setSTLLayout(stlLayout);
+        stlSheet.setName(sheet.getName());
 
         //create stlCell list from a list of cells
         for (Cell cell : sheet.getCells()) {
@@ -26,9 +36,10 @@ public class STLConverter {
 
             // Extracting coordinate data
             String coordinate = cell.getCoordinate();
-            String[] parts = coordinate.split(","); // Assuming the format "row,column"
-            int row = Integer.parseInt(parts[0].trim());
-            String column = parts[1].trim();
+            String[] parts = coordinate.split(","); // format is "Col,Row" i.e. cell A,4
+            int row = Integer.parseInt(parts[1].trim());
+            String column = parts[0].trim();
+
 
             // Set properties from Cell to STLCell
             stlCell.setSTLOriginalValue(cell.getOriginalValue());
@@ -38,23 +49,31 @@ public class STLConverter {
             // Add the constructed STLCell to the list of STLCells
             stlCells.getSTLCell().add(stlCell);
         }
-        stlSheet.setName(sheet.getName());
         stlSheet.setSTLCells(stlCells);
         return stlSheet;
     }
 
     // Convert from STL class to project class
     public static Sheet fromSTLSheet(STLSheet stlSheet) {
-        Sheet sheet = new SheetImp();
+        // Derive values from STLSheet
+        int cellHeight = stlSheet.getSTLLayout().getSTLSize().getRowsHeightUnits();
+        int cellWidth = stlSheet.getSTLLayout().getSTLSize().getColumnWidthUnits();  // Default or derived value
+        int numOfCols = stlSheet.getSTLLayout().getColumns();
+        int numOfRows = stlSheet.getSTLLayout().getRows();
+        String sheetName = stlSheet.getName();
 
-        for (STLCell stlCell : stlSheet.getCells().getSTLCell()) {
-            CellImp cell = new CellImp();
-            // Set properties from STLCell to CellImp
-            cell.setContent(stlCell.getContent());
-            cell.setX(stlCell.getPositionX());
-            cell.setY(stlCell.getPositionY());
-            sheet.addCell(cell);
+        // Create a new SheetImp instance with derived or default values
+        SheetImp sheet = new SheetImp(cellHeight, cellWidth, numOfCols, numOfRows, sheetName);
+
+        // Loop through each STLCell in the STLCells of the STLSheet and set them inside the sheet object
+        for (STLCell stlCell : stlSheet.getSTLCells().getSTLCell()) {
+            // get values for each
+            String coordinate = stlCell.getColumn() + "," + stlCell.getColumn();
+            String originalVal = stlCell.getSTLOriginalValue();
+            // Add cell to the sheet
+            sheet.setCell(coordinate, originalVal);
         }
 
         return sheet;
     }
+}
