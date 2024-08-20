@@ -10,11 +10,12 @@ public class MainMenu implements Menu {
     private final static int MAX_COLUMN_NUM = 20;
     private final static int MAX_ROW_NUM = 50;
     private final static int DEFAULT_CELL_WIDTH = 5;
-    private final static int DEFAULT_CELL_LENGTH = 1;
+    private final static int DEFAULT_CELL_HEIGHT = 1;
 
 
-    public MainMenu(Engine engineAPI) {
+    public MainMenu(Engine engineAPI, InputHandler inputhandler) {
         this.engineAPI = engineAPI;
+        this.inputHandler = inputhandler;
     }
 
     @Override
@@ -31,13 +32,13 @@ public class MainMenu implements Menu {
     public void handleUserChoice(int choice) {
         switch (choice) {
             case 1:
-                // logic to create new spreadsheet
+                createNewSpreadsheet();
                 break;
             case 2:
                 loadSpreadsheet();
                 break;
             case 3:
-                //logic to load system file
+                loadSystemState();
                 break;
             case 9:
                 System.out.println("Exiting...");
@@ -71,7 +72,11 @@ public class MainMenu implements Menu {
         System.out.println("Enter desired number of columns (up to 20)");
         int columnNum = this.inputHandler.readIntRange(1,20);
         System.out.println("Enter desired number of rows (up to 50)");
-        int rowNum = this.inputHandler.readIntRange(1,20);
-        this.engineAPI.createSheet();
+        int rowNum = this.inputHandler.readIntRange(1,50);
+        this.engineAPI.createSheet(sheetName,DEFAULT_CELL_HEIGHT, DEFAULT_CELL_WIDTH, columnNum, rowNum);
+    }
+    private void loadSystemState() {
+        //TODO: implement
+        System.out.println("Not implemented yet");
     }
 }
