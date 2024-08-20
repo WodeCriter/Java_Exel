@@ -74,7 +74,7 @@ public class EngineImp implements Engine {
         // Simulated save logic
         File file = new File(filePath);
         if (file.createNewFile()) {
-            System.out.println("Spreadsheet saved to " + filePath);
+            return;
         } else {
             throw new Exception("Failed to save the spreadsheet.");
         }
