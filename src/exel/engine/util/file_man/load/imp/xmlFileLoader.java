@@ -17,7 +17,7 @@ public class xmlFileLoader {
      * @param filePath The path to the XML file.
      * @return The loaded object or null if an error occurs.
      */
-    public Sheet loadSpreadsheet(String filePath) {
+    public static Sheet loadSpreadsheet(String filePath) {
         try {
             // Create a JAXB context passing in the class of the generated JAXB classes
             JAXBContext jaxbContext = JAXBContext.newInstance(JAXB_PROJECT_XML_CLASSES);
