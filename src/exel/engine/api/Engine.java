@@ -9,7 +9,7 @@ public interface Engine {
     /**
      * Creates a new spreadsheet.
      */
-    void createSheet();
+    void createSheet(String sheetName, int cellHeight, int cellWidth,int numOfCols , int numOfRows);
 
     /**
      * Loads a spreadsheet from an XML file.
