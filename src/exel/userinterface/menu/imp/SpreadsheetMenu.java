@@ -47,7 +47,7 @@ public class SpreadsheetMenu implements Menu {
                 saveFile();
                 break;
             case 6:
-                //logic to load file
+                loadFile();
                 break;
             case 8:
                 System.out.println("Exiting to main menu...");
