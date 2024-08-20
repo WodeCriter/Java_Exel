@@ -1,5 +1,7 @@
 package exel.engine.api;
 
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
+
 import java.util.List;
 
 public interface Engine {
@@ -24,11 +26,10 @@ public interface Engine {
 
     /**
      * Retrieves the contents of a specific cell.
-     * @param row The row number of the cell.
-     * @param column The column letter of the cell.
+     * @param cellCoordinate The column letter of the cell.
      * @return The contents of the specified cell.
      */
-    ReadOnlyCell getCellContents(int row, char column);
+    ReadOnlyCell getCellContents(String cellCoordinate);
 
     /**
      * Updates the contents of a specific cell.
