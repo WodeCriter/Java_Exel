@@ -25,6 +25,10 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
         this.dependsOn = null;
         this.influencingOn = null;
     }
+
+    public CellImp(String coordinate){
+        this(coordinate, null);
+    }
     @Override
     public String getCoordinate() {
         return coordinate;
