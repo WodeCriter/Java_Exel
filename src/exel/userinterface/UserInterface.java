@@ -71,13 +71,15 @@ public class UserInterface {
         if (!path.endsWith(".xml")) {
             System.out.println("Error: The file must be an XML file (.xml extension).");
         } else {
-            // Assuming file is valid and content checks passed
+            // TODO: create exel.engine.EngineAPI.load()
             System.out.println("File loaded successfully. Spreadsheet is now at version 1.");
         }
     }
 
     //the function that will get a sheet object and display it on the screen
     private void displaySpreadsheet() {
+        //TODO: create exel.engine.EngineAPI.getSheet()
+
         // Mock data and display logic
         System.out.println("Version: 1");
         System.out.println("Spreadsheet: ExampleSheet");
@@ -104,23 +106,28 @@ public class UserInterface {
         }
     }
     private void createNewSpreadsheet() {
+        //TODO: create exel.engine.EngineAPI.createSheet()
         // Logic to create a new sheet
     }
 
     private void showCellContents() {
+        //TODO: create exel.engine.EngineAPI.getCellContents()
         // Logic to display contents of a specific cell
     }
 
     private void updateCellContents() {
+        //TODO: create exel.engine.EngineAPI.updateCellContents()
         // Logic to update contents of a specific cell
     }
 
     private void showVersion() {
-        // Display current version of the spreadsheet
+        //TODO: create exel.engine.EngineAPI.showVersion()
+        // Logic to update contents of a specific cell
     }
 
     private void saveAndExit() {
         // Logic to save the file and exit to the main menu
+        //TODO: create exel.engine.EngineAPI.saveFile()
         sheetLoaded = false; // Reset the sheetLoaded flag
         System.out.println("File saved and returning to main menu.");
     }
