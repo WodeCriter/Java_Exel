@@ -1,5 +1,6 @@
 package exel.engine.api;
 
+import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 
 import java.util.List;
@@ -33,12 +34,11 @@ public interface Engine {
 
     /**
      * Updates the contents of a specific cell.
-     * @param row The row number of the cell.
-     * @param column The column letter of the cell.
+     * @param coordinate The coordinate of the cell.
      * @param value The new value for the cell.
      * @throws Exception if there is an issue with updating the cell
      */
-    void updateCellContents(int row, char column, String value);
+    void updateCellContents(String coordinate, String value) throws Exception;
 
     /**
      * Retrieves the version of the current spreadsheet.
