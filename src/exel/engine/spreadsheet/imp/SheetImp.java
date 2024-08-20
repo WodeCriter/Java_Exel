@@ -50,9 +50,8 @@ public class SheetImp implements Sheet {
 
     @Override
     public void setCell(String coordinate, String value) {
-        //fix the constructor of cell
-        //Cell cell = activeCells.computeIfAbsent(coordinate, k -> new CellImp());
-        //cell.setCellOriginalValue(value);
+        Cell cell = activeCells.computeIfAbsent(coordinate, CellImp::new);
+        cell.setCellOriginalValue(value);
     }
 
     public int getCellHeight() {
