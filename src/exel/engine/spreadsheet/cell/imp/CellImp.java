@@ -1,12 +1,11 @@
 package exel.engine.spreadsheet.cell.imp;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import exel.engine.expressions.api.Expression;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.expressions.imp.FunctionParser;
+import exel.engine.spreadsheet.imp.SheetImp;
 
 
 public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
@@ -24,7 +23,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
         this.originalValue = originalValue;
         this.version = 1;
         calculateEffectiveValue();
-        setUpDependsOn();
+        this.dependsOn = null;
         this.influencingOn = null;
     }
 
@@ -32,11 +31,13 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
         this(coordinate, null);
     }
 
-    private void setUpDependsOn(){
-        dependsOn = new LinkedList<>();
-        List<String> dependsOnStr = FunctionParser.getCellsInString(originalValue);
-        //TODO: Needs to finish this method. Need to find a way to convert the coordinates into actual cells to add to dependsOn.
+    @Override
+    public void setUpDependsOn(SheetImp sheet){
+        dependsOn = new ArrayList<>();
+        influencingOn = new ArrayList<>();
+        sheet.setUpDependsOnOfCell(this, dependsOn);
     }
+
     @Override
     public String getCoordinate() {
         return coordinate;

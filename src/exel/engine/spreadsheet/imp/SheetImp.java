@@ -1,17 +1,15 @@
 package exel.engine.spreadsheet.imp;
 
+import exel.engine.expressions.imp.FunctionParser;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SheetImp implements Sheet {
 
-    private Map<String, Cell> activeCells;
+    private Map<String, CellImp> activeCells;
     private String sheetName;
     private int cellHeight;
     private int cellWidth;
@@ -44,7 +42,7 @@ public class SheetImp implements Sheet {
     }
 
     @Override
-    public Cell getCell(String coordinate) {
+    public CellImp getCell(String coordinate) {
         return activeCells.get(coordinate);
     }
 
@@ -52,6 +50,7 @@ public class SheetImp implements Sheet {
     public void setCell(String coordinate, String value) {
         Cell cell = activeCells.computeIfAbsent(coordinate, CellImp::new);
         cell.setCellOriginalValue(value);
+        cell.setUpDependsOn(this);
     }
 
     public int getCellHeight() {
@@ -68,5 +67,16 @@ public class SheetImp implements Sheet {
 
     public int getNumOfRows() {
         return numOfRows;
+    }
+
+    //TODO: Needs to update influencingOn as well
+    public void setUpDependsOnOfCell(CellImp cell, List<CellImp> dependsOn){
+        List<String> dependsOnStr = FunctionParser.getCellCordsInOriginalValue(cell.getOriginalValue());
+
+        for (String coordinate : dependsOnStr)
+        {
+            CellImp influencingCell = activeCells.computeIfAbsent(coordinate, CellImp::new);
+            dependsOn.add(influencingCell);
+        }
     }
 }

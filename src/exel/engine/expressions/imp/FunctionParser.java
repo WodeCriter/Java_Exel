@@ -197,7 +197,7 @@ public enum FunctionParser
         return parts;
     }
 
-    public static List<String> getCellsInString(String input) {
+    public static List<String> getCellCordsInOriginalValue(String input) {
         List<String> cellsList = null;
 
         if (input.startsWith("{") && input.endsWith("}"))
