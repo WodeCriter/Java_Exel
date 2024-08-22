@@ -198,32 +198,37 @@ public enum FunctionParser
     }
 
     public static List<String> getCellCordsInOriginalValue(String input) {
-        List<String> cellsList = null;
+        List<String> cellsList = new LinkedList<>();
 
-        if (input.startsWith("{") && input.endsWith("}"))
+        if (isStringACellCoordinate(input))
+            cellsList.add(input);
+        else if (input.startsWith("{") && input.endsWith("}"))
         {
             String functionContent = input.substring(1, input.length() - 1);
-            cellsList = parseMainParts(functionContent);
+            List<String> mainParts = parseMainParts(functionContent);
+            mainParts.removeFirst(); //Removes function name
 
-            //remove all the non cell strings from the list
-            cellsList.removeIf(topLevelPart -> !isStringACellCoordinate(topLevelPart));
+            for (String part : mainParts)
+                cellsList.addAll(getCellCordsInOriginalValue(part));
         }
-        else if (isStringACellCoordinate(input))
-        {
-            cellsList = new LinkedList<>();
-            cellsList.add(input);
-        }
-
         return cellsList;
     }
 
     private static Boolean isStringACellCoordinate(String input) {
-        char[] strAsArr = input.toCharArray();
+        char[] strAsArr = input.trim().toCharArray();
 
         if (!Character.isUpperCase(strAsArr[0]))
             return false;
 
-        for (int i = 1; i < strAsArr.length; i++)
+        int i = 1;
+        while (strAsArr[i] != ',')
+        {
+            if (!Character.isUpperCase(strAsArr[i]))
+                return false;
+            i++;
+        }
+
+        for (i++ ; i < strAsArr.length; i++)
         {
             if (!Character.isDigit(strAsArr[i]))
                 return false;

@@ -14,6 +14,7 @@ public interface Cell {
     EffectiveValue getEffectiveValue();
     void calculateEffectiveValue();
     int getVersion();
+    void updateVersion();
     List<CellImp> getDependsOn();
     List<CellImp> getInfluencingOn();
 }

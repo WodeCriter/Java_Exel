@@ -87,6 +87,11 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
     }
 
     @Override
+    public void updateVersion() {
+        version++;
+    }
+
+    @Override
     public List<CellImp> getDependsOn() {
         return dependsOn;
     }
