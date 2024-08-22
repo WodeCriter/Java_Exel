@@ -48,9 +48,9 @@ public class SheetImp implements Sheet {
 
     @Override
     public void setCell(String coordinate, String value) {
-        Cell cell = activeCells.computeIfAbsent(coordinate, CellImp::new);
+        Cell cell = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
         cell.setCellOriginalValue(value);
-        cell.setUpDependsOn(this);
+        //cell.setUpDependsOn(this);
     }
 
     public int getCellHeight() {
@@ -69,14 +69,14 @@ public class SheetImp implements Sheet {
         return numOfRows;
     }
 
-    //TODO: Needs to update influencingOn as well
-    public void setUpDependsOnOfCell(CellImp cell, List<CellImp> dependsOn){
-        List<String> dependsOnStr = FunctionParser.getCellCordsInOriginalValue(cell.getOriginalValue());
-
-        for (String coordinate : dependsOnStr)
-        {
-            CellImp influencingCell = activeCells.computeIfAbsent(coordinate, CellImp::new);
-            dependsOn.add(influencingCell);
-        }
-    }
+//    //TODO: Needs to update influencingOn as well
+//    public void setUpDependsOnOfCell(CellImp cell, List<CellImp> dependsOn){
+//        List<String> dependsOnStr = FunctionParser.getCellCordsInOriginalValue(cell.getOriginalValue());
+//
+//        for (String coordinate : dependsOnStr)
+//        {
+//            CellImp influencingCell = activeCells.computeIfAbsent(coordinate, CellImp::new);
+//            dependsOn.add(influencingCell);
+//        }
+//    }
 }

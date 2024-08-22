@@ -16,5 +16,4 @@ public interface Cell {
     int getVersion();
     List<CellImp> getDependsOn();
     List<CellImp> getInfluencingOn();
-    public void setUpDependsOn(SheetImp sheet);
 }
