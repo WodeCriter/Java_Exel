@@ -21,7 +21,9 @@ public class InputHandlerImp implements InputHandler {
     public int readInt() {
         while (true) {
             try {
-                return scanner.nextInt();
+                int result = scanner.nextInt();
+                scanner.nextLine(); // Consume the newline character after reading the integer
+                return result;
             } catch (InputMismatchException e) {
                 scanner.nextLine(); // Consume the invalid input
                 System.out.println("Invalid input. Please enter an integer.");
