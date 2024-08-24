@@ -52,6 +52,7 @@ public class SpreadsheetMenu implements Menu {
                 break;
             case 8:
                 System.out.println("Exiting to main menu...");
+                engineAPI.clearSheet();
                 break;
             case 9:
                 System.out.println("Exiting program...");
