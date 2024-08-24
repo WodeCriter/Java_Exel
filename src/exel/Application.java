@@ -16,13 +16,16 @@ public class Application {
         SpreadsheetMenu spreadsheetMenu = new SpreadsheetMenu(engine, inputHandler);
         MainMenu mainMenu = new MainMenu(engine,inputHandler);
 
-        if (engine.hasSheet()) {
-            // If a sheet is loaded, display the spreadsheet menu
+        while (true){
+            if (engine.hasSheet()) {
+                // If a sheet is loaded, display the spreadsheet menu
 
-            spreadsheetMenu.displayOptions();
-        } else {
-            // If no sheet is loaded, display the main menu
-            mainMenu.displayOptions();
+                spreadsheetMenu.displayOptions();
+            } else {
+                // If no sheet is loaded, display the main menu
+                mainMenu.displayOptions();
+            }
         }
+
     }
 }

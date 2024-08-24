@@ -52,4 +52,10 @@ public interface Engine {
      * @throws Exception if there is an issue saving the file.
      */
     void saveFile(String filePath) throws Exception;
+
+    // Method to check if the engine has a loaded sheet
+    boolean hasSheet();
+
+    // Method to clear the current sheet
+    void clearSheet();
 }

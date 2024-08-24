@@ -79,4 +79,14 @@ public class EngineImp implements Engine {
             throw new Exception("Failed to save the spreadsheet.");
         }
     }
+
+    @Override
+    public boolean hasSheet() {
+        return this.currentSheet != null;
+    }
+
+    @Override
+    public void clearSheet() {
+        this.currentSheet = null;
+    }
 }
