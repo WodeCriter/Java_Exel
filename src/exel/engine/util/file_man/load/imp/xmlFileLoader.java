@@ -40,11 +40,8 @@ public class xmlFileLoader {
         xmlFileLoader loader = new xmlFileLoader();
         Sheet spreadsheet = loader.loadSpreadsheet("path/to/your/spreadsheet.xml");
 
-        if (spreadsheet != null) {
-            System.out.println("Spreadsheet loaded successfully.");
-            // Further processing with 'spreadsheet' object
-        } else {
-            System.out.println("Failed to load the spreadsheet.");
+        if (spreadsheet == null) {
+            throw new RuntimeException("Failed to load the spreadsheet.");
         }
     }
 }
