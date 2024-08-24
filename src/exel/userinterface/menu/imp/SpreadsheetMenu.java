@@ -10,8 +10,9 @@ public class SpreadsheetMenu implements Menu {
     private InputHandler inputHandler;
     private Engine engineAPI;
 
-    public SpreadsheetMenu(Engine engineAPI) {
+    public SpreadsheetMenu(Engine engineAPI, InputHandler inputhandler) {
         this.engineAPI = engineAPI;
+        this.inputHandler = inputhandler;
     }
 
     @Override
