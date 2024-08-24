@@ -20,6 +20,7 @@ public class MainMenu implements Menu {
 
     @Override
     public void displayOptions() {
+        System.out.println("-------Main menu-------");
         System.out.println("1. Create a new Spreadsheet");
         System.out.println("2. Load a Spreadsheet from an XML file");
         System.out.println("3. Load system state from file");

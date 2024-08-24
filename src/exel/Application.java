@@ -15,6 +15,7 @@ public class Application {
         InputHandler inputHandler = new InputHandlerImp(new Scanner(System.in));
         SpreadsheetMenu spreadsheetMenu = new SpreadsheetMenu(engine, inputHandler);
         MainMenu mainMenu = new MainMenu(engine,inputHandler);
+        System.out.println("----Welcome to Exel----");
 
         while (true){
             if (engine.hasSheet()) {
