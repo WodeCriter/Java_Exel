@@ -110,6 +110,7 @@ public class SpreadsheetMenu implements Menu {
         }
     }
 
+    //Todo: fix the not working part
     private void updateCellContents() {
         System.out.print("Enter cell coordinate (e.g., A1): ");
         String coordinate = inputHandler.readLine();
