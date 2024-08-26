@@ -19,7 +19,7 @@ public class xmlFileSaver {
      * @param filePath The path where the XML file will be saved.
      * @return true if the file was saved successfully, false otherwise.
      */
-    public boolean saveSpreadsheet(Sheet sheet, String filePath) {
+    public static boolean saveSpreadsheet(Sheet sheet, String filePath) {
         try {
             // Create a JAXB context passing in the class of the generated JAXB classes
             JAXBContext jaxbContext = JAXBContext.newInstance(JAXB_PROJECT_XML_CLASSES);
@@ -34,7 +34,7 @@ public class xmlFileSaver {
             STLSheet stlSheet = STLConverter.toSTLSheet(sheet);
 
             // Marshal the STLSheet object to a file
-            File file = new File(filePath);
+            File file = new File(filePath + '/' +sheet.getName() + "_sheet.xml");
             marshaller.marshal(stlSheet, file);
 
             return true;  // Return true to indicate success

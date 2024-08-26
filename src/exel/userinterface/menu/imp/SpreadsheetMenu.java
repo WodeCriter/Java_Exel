@@ -142,7 +142,7 @@ public class SpreadsheetMenu implements Menu {
         System.out.print("Enter file path to save: ");
         String filePath = inputHandler.readLine();
         try {
-            engineAPI.saveFile(filePath);
+            engineAPI.saveXmlFile(filePath);
         }catch (Exception e){
             System.out.println("Error: " + e.getMessage());
         }

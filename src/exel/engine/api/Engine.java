@@ -3,8 +3,6 @@ package exel.engine.api;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 
-import java.util.List;
-
 public interface Engine {
     /**
      * Creates a new spreadsheet.
@@ -51,7 +49,7 @@ public interface Engine {
      * @param filePath The path where the file should be saved.
      * @throws Exception if there is an issue saving the file.
      */
-    void saveFile(String filePath) throws Exception;
+    void saveXmlFile(String filePath) throws Exception;
 
     // Method to check if the engine has a loaded sheet
     boolean hasSheet();

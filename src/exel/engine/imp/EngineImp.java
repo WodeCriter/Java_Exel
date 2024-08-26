@@ -9,6 +9,7 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.util.file_man.load.imp.xmlFileLoader;
+import exel.engine.util.file_man.save.imp.xmlFileSaver;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,14 +71,9 @@ public class EngineImp implements Engine {
     }
 
     @Override
-    public void saveFile(String filePath) throws Exception {
+    public void saveXmlFile(String filePath) throws Exception {
         // Simulated save logic
-        File file = new File(filePath);
-        if (file.createNewFile()) {
-            return;
-        } else {
-            throw new Exception("Failed to save the spreadsheet.");
-        }
+        xmlFileSaver.saveSpreadsheet(this.currentSheet , filePath);
     }
 
     @Override
