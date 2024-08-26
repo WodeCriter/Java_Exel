@@ -32,7 +32,11 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
     }
 
     public CellImp(String coordinate, SheetImp sheet){
-        this(coordinate, null, sheet);
+        this.coordinate = coordinate;
+        this.originalValue = null;
+        this.sheet = sheet;
+        this.version = 1;
+        this.influencingOn = new LinkedList<>();
     }
 
     private void setUpDependsOn(){
@@ -63,7 +67,11 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
 
     @Override
     public void setCellOriginalValue(String value) {
-        if (!originalValue.equals(value))
+        if (originalValue == null)
+        {
+            this.originalValue = value;
+        }
+        else if (!originalValue.equals(value))
         {
             this.originalValue = value;
             stopCellFromDepending();

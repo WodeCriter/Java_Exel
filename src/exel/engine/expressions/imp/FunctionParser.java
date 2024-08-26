@@ -262,14 +262,12 @@ public enum FunctionParser
             return false;
 
         int i = 1;
-        while (strAsArr[i] != ',')
+        while (Character.isUpperCase(strAsArr[i]))
         {
-            if (!Character.isUpperCase(strAsArr[i]))
-                return false;
             i++;
         }
 
-        for (i++ ; i < strAsArr.length; i++)
+        for (; i < strAsArr.length; i++)
         {
             if (!Character.isDigit(strAsArr[i]))
                 return false;

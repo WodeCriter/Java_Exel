@@ -67,7 +67,7 @@ public class STLConverter {
         // Loop through each STLCell in the STLCells of the STLSheet and set them inside the sheet object
         for (STLCell stlCell : stlSheet.getSTLCells().getSTLCell()) {
             // get values for each
-            String coordinate = stlCell.getColumn() + "," + stlCell.getRow();
+            String coordinate = stlCell.getColumn() + stlCell.getRow();
             String originalVal = stlCell.getSTLOriginalValue();
             // Add cell to the sheet
             sheet.setCell(coordinate, originalVal);
