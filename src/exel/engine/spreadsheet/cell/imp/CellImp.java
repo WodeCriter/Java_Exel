@@ -68,16 +68,14 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
 
     @Override
     public void setCellOriginalValue(String value) {
-        if (originalValue == null)
-        {
-            this.originalValue = value;
-        }
-        else if (!originalValue.equals(value))
-        {
-            this.originalValue = value;
-            stopCellFromDepending();
-            setUpDependsOn();
-        }
+        this.originalValue = value;
+    }
+
+    @Override
+    public void updateDependencies(){
+        stopCellFromDepending();
+        setUpDependsOn();
+        version++;
     }
 
     @Override
@@ -94,11 +92,6 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
     @Override
     public int getVersion() {
         return version;
-    }
-
-    @Override
-    public void updateVersion() {
-        version++;
     }
 
     @Override

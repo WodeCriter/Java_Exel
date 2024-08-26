@@ -12,6 +12,7 @@ public class SheetImp implements Sheet
 {
     private Map<String, CellImp> activeCells;
     private String sheetName;
+    private int version;
     private int cellHeight;
     private int cellWidth;
     private int numOfCols;
@@ -26,6 +27,7 @@ public class SheetImp implements Sheet
         this.cellWidth = cellWidth;
         this.numOfCols = numOfCols;
         this.numOfRows = numOfRows;
+        this.version = 1;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class SheetImp implements Sheet
     @Override
     public int getVersion()
     {
-        return 0;
+        return version;
     }
 
     @Override
@@ -62,7 +64,6 @@ public class SheetImp implements Sheet
         else {
             throw new IllegalArgumentException("Cell Coordinate outside of range");
         }
-
     }
 
     public int getCellHeight()
@@ -90,16 +91,30 @@ public class SheetImp implements Sheet
         WHITE, BLACK, GREY
     }
 
-    public void updateCellValueAndCalculate(String coordinate, String newValue)
+    public Sheet updateCellValueAndCalculate(String coordinate, String newValue)
     {
-        Cell cell = activeCells.get(coordinate);
-        cell.setCellOriginalValue(newValue);
-        List<Cell> orderedCells = orderCellsForCalculation(cell);
+        SheetImp copySheet = copySheet();
+        copySheet.version++;
+        copySheet.setCell(coordinate, newValue);//update the cell in the copy sheet
+        Cell cell = copySheet.activeCells.get(coordinate);
+        if (cell == null)
+            throw new IllegalArgumentException("Cell " + coordinate + " not found in map after set cell");
+        cell.updateDependencies();
 
-        for (Cell orderedCell : orderedCells)
+        try
         {
-            orderedCell.calculateEffectiveValue();
+            List<Cell> orderedCells =  orderCellsForCalculation(cell); //todo: figure out what to do here, when circle is found.
+            for (Cell orderedCell : orderedCells)
+            {
+                orderedCell.calculateEffectiveValue();
+            }
+            return copySheet;
         }
+        catch (Exception ex)
+        {
+            return this;
+        }
+
     }
 
     private List<Cell> orderCellsForCalculation(Cell startingCell)
@@ -110,14 +125,7 @@ public class SheetImp implements Sheet
         for (Cell cell : activeCells.values())
             coloredCells.put(cell, Color.WHITE);
 
-        try
-        {
-            orderCellsForCalculationHelper(startingCell, coloredCells, orderedCells);
-        }
-        catch (Exception e)
-        {
-            throw e; //todo: figure out what to do here, when circle is found.
-        }
+        orderCellsForCalculationHelper(startingCell, coloredCells, orderedCells);
         return orderedCells;
     }
 

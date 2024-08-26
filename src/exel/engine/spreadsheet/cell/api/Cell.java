@@ -11,10 +11,10 @@ public interface Cell {
     String getCoordinate();
     String getOriginalValue();
     void setCellOriginalValue(String value);
+    void updateDependencies();
     EffectiveValue getEffectiveValue();
     void calculateEffectiveValue();
     int getVersion();
-    void updateVersion();
     List<CellImp> getDependsOn();
     List<CellImp> getInfluencingOn();
 }

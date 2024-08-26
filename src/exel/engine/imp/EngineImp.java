@@ -62,7 +62,7 @@ public class EngineImp implements Engine {
         if (currentSheet == null) {
             throw new IllegalStateException("No sheet is currently loaded.");
         }
-        currentSheet.setCell(coordinate, value); // Directly set the cell's value in the modifiable sheet
+        currentSheet.updateCellValueAndCalculate(coordinate, value); // Directly set the cell's value in the modifiable sheet
     }
 
     @Override
