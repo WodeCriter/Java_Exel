@@ -11,7 +11,7 @@ public class ReadOnlyCellImp implements ReadOnlyCell {
 
     private final String coordinate;
     private final String originalValue;
-    private final EffectiveValue effectiveValue;
+    private final String effectiveValue;
     private final int version;
     private final List<String> dependsOn;
     private final List<String> influencingOn;
@@ -20,7 +20,7 @@ public class ReadOnlyCellImp implements ReadOnlyCell {
                            int version, List<CellImp> dependsOn, List<CellImp> influencingOn) {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
-        this.effectiveValue = effectiveValue;
+        this.effectiveValue = effectiveValue.getValue().toString();
         this.version = version;
         // Convert CellImp lists to ReadOnlyCellImp lists
         // Convert CellImp lists to list of strings containing cell coordinates
@@ -41,7 +41,7 @@ public class ReadOnlyCellImp implements ReadOnlyCell {
     }
 
     @Override
-    public EffectiveValue getEffectiveValue() {
+    public String getEffectiveValue() {
         return effectiveValue;
     }
 

@@ -90,8 +90,8 @@ public class SpreadsheetMenu implements Menu {
             for (int j = 0; j < sheet.getNumOfCols(); j++) {
                 String cellCoordinate = "" + (char)('A' + j) + i;
                 ReadOnlyCell cell = engineAPI.getCellContents(cellCoordinate);
-                String cellValue = (cell != null && cell.getEffectiveValue() != null) ? cell.getEffectiveValue().toString() : "";
-                cellValue = formatCellValue(cellValue, cellWidth); // Format cell value to fit the width
+                String cellValue = (cell != null && cell.getEffectiveValue() != null) ? cell.getEffectiveValue() : "";
+                cellValue = formatCellValue(cellValue, cellWidth);  // Ensure cell value is formatted correctly
                 System.out.print(cellValue + " | ");
             }
             System.out.println();  // New line after each row
@@ -104,7 +104,7 @@ public class SpreadsheetMenu implements Menu {
         String coordinate = inputHandler.readLine();
         ReadOnlyCell cell = engineAPI.getCellContents(coordinate);
         if (cell != null) {
-            System.out.println("Cell " + coordinate + " contents: " + cell.getEffectiveValue().getValue());
+            System.out.println("Cell " + coordinate + " contents: " + cell.getEffectiveValue());
         } else {
             System.out.println("No contents found at " + coordinate);
         }
@@ -156,9 +156,16 @@ public class SpreadsheetMenu implements Menu {
     }
 
     private static String formatCellValue(String value, int width) {
-        if (value.length() > width) {
-            return value.substring(0, width - 3) + "...";
+        if (value == null) {
+            value = "";  // Treat null as empty string
         }
-        return value;
+        if (value.length() > width) {
+            if (width > 3) {
+                return value.substring(0, width - 3) + "...";  // Add ellipsis if there's enough space
+            } else {
+                return value.substring(0, width);  // No space for ellipsis, just truncate
+            }
+        }
+        return String.format("%-" + width + "s", value);  // Pad with spaces to ensure alignment
     }
 }

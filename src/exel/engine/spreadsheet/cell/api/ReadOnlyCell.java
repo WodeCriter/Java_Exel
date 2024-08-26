@@ -21,7 +21,7 @@ public interface ReadOnlyCell {
      * Gets the effective value of the cell after any calculations or evaluations.
      * @return the effective value of the cell.
      */
-    EffectiveValue getEffectiveValue();
+    String getEffectiveValue();
 
     /**
      * Gets the version of the cell, typically indicating how many times it has been modified.
