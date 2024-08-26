@@ -124,11 +124,12 @@ public class SpreadsheetMenu implements Menu {
         String value = inputHandler.readLine();
         try {
             engineAPI.updateCellContents(coordinate, value);
+            System.out.println("Cell updated successfully.");
         }catch (Exception e){
             System.out.println("Error: " + e.getMessage());
         }
 
-        System.out.println("Cell updated successfully.");
+
     }
 
     private void showVersion() {

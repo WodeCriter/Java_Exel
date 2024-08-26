@@ -36,9 +36,9 @@ public interface Engine {
      * Updates the contents of a specific cell.
      * @param coordinate The coordinate of the cell.
      * @param value The new value for the cell.
-     * @throws Exception if there is an issue with updating the cell
+     * @throws IllegalStateException if there is an issue with updating the cell
      */
-    void updateCellContents(String coordinate, String value) throws Exception;
+    void updateCellContents(String coordinate, String value) throws IllegalStateException;
 
     /**
      * Retrieves the version of the current spreadsheet.

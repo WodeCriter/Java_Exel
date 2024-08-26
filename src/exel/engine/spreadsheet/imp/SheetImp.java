@@ -5,10 +5,7 @@ import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.*;
 
 public class SheetImp implements Sheet
@@ -56,11 +53,16 @@ public class SheetImp implements Sheet
     }
 
     @Override
-    public void setCell(String coordinate, String value)
+    public void setCell(String coordinate, String value) throws IllegalArgumentException
     {
-        Cell cell = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
-        cell.setCellOriginalValue(value);
-        //cell.setUpDependsOn(this);
+        if (isCoordinateInRange(coordinate)){
+            Cell cell = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
+            cell.setCellOriginalValue(value);
+        }
+        else {
+            throw new IllegalArgumentException("Cell Coordinate outside of range");
+        }
+
     }
 
     public int getCellHeight()
@@ -156,6 +158,39 @@ public class SheetImp implements Sheet
             // deal with the runtime error that was discovered as part of invocation
             return this;
         }
+    }
+
+    private Boolean isCoordinateInRange(String coordinate) {
+        if (coordinate == null || coordinate.isEmpty()) {
+            return false; // Early return for null or empty string input.
+        }
+
+        // Separate the column letter(s) from the row number.
+        int i = 0;
+        while (i < coordinate.length() && Character.isLetter(coordinate.charAt(i))) {
+            i++;
+        }
+
+        // Split the string into the alphabetic part and the numeric part.
+        String columnPart = coordinate.substring(0, i);
+        String rowPart = coordinate.substring(i);
+
+        // Convert the column letters to a column index (0-based).
+        int column = 0;
+        for (int j = 0; j < columnPart.length(); j++) {
+            column = column * 26 + (Character.toUpperCase(columnPart.charAt(j)) - 'A' + 1);
+        }
+
+        // Convert the row string to an integer.
+        int row;
+        try {
+            row = Integer.parseInt(rowPart);
+        } catch (NumberFormatException e) {
+            return false; // Return false if row part is not an integer.
+        }
+
+        // Check if the column index and row index are within the allowed range.
+        return column > 0 && column <= this.numOfCols && row > 0 && row <= this.numOfRows;
     }
 }
 
