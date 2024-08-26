@@ -3,47 +3,48 @@ package exel.engine.expressions.imp.String;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;
 import exel.engine.expressions.api.Expression;
+import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 public class SubExpression implements Expression
 {
     private final Expression source;
-    private int startIndex, endIndex;
+    private Expression startIndex, endIndex;
 
-    public SubExpression(Expression source, int startIndex, int endIndex)
+    public SubExpression(Expression source, Expression startIndex, Expression endIndex)
     {
         this.source = source;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
-
-        if (startIndex == endIndex)
-            throw new IllegalArgumentException("start and end indexes cannot be equal");
-
-        if (startIndex > endIndex)
-            swapStartAndEndIndexes();
     }
 
     @Override
-    public EffectiveValue eval()
+    public EffectiveValue eval(Sheet sheet)
     {
-        EffectiveValue sourceValue = source.eval();
+        EffectiveValue sourceValue = source.eval(sheet);
+        EffectiveValue startValue = this.startIndex.eval(sheet);
+        EffectiveValue endValue = this.endIndex.eval(sheet);
 
         if (sourceValue.getCellType() != CellType.STRING)
-            throw new RuntimeException("The item given is not a String");
+            throw new RuntimeException("The source given is not a String");
+        if (startValue.getCellType() != CellType.NUMERIC || endValue.getCellType() != CellType.NUMERIC)
+            throw new RuntimeException("The start or end index given are not Numeric");
 
         String sourceStr = sourceValue.extractValueWithExpectation(String.class);
+        int startIndex = startValue.extractValueWithExpectation(Integer.class);
+        int endIndex = endValue.extractValueWithExpectation(Integer.class);
+
+        if (startIndex > endIndex)
+        {
+            int tmp = startIndex;
+            startIndex = endIndex;
+            endIndex = tmp;
+        }
 
         if (startIndex < 0 || endIndex < 0 || startIndex >= sourceStr.length() || endIndex >= sourceStr.length())
-            return new EffectiveValueImp(CellType.STRING, "!UNDEFINED!");
+            return new EffectiveValueImp(CellType.STRING, UNDEFINED_VALUE);
 
         return new EffectiveValueImp(CellType.STRING, sourceStr.substring(startIndex, endIndex));
-    }
-
-    private void swapStartAndEndIndexes()
-    {
-        int tmp = startIndex;
-        startIndex = endIndex;
-        endIndex = tmp;
     }
 
     @Override

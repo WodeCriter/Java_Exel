@@ -3,6 +3,7 @@ package exel.engine.expressions.imp.String;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;
 import exel.engine.expressions.api.Expression;
+import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 public class UpperCaseExpression implements Expression {
@@ -14,7 +15,7 @@ public class UpperCaseExpression implements Expression {
     }
 
     @Override
-    public EffectiveValue eval() {
+    public EffectiveValue eval(Sheet sheet) {
         return new EffectiveValueImp(CellType.STRING, value.toUpperCase());
     }
 

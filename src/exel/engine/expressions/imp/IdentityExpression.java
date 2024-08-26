@@ -3,6 +3,7 @@ package exel.engine.expressions.imp;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;
 import exel.engine.expressions.api.Expression;
+import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 public class IdentityExpression implements Expression
@@ -17,7 +18,7 @@ public class IdentityExpression implements Expression
     }
 
     @Override
-    public EffectiveValue eval()
+    public EffectiveValue eval(Sheet sheet)
     {
         return new EffectiveValueImp(type, value);
     }
