@@ -72,7 +72,7 @@ public enum FunctionParser
                 {
                     // validations of the function. it should have exactly two arguments
                     if (arguments.size() != 1)
-                        throw new IllegalArgumentException("Invalid number of arguments for MINUS function. Expected 1, but got " + arguments.size());
+                        throw new IllegalArgumentException("Invalid number of arguments for ABS function. Expected 1, but got " + arguments.size());
 
                     //structure is good. parse arguments
                     Expression exp = parseExpression(arguments.get(0).trim());
@@ -148,7 +148,21 @@ public enum FunctionParser
 
                     return new SubExpression(stringToCut, startIndex, endIndex);
                 }
-            }
+            },
+    REF {
+        @Override
+        public Expression parse(List<String> arguments)
+        {
+            if (arguments.size() != 1)
+                throw new IllegalArgumentException("Invalid number of arguments for REF function. Expected 1, but got " + arguments.size());
+
+            String coordinate = arguments.getFirst().trim();
+            if (!isStringACellCoordinate(coordinate))
+                throw new IllegalArgumentException("Invalid argument for REF function. Expected a valid cell reference, but got " + coordinate);
+
+            return new RefExpression(coordinate);
+        }
+    }
 
 
     /*UPPER_CASE {

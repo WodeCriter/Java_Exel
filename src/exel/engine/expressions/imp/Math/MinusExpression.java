@@ -3,6 +3,7 @@ package exel.engine.expressions.imp.Math;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;
 import exel.engine.expressions.api.Expression;
+import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 public class MinusExpression implements Expression {
@@ -15,9 +16,9 @@ public class MinusExpression implements Expression {
     }
 
     @Override
-    public EffectiveValue eval() {
-        EffectiveValue leftValue = left.eval();
-        EffectiveValue rightValue = right.eval();
+    public EffectiveValue eval(Sheet sheet) {
+        EffectiveValue leftValue = left.eval(sheet);
+        EffectiveValue rightValue = right.eval(sheet);
 
         if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC )
             throw new RuntimeException("Not all items are numeric values");

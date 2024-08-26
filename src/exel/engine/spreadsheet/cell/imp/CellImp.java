@@ -78,7 +78,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
 
     @Override
     public void calculateEffectiveValue() {
-        effectiveValue = FunctionParser.parseExpression(originalValue).eval();
+        effectiveValue = FunctionParser.parseExpression(originalValue).eval(sheet);
     }
 
     @Override

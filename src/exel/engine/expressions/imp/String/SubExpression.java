@@ -3,6 +3,7 @@ package exel.engine.expressions.imp.String;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;
 import exel.engine.expressions.api.Expression;
+import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 public class SubExpression implements Expression
@@ -18,11 +19,11 @@ public class SubExpression implements Expression
     }
 
     @Override
-    public EffectiveValue eval()
+    public EffectiveValue eval(Sheet sheet)
     {
-        EffectiveValue sourceValue = source.eval();
-        EffectiveValue startValue = this.startIndex.eval();
-        EffectiveValue endValue = this.endIndex.eval();
+        EffectiveValue sourceValue = source.eval(sheet);
+        EffectiveValue startValue = this.startIndex.eval(sheet);
+        EffectiveValue endValue = this.endIndex.eval(sheet);
 
         if (sourceValue.getCellType() != CellType.STRING)
             throw new RuntimeException("The source given is not a String");
@@ -41,7 +42,7 @@ public class SubExpression implements Expression
         }
 
         if (startIndex < 0 || endIndex < 0 || startIndex >= sourceStr.length() || endIndex >= sourceStr.length())
-            return new EffectiveValueImp(CellType.STRING, "!UNDEFINED!");
+            return new EffectiveValueImp(CellType.STRING, UNDEFINED_VALUE);
 
         return new EffectiveValueImp(CellType.STRING, sourceStr.substring(startIndex, endIndex));
     }
