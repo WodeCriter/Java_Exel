@@ -9,7 +9,7 @@ public class MainMenu implements Menu {
     private Engine engineAPI;
     private final static int MAX_COLUMN_NUM = 20;
     private final static int MAX_ROW_NUM = 50;
-    private final static int DEFAULT_CELL_WIDTH = 3;
+    private final static int DEFAULT_CELL_WIDTH = 5;
     private final static int DEFAULT_CELL_HEIGHT = 1;
 
 

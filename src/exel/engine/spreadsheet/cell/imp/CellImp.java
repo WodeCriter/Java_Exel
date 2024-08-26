@@ -37,6 +37,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
         this.sheet = sheet;
         this.version = 1;
         this.influencingOn = new LinkedList<>();
+        this.dependsOn = new LinkedList<>();
     }
 
     private void setUpDependsOn(){
