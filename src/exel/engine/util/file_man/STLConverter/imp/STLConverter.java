@@ -36,9 +36,15 @@ public class STLConverter {
 
             // Extracting coordinate data
             String coordinate = cell.getCoordinate();
-            String[] parts = coordinate.split(","); // format is "Col,Row" i.e. cell A,4
-            int row = Integer.parseInt(parts[1].trim());
-            String column = parts[0].trim();
+            int i = 0;
+            // Find where the letters stop and the numbers start
+            while (i < coordinate.length() && Character.isLetter(coordinate.charAt(i))) {
+                i++;
+            }
+
+            // Separate the column letters and row numbers based on the index found
+            String column = coordinate.substring(0, i).trim(); // Column letters
+            int row = Integer.parseInt(coordinate.substring(i).trim()); // Row numbers
 
             // Set properties from Cell to STLCell
             stlCell.setSTLOriginalValue(cell.getOriginalValue());

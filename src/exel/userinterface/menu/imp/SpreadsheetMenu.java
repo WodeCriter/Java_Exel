@@ -139,15 +139,14 @@ public class SpreadsheetMenu implements Menu {
     }
 
     private void saveFile(){
-        System.out.print("Enter file path to save: ");
+        System.out.print("Enter file path to the folder: ");
         String filePath = inputHandler.readLine();
         try {
             engineAPI.saveXmlFile(filePath);
+            System.out.println("File saved successfully at " + filePath);
         }catch (Exception e){
             System.out.println("Error: " + e.getMessage());
         }
-
-        System.out.println("File saved successfully at " + filePath);
     }
 
     private void loadFile() {
