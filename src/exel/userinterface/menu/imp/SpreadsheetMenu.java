@@ -6,6 +6,8 @@ import exel.userinterface.menu.api.Menu;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 
+import java.util.List;
+
 public class SpreadsheetMenu implements Menu {
     private InputHandler inputHandler;
     private Engine engineAPI;
@@ -104,7 +106,11 @@ public class SpreadsheetMenu implements Menu {
         String coordinate = inputHandler.readLine();
         ReadOnlyCell cell = engineAPI.getCellContents(coordinate);
         if (cell != null) {
-            System.out.println("Cell " + coordinate + " contents: " + cell.getEffectiveValue());
+            System.out.println("Cell: " + coordinate);
+            System.out.println("Original Value: " + cell.getOriginalValue());
+            System.out.println("Effective Value: " + cell.getEffectiveValue());
+            System.out.println("Version: " + cell.getVersion());
+            printDependenciesAndInfluences(cell);
         } else {
             System.out.println("No contents found at " + coordinate);
         }
@@ -167,5 +173,29 @@ public class SpreadsheetMenu implements Menu {
             }
         }
         return String.format("%-" + width + "s", value);  // Pad with spaces to ensure alignment
+    }
+
+    private void printDependenciesAndInfluences(ReadOnlyCell cell) {
+        List<String> dependsOn = cell.getDependsOn();
+        List<String> influencingOn = cell.getInfluencingOn();
+
+        System.out.print("Depends On: ");
+        if (!dependsOn.isEmpty())
+            for (String dep : dependsOn)
+                System.out.print(dep + " ");
+        else{
+            System.out.print("None.");
+        }
+        System.out.println();
+
+        System.out.print("Influencing On: ");
+        if (!influencingOn.isEmpty())
+            for (String inf : influencingOn)
+                System.out.print(inf + " ");
+        else{
+            System.out.print("None.");
+        }
+        System.out.println();
+
     }
 }
