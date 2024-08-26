@@ -81,6 +81,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
 
     @Override
     public EffectiveValue getEffectiveValue() {
+        calculateEffectiveValue();
         return effectiveValue;
     }
 

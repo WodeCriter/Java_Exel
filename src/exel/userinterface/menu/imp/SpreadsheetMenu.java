@@ -104,7 +104,7 @@ public class SpreadsheetMenu implements Menu {
         String coordinate = inputHandler.readLine();
         ReadOnlyCell cell = engineAPI.getCellContents(coordinate);
         if (cell != null) {
-            System.out.println("Cell " + coordinate + " contents: " + cell.getEffectiveValue());
+            System.out.println("Cell " + coordinate + " contents: " + cell.getEffectiveValue().getValue());
         } else {
             System.out.println("No contents found at " + coordinate);
         }
