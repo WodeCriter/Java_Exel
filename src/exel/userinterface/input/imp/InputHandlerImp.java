@@ -35,7 +35,7 @@ public class InputHandlerImp implements InputHandler {
     public int readIntRange(int min, int max){
         int number = readInt();
         while (number < min || number > max) {
-            System.out.println("Invalid input. Please enter an integer.");
+            System.out.println("Invalid input. Please enter a valid integer.");
             number = readInt();
         }
         return number;

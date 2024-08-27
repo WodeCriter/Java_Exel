@@ -1,5 +1,6 @@
 package exel.engine.spreadsheet.cell.imp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,8 +11,9 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.imp.SheetImp;
 
 
-public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
+public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializable {
 
+    private static final long serialVersionUID = 1L;
     private final String coordinate;
     private String originalValue;
     private EffectiveValue effectiveValue;
@@ -33,7 +35,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
 
     public CellImp(String coordinate, SheetImp sheet){
         this.coordinate = coordinate;
-        this.originalValue = null;
+        this.originalValue = "";
         this.sheet = sheet;
         this.version = 1;
         this.influencingOn = new LinkedList<>();
@@ -45,7 +47,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
         List<String> influencingCellsCords = FunctionParser.getCellCordsInOriginalValue(originalValue);
         for (String cellCord : influencingCellsCords)
         {
-            CellImp influencingCell = sheet.getCell(cellCord); //needs to make sure it actually updates the cell, or if it's just a copy...
+            CellImp influencingCell = sheet.getCell(cellCord);
             dependsOn.add(influencingCell);
             influencingCell.influencingOn.add(this);
         }

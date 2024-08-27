@@ -15,7 +15,7 @@ public class RefExpression implements Expression
     public RefExpression(String coordinate)
     {
         this.coordinate = coordinate;
-        type = null; //todo: Make new CellType "UNKNOWN" instead of using null.
+        type = CellType.UNKNOWN;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class RefExpression implements Expression
     {
         Cell cell = sheet.getCell(coordinate);
 
-        if (cell == null)
+        if (cell.getEffectiveValue().getValue() == "")
         {
             type = CellType.STRING;
             return new EffectiveValueImp(CellType.STRING, UNDEFINED_VALUE);

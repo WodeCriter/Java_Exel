@@ -8,8 +8,9 @@ import exel.engine.spreadsheet.cell.imp.CellImp;
 import java.io.*;
 import java.util.*;
 
-public class SheetImp implements Sheet
+public class SheetImp implements Sheet, Serializable
 {
+    private static final long serialVersionUID = 1L;
     private Map<String, CellImp> activeCells;
     private String sheetName;
     private int version;
@@ -51,7 +52,11 @@ public class SheetImp implements Sheet
     @Override
     public CellImp getCell(String coordinate)
     {
-        return activeCells.get(coordinate);
+        CellImp cellToReturn = activeCells.get(coordinate);
+        if (cellToReturn == null)
+            cellToReturn = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
+
+        return cellToReturn;
     }
 
     @Override
@@ -103,7 +108,7 @@ public class SheetImp implements Sheet
 
         try
         {
-            List<Cell> orderedCells =  orderCellsForCalculation(cell); //todo: figure out what to do here, when circle is found.
+            List<Cell> orderedCells =  orderCellsForCalculation(cell);
             for (Cell orderedCell : orderedCells)
             {
                 orderedCell.calculateEffectiveValue();

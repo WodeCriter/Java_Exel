@@ -3,7 +3,8 @@ package exel.engine.spreadsheet.cell.api;
 public enum CellType {
     NUMERIC(Double.class) ,
     STRING(String.class) ,
-    BOOLEAN(Boolean.class) ;
+    BOOLEAN(Boolean.class),
+    UNKNOWN(Void.class);
 
     private Class<?> type;
 
