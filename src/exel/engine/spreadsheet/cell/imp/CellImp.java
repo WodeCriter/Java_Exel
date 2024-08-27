@@ -1,5 +1,6 @@
 package exel.engine.spreadsheet.cell.imp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,8 +11,9 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.imp.SheetImp;
 
 
-public class CellImp implements exel.engine.spreadsheet.cell.api.Cell {
+public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializable {
 
+    private static final long serialVersionUID = 1L;
     private final String coordinate;
     private String originalValue;
     private EffectiveValue effectiveValue;
