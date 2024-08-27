@@ -162,29 +162,7 @@ public enum FunctionParser
 
             return new RefExpression(coordinate);
         }
-    }
-
-
-    /*UPPER_CASE {
-        @Override
-        public Expression parse(List<String> arguments) {
-            // validations of the function. it should have exactly one argument
-            if (arguments.size() != 1) {
-                throw new IllegalArgumentException("Invalid number of arguments for UPPER_CASE function. Expected 1, but got " + arguments.size());
-            }
-
-            // structure is good. parse arguments
-            Expression arg = parseExpression(arguments.get(0).trim());
-
-            // more validations on the expected argument types
-            if (!arg.getFunctionResultType().equals(CellType.STRING)) {
-                throw new IllegalArgumentException("Invalid argument types for UPPER_CASE function. Expected STRING, but got " + arg.getFunctionResultType());
-            }
-
-            // all is good. create the relevant function instance
-            return new UpperCaseExpression(arg);
-        }
-    } **/;
+    };
 
     abstract public Expression parse(List<String> arguments);
 
@@ -287,8 +265,12 @@ public enum FunctionParser
         Expression left = parseExpression(arguments.get(0).trim());
         Expression right = parseExpression(arguments.get(1).trim());
 
+        CellType leftType = left.getFunctionResultType();
+        CellType rightType = right.getFunctionResultType();
+
         // more validations on the expected argument types
-        if (!left.getFunctionResultType().equals(expectedArgsType) || !right.getFunctionResultType().equals(expectedArgsType))
+        if ((!leftType.equals(expectedArgsType) && !leftType.equals(CellType.UNKNOWN)) ||
+                (!rightType.equals(expectedArgsType) && !rightType.equals(CellType.UNKNOWN)))
             throw new IllegalArgumentException("Invalid argument types for " + funcName + " function. " +
                     "Expected " + expectedArgsType.toString() + ", but got " + left.getFunctionResultType() + " and " + right.getFunctionResultType());
 

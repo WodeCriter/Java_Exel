@@ -52,7 +52,11 @@ public class SheetImp implements Sheet, Serializable
     @Override
     public CellImp getCell(String coordinate)
     {
-        return activeCells.get(coordinate);
+        CellImp cellToReturn = activeCells.get(coordinate);
+        if (cellToReturn == null)
+            cellToReturn = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
+
+        return cellToReturn;
     }
 
     @Override
