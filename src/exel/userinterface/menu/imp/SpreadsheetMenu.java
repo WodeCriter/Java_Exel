@@ -102,21 +102,25 @@ public class SpreadsheetMenu implements Menu {
 
     private void showCellContents() {
         System.out.print("Enter cell coordinate (e.g., A1): ");
-        //Todo: validate coordinate and ease of input
-        String coordinate = inputHandler.readLine();
-        ReadOnlyCell cell = engineAPI.getCellContents(coordinate);
-        if (cell != null) {
-            System.out.println("Cell: " + coordinate);
-            System.out.println("Original Value: " + cell.getOriginalValue());
-            System.out.println("Effective Value: " + cell.getEffectiveValue());
-            System.out.println("Version: " + cell.getVersion());
-            printDependenciesAndInfluences(cell);
-        } else {
-            System.out.println("No contents found at " + coordinate);
+        String coordinate = inputHandler.readLine().toUpperCase();
+        try{
+            ReadOnlyCell cell = engineAPI.getCellContents(coordinate);
+            if (cell != null) {
+                System.out.println("Cell: " + coordinate);
+                System.out.println("Original Value: " + cell.getOriginalValue());
+                System.out.println("Effective Value: " + cell.getEffectiveValue());
+                System.out.println("Version: " + cell.getVersion());
+                printDependenciesAndInfluences(cell);
+            } else {
+                System.out.println("No contents found at " + coordinate);
+            }
+        }catch(Exception e){
+            System.out.println("Error: " + e.getMessage());
         }
+
+
     }
 
-    //Todo: fix the not working part
     private void updateCellContents() {
         System.out.print("Enter cell coordinate (e.g., A1): ");
         String coordinate = inputHandler.readLine().toUpperCase();

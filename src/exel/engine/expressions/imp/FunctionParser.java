@@ -244,24 +244,31 @@ public enum FunctionParser
     }
 
     private static Boolean isStringACellCoordinate(String input) {
-        char[] strAsArr = input.trim().toCharArray();
-
-        if (strAsArr.length == 0 || !Character.isUpperCase(strAsArr[0]))
+        if (input == null || input.isEmpty()) {
             return false;
+        }
 
-        int i = 1;
-        while (Character.isUpperCase(strAsArr[i]))
-        {
+        input = input.trim();
+        int length = input.length();
+        int i = 0;
+
+        // Check for the presence of at least one letter at the start
+        while (i < length && Character.isLetter(input.charAt(i))) {
             i++;
         }
 
-        for (; i < strAsArr.length; i++)
-        {
-            if (!Character.isDigit(strAsArr[i]))
-                return false;
+        // There should be at least one letter and one digit
+        if (i == 0 || i == length) {
+            return false;
         }
 
-        return true;
+        // Check that the rest of the string is digits
+        while (i < length && Character.isDigit(input.charAt(i))) {
+            i++;
+        }
+
+        // If we've parsed through all characters, it's a valid coordinate
+        return i == length;
     }
 
     private static AbstractMap.SimpleEntry<Expression, Expression> checkArgsAndParseExpressions

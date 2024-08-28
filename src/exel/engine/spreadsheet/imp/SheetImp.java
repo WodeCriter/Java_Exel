@@ -54,17 +54,18 @@ public class SheetImp implements Sheet, Serializable
     {
         CellImp cellToReturn = activeCells.get(coordinate);
         if (cellToReturn == null)
-            cellToReturn = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
+            cellToReturn = (CellImp) setCell(coordinate, "");
 
         return cellToReturn;
     }
 
     @Override
-    public void setCell(String coordinate, String value) throws IllegalArgumentException
+    public Cell setCell(String coordinate, String value) throws IllegalArgumentException
     {
         if (isCoordinateInRange(coordinate)){
             Cell cell = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
             cell.setCellOriginalValue(value);
+            return cell;
         }
         else {
             throw new IllegalArgumentException("Cell Coordinate outside of range");
@@ -112,7 +113,6 @@ public class SheetImp implements Sheet, Serializable
             orderedCell.calculateEffectiveValue();
         }
         return copySheet;
-
     }
 
     private List<Cell> orderCellsForCalculation(Cell startingCell)
