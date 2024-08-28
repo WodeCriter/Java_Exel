@@ -3,7 +3,10 @@ package exel.engine.effectivevalue.imp;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.spreadsheet.cell.api.CellType;
 
-public class EffectiveValueImp implements EffectiveValue {
+import java.io.Serializable;
+
+public class EffectiveValueImp implements EffectiveValue, Serializable {
+    private static final long serialVersionUID = 1L;
     private CellType cellType;
     private Object value;
 
