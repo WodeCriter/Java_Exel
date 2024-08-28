@@ -106,19 +106,12 @@ public class SheetImp implements Sheet, Serializable
             throw new IllegalArgumentException("Cell " + coordinate + " not found in map after set cell");
         cell.updateDependencies();
 
-        try
+        List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
+        for (Cell orderedCell : orderedCells)
         {
-            List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
-            for (Cell orderedCell : orderedCells)
-            {
-                orderedCell.calculateEffectiveValue();
-            }
-            return copySheet;
+            orderedCell.calculateEffectiveValue();
         }
-        catch (Exception ex)
-        {
-            return this;
-        }
+        return copySheet;
 
     }
 
