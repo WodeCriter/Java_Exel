@@ -179,7 +179,17 @@ public enum FunctionParser
 
             //Idea: topLevelParts now has either cells, functions, or numbers.
             //If it's a cell, it should be added to the "dependsOn" list given in the method.
-            return FunctionParser.valueOf(functionName).parse(topLevelParts);
+            FunctionParser func;
+            try {
+                func = FunctionParser.valueOf(functionName);
+            }
+            //If you get an exception (probably from the enum) tell user the function did not exist
+            catch (IllegalArgumentException e )
+            {
+                throw new IllegalArgumentException("Invalid function name: " + functionName);
+            }
+
+            return func.parse(topLevelParts);
         }
 
         // handle identity expression
@@ -236,11 +246,11 @@ public enum FunctionParser
     private static Boolean isStringACellCoordinate(String input) {
         char[] strAsArr = input.trim().toCharArray();
 
-        if (strAsArr.length == 0 || !Character.isUpperCase(strAsArr[0]))
+        if (strAsArr.length == 0 || !Character.isLetter(strAsArr[0]))
             return false;
 
         int i = 1;
-        while (Character.isUpperCase(strAsArr[i]))
+        while (Character.isLetter(strAsArr[i]))
         {
             i++;
         }

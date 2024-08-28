@@ -139,7 +139,7 @@ public class SheetImp implements Sheet, Serializable
                     orderCellsForCalculationHelper(dependentCell, coloredCells, orderedCells);
                     break;
                 case GREY:
-                    throw new IllegalArgumentException("Cells are not allowed to influence each other.");
+                    throw new IllegalArgumentException("Cell update failed, dependency circle found.");
             }
         }
 
