@@ -115,10 +115,8 @@ public class SpreadsheetMenu implements Menu {
                 System.out.println("No contents found at " + coordinate);
             }
         }catch(Exception e){
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Failed to fetch cell info: " + e.getMessage());
         }
-
-
     }
 
     private void updateCellContents() {
@@ -130,10 +128,8 @@ public class SpreadsheetMenu implements Menu {
             engineAPI.updateCellContents(coordinate, value);
             System.out.println("Cell updated successfully.");
         }catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Cell update failed: " + e.getMessage());
         }
-
-
     }
 
     private void showVersion() {
