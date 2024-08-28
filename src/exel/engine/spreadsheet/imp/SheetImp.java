@@ -108,7 +108,7 @@ public class SheetImp implements Sheet, Serializable
 
         try
         {
-            List<Cell> orderedCells =  orderCellsForCalculation(cell);
+            List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
             for (Cell orderedCell : orderedCells)
             {
                 orderedCell.calculateEffectiveValue();
@@ -144,6 +144,7 @@ public class SheetImp implements Sheet, Serializable
             {
                 case WHITE:
                     orderCellsForCalculationHelper(dependentCell, coloredCells, orderedCells);
+                    break;
                 case GREY:
                     throw new IllegalArgumentException("Cells are not allowed to influence each other.");
             }
