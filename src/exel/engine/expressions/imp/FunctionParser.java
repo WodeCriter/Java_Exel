@@ -246,11 +246,11 @@ public enum FunctionParser
     private static Boolean isStringACellCoordinate(String input) {
         char[] strAsArr = input.trim().toCharArray();
 
-        if (strAsArr.length == 0 || !Character.isLetter(strAsArr[0]))
+        if (strAsArr.length == 0 || !Character.isUpperCase(strAsArr[0]))
             return false;
 
         int i = 1;
-        while (Character.isLetter(strAsArr[i]))
+        while (Character.isUpperCase(strAsArr[i]))
         {
             i++;
         }
