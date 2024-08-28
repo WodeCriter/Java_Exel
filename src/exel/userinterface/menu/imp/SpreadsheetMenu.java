@@ -99,13 +99,13 @@ public class SpreadsheetMenu implements Menu {
             System.out.println();  // New line after each row
         }
     }
-
+    // TODO: fix the versions
     private void showCellContents() {
         System.out.print("Enter cell coordinate (e.g., A1): ");
         String coordinate = inputHandler.readLine().toUpperCase();
         try{
             ReadOnlyCell cell = engineAPI.getCellContents(coordinate);
-            if (cell != null) {
+            if (cell.getOriginalValue() != null) {
                 System.out.println("Cell: " + coordinate);
                 System.out.println("Original Value: " + cell.getOriginalValue());
                 System.out.println("Effective Value: " + cell.getEffectiveValue());
