@@ -62,7 +62,7 @@ public class MainMenu implements Menu {
                 this.engineAPI.loadSheet(path);
                 System.out.println("File loaded successfully. Spreadsheet is now at version 1.");
             }catch (Exception e){
-                System.out.println("Error: " + e.getMessage());
+                System.out.println("XML File load failed: " + e.getMessage());
             }
         }
     }
@@ -77,7 +77,18 @@ public class MainMenu implements Menu {
         this.engineAPI.createSheet(sheetName,DEFAULT_CELL_HEIGHT, DEFAULT_CELL_WIDTH, columnNum, rowNum);
     }
     private void loadSystemState() {
-        //TODO: implement
-        System.out.println("Not implemented yet");
+        System.out.print("Please enter the full path to the binary file (including .bin suffix): ");
+        String path = this.inputHandler.readLine();
+
+        if (!path.endsWith(".bin")) {
+            System.out.println("Error: The file must be an binary file (.bin extension).");
+        } else {
+            try {
+                this.engineAPI.loadSysState(path);
+                System.out.println("System state loaded successfully.");
+            }catch (Exception e){
+                System.out.println("System state load failed: " + e.getMessage());
+            }
+        }
     }
 }

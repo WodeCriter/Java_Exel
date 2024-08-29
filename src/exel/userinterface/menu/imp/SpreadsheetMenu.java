@@ -137,9 +137,13 @@ public class SpreadsheetMenu implements Menu {
     }
 
     private void showVersion() {
-        //TODO: FIX LOGIC
-        String version = engineAPI.getVersion();
-        System.out.println("FIX:Current spreadsheet version: " + version);
+        try {
+            VersionMenu versionMenu = new VersionMenu(engineAPI, inputHandler);
+            versionMenu.displayOptions();
+        }catch (Exception e){
+            System.out.println("Cannot display version menu: " + e.getMessage());
+        }
+
     }
 
     private void saveXmlFile(){

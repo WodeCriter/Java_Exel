@@ -14,7 +14,7 @@ public class RefExpression implements Expression
 
     public RefExpression(String coordinate)
     {
-        this.coordinate = coordinate;
+        this.coordinate = coordinate.toUpperCase();
         type = CellType.UNDEFINED;
     }
 

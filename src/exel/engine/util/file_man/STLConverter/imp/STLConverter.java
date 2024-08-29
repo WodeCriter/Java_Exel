@@ -78,7 +78,7 @@ public class STLConverter {
             // Add cell to the sheet
             sheet.setCell(coordinate, originalVal);
         }
-
+        sheet.rebase();
         return sheet;
     }
 }

@@ -1,9 +1,11 @@
 package exel.engine.spreadsheet.imp;
 
+import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +28,11 @@ public class ReadOnlySheetImp implements ReadOnlySheet {
         this.numOfRows = numOfRows;
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
+    }
+
+    public ReadOnlySheetImp(Sheet sheet) {
+        this(sheet.getVersion(), sheet.getReadOnlyCells(), sheet.getName(),
+                sheet.getNumOfCols(), sheet.getNumOfRows(), sheet.getCellWidth(), sheet.getCellHeight());
     }
 
     @Override

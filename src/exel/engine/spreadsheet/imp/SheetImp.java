@@ -1,9 +1,11 @@
 package exel.engine.spreadsheet.imp;
 
-import exel.engine.expressions.imp.FunctionParser;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
+import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
+import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
 import java.util.*;
@@ -14,6 +16,7 @@ public class SheetImp implements Sheet, Serializable
     private Map<String, CellImp> activeCells;
     private String sheetName;
     private int version;
+    private VersionManager versionManager;
     private int cellHeight;
     private int cellWidth;
     private int numOfCols;
@@ -29,6 +32,7 @@ public class SheetImp implements Sheet, Serializable
         this.numOfCols = numOfCols;
         this.numOfRows = numOfRows;
         this.version = 1;
+        this.versionManager = new VersionManager(this.copySheet());
     }
 
     @Override
@@ -44,9 +48,42 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
+    public List<ReadOnlyCell> getReadOnlyCells() {
+        List<ReadOnlyCell> readOnlyCellsList = new LinkedList<>();
+        for (Cell cell : activeCells.values()) {
+            ReadOnlyCell readOnlyCell = new ReadOnlyCellImp(
+                    cell.getCoordinate(),
+                    cell.getOriginalValue(),
+                    cell.getEffectiveValue(),
+                    cell.getVersion(),
+                    cell.getDependsOn(),
+                    cell.getInfluencingOn()
+            );
+            readOnlyCellsList.add(readOnlyCell);
+        }
+        return readOnlyCellsList; // return the list
+    }
+
+    @Override
     public int getVersion()
     {
         return version;
+    }
+
+    @Override
+    public Sheet getSheetByVersion(int version)
+    {
+        return versionManager.getSheetByVersion(version);
+    }
+
+    @Override
+    public List<Integer> getNumOfChangesInEachVersion()
+    {
+        return versionManager.getNumOfChangesInEachVersion();
+    }
+
+    public void rebase(){
+       this.versionManager.setBaseSheet(this.copySheet(), this.getCells());
     }
 
     @Override
@@ -104,8 +141,10 @@ public class SheetImp implements Sheet, Serializable
 
         List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
         orderedCells.forEach(Cell::calculateEffectiveValue);
+        versionManager.recordChanges(orderedCells);
         return copySheet;
     }
+
 
     private List<Cell> orderCellsForCalculation(Cell startingCell)
     {
@@ -134,7 +173,7 @@ public class SheetImp implements Sheet, Serializable
         orderedCells.addFirst(cell);
     }
 
-    private SheetImp copySheet() {
+    public SheetImp copySheet() {
         // lots of options here:
         // 1. implement clone all the way (yac... !)
         // 2. implement copy constructor for CellImpl and SheetImpl

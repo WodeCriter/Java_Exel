@@ -3,6 +3,8 @@ package exel.engine.api;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 
+import java.util.List;
+
 public interface Engine {
     /**
      * Creates a new spreadsheet.
@@ -16,12 +18,20 @@ public interface Engine {
      */
     void loadSheet(String filePath) throws Exception;
 
+
+    void loadSysState(String filePath) throws Exception;
+
     /**
      * Retrieves the contents of the entire sheet for display purposes.
      * @return A list of lists representing the spreadsheet, where each inner list is a row of cell values.
      *
      */
     ReadOnlySheet getSheet();
+
+
+    ReadOnlySheet getSheetOfVersion(int version);
+
+    List<Integer> getListOfVersionChanges();
 
     /**
      * Retrieves the contents of a specific cell.
@@ -38,11 +48,6 @@ public interface Engine {
      */
     void updateCellContents(String coordinate, String value) throws IllegalStateException;
 
-    /**
-     * Retrieves the version of the current spreadsheet.
-     * @return The version as a String.
-     */
-    String getVersion();
 
     /**
      * Saves the current spreadsheet to a file.

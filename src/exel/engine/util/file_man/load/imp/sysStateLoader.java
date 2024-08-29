@@ -4,7 +4,7 @@ import exel.engine.spreadsheet.api.Sheet;
 import java.io.*;
 
 public class sysStateLoader {
-    public static Sheet loadSheet(String filePath) {
+    public static Sheet loadSysState(String filePath) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
             return (Sheet) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
