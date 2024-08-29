@@ -82,6 +82,10 @@ public class SheetImp implements Sheet, Serializable
         return versionManager.getNumOfChangesInEachVersion();
     }
 
+    public void rebase(){
+       this.versionManager.setBaseSheet(this.copySheet(), this.getCells());
+    }
+
     @Override
     public CellImp getCell(String coordinate)
     {

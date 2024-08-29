@@ -24,6 +24,12 @@ public class VersionManager {
         changesPerVersion.add(versionChanges);
     }
 
+    public void setBaseSheet(SheetImp baseSheet, List<Cell> changedCells) {
+        this.baseSheet = baseSheet;
+        changesPerVersion = new LinkedList<>();
+        recordChanges(changedCells);
+    }
+
     public SheetImp getSheetByVersion(int version) {
         SheetImp versionSheet = baseSheet.copySheet(); // Start with the base state
         for (int i = 1; i <= version; i++) {
