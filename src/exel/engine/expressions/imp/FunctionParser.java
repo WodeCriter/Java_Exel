@@ -4,6 +4,7 @@ import exel.engine.expressions.api.Expression;
 import exel.engine.expressions.imp.Math.*;
 import exel.engine.expressions.imp.String.ConcatExpression;
 import exel.engine.expressions.imp.String.SubExpression;
+import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 import java.util.*;
@@ -61,7 +62,6 @@ public enum FunctionParser
                 public Expression parse(List<String> arguments)
                 {
                     AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "MINUS", CellType.NUMERIC);
-                    // all is good. create the relevant function instance
                     return new MinusExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
@@ -78,7 +78,7 @@ public enum FunctionParser
                     Expression exp = parseExpression(arguments.get(0).trim());
 
                     // more validations on the expected argument types
-                    if (!exp.getFunctionResultType().equals(CellType.NUMERIC))
+                    if (!exp.getFunctionResultType().equals(CellType.NUMERIC) && !exp.getFunctionResultType().equals(CellType.UNKNOWN))
                         throw new IllegalArgumentException("Invalid argument types for ABS function. Expected NUMERIC, but got " + exp.getFunctionResultType());
 
                     return new AbsExpression(exp);
@@ -143,7 +143,13 @@ public enum FunctionParser
                     Expression startIndex = parseExpression(arguments.get(1).trim());
                     Expression endIndex = parseExpression(arguments.get(2).trim());
 
-                    if (!stringToCut.getFunctionResultType().equals(CellType.STRING) || !startIndex.getFunctionResultType().equals(CellType.NUMERIC) || !endIndex.getFunctionResultType().equals(CellType.NUMERIC))
+                    CellType stringToCutType = stringToCut.getFunctionResultType();
+                    CellType startIndexType = startIndex.getFunctionResultType();
+                    CellType endIndexType = endIndex.getFunctionResultType();
+
+                    if ((!stringToCutType.equals(CellType.STRING) && !stringToCutType.equals(CellType.UNKNOWN)) ||
+                            (!startIndexType.equals(CellType.NUMERIC) && !startIndexType.equals(CellType.UNKNOWN)) ||
+                            (!endIndexType.equals(CellType.NUMERIC) && !endIndexType.equals(CellType.UNKNOWN)))
                         throw new IllegalArgumentException("Invalid argument types for SUB function. Expected String and 2 Numerics, but got " + stringToCut.getFunctionResultType() + ", " + startIndex.getFunctionResultType() + ", " + endIndex.getFunctionResultType());
 
                     return new SubExpression(stringToCut, startIndex, endIndex);
@@ -183,7 +189,7 @@ public enum FunctionParser
             try {
                 func = FunctionParser.valueOf(functionName);
             }
-            //If you get an exception (probably from the enum) tell user the function did not exist
+            //If you get an exception (probably from the enum) tell user the function does not exist
             catch (IllegalArgumentException e )
             {
                 throw new IllegalArgumentException("Invalid function name: " + functionName);

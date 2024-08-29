@@ -31,8 +31,8 @@ public class SubExpression implements Expression
             throw new RuntimeException("The start or end index given are not Numeric");
 
         String sourceStr = sourceValue.extractValueWithExpectation(String.class);
-        int startIndex = startValue.extractValueWithExpectation(Integer.class);
-        int endIndex = endValue.extractValueWithExpectation(Integer.class);
+        int startIndex = startValue.extractValueWithExpectation(Double.class).intValue();
+        int endIndex = endValue.extractValueWithExpectation(Double.class).intValue();
 
         if (startIndex > endIndex)
         {
@@ -40,6 +40,7 @@ public class SubExpression implements Expression
             startIndex = endIndex;
             endIndex = tmp;
         }
+        endIndex++;
 
         if (startIndex < 0 || endIndex < 0 || startIndex >= sourceStr.length() || endIndex >= sourceStr.length())
             return new EffectiveValueImp(CellType.STRING, UNDEFINED_VALUE);

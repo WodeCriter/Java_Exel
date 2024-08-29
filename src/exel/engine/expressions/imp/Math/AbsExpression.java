@@ -20,7 +20,7 @@ public class AbsExpression implements Expression {
         if (expValue.getCellType() != CellType.NUMERIC)
             throw new RuntimeException("Not all items are numeric values");
 
-        double result = Math.abs(expValue.extractValueWithExpectation(Double.class));
+        Double result = Math.abs(expValue.extractValueWithExpectation(Double.class));
         return new EffectiveValueImp(CellType.NUMERIC, result);
     }
 
