@@ -30,7 +30,6 @@ public class xmlFileLoader {
             STLSheet sheetFromFile = (STLSheet) unmarshaller.unmarshal(file);
             return STLConverter.fromSTLSheet(sheetFromFile);
         } catch (JAXBException e) {
-            e.printStackTrace();
             return null; // or handle the error as appropriate
         }
     }

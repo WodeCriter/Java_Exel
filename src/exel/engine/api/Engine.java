@@ -16,6 +16,9 @@ public interface Engine {
      */
     void loadSheet(String filePath) throws Exception;
 
+
+    void loadSysState(String filePath) throws Exception;
+
     /**
      * Retrieves the contents of the entire sheet for display purposes.
      * @return A list of lists representing the spreadsheet, where each inner list is a row of cell values.

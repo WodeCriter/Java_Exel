@@ -8,11 +8,11 @@ import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
+import exel.engine.util.file_man.load.imp.sysStateLoader;
 import exel.engine.util.file_man.load.imp.xmlFileLoader;
 import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class EngineImp implements Engine {
@@ -37,8 +37,18 @@ public class EngineImp implements Engine {
     public void loadSheet(String filePath) throws Exception {
         // Simulated loading logic
         this.filePath = filePath;
-        // Real implementation would involve parsing XML and creating a Sheet object
+        // parse the xml and create a sheet and a copy sheet object
         this.currentSheet = xmlFileLoader.loadSpreadsheet(filePath);
+        this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet.getVersion(), new ArrayList<>(), currentSheet.getName(), currentSheet.getNumOfCols(), currentSheet.getNumOfRows(), currentSheet.getCellWidth(), currentSheet.getCellHeight());
+
+    }
+
+    @Override
+    public void loadSysState(String filePath) throws Exception {
+        // Simulated loading logic
+        this.filePath = filePath;
+        // create a sheet object from the binary file
+        this.currentSheet = sysStateLoader.loadSysState(filePath);
         this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet.getVersion(), new ArrayList<>(), currentSheet.getName(), currentSheet.getNumOfCols(), currentSheet.getNumOfRows(), currentSheet.getCellWidth(), currentSheet.getCellHeight());
 
     }
