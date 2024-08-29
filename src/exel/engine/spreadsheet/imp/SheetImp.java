@@ -92,11 +92,6 @@ public class SheetImp implements Sheet, Serializable
         return numOfRows;
     }
 
-    private enum Color
-    {
-        WHITE, BLACK, GREY
-    }
-
     public Sheet updateCellValueAndCalculate(String coordinate, String newValue)
     {
         SheetImp copySheet = copySheet();
@@ -108,42 +103,34 @@ public class SheetImp implements Sheet, Serializable
         cell.updateDependencies();
 
         List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
-        for (Cell orderedCell : orderedCells)
-        {
-            orderedCell.calculateEffectiveValue();
-        }
+        orderedCells.forEach(Cell::calculateEffectiveValue);
         return copySheet;
     }
 
     private List<Cell> orderCellsForCalculation(Cell startingCell)
     {
         List<Cell> orderedCells = new LinkedList<>();
-        Map<Cell, Color> coloredCells = new HashMap<>();
-
-        for (Cell cell : activeCells.values())
-            coloredCells.put(cell, Color.WHITE);
+        Map<Cell, Boolean> coloredCells = new HashMap<>();
 
         orderCellsForCalculationHelper(startingCell, coloredCells, orderedCells);
         return orderedCells;
     }
 
-    private void orderCellsForCalculationHelper(Cell cell, Map<Cell, Color> coloredCells, List<Cell> orderedCells)
+    private void orderCellsForCalculationHelper(Cell cell, Map<Cell, Boolean> coloredCells, List<Cell> orderedCells)
     {
-        coloredCells.put(cell, Color.GREY);
+        Boolean GREY = true, BLACK = false, WHITE = null; //DFS Colors
+        coloredCells.put(cell, GREY); //color Cell Grey
 
         for (Cell dependentCell : cell.getInfluencingOn())
         {
-            switch (coloredCells.get(dependentCell))
-            {
-                case WHITE:
-                    orderCellsForCalculationHelper(dependentCell, coloredCells, orderedCells);
-                    break;
-                case GREY:
-                    throw new IllegalArgumentException("Cell update failed, dependency circle found.");
-            }
+            Boolean color = coloredCells.get(dependentCell);
+            if (color == WHITE)
+                orderCellsForCalculationHelper(dependentCell, coloredCells, orderedCells);
+            if (color == GREY)
+                throw new IllegalArgumentException("Cell update failed, dependency circle found.");
         }
 
-        coloredCells.put(cell, Color.BLACK);
+        coloredCells.put(cell, BLACK); //color Cell Black
         orderedCells.addFirst(cell);
     }
 

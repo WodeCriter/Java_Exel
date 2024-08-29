@@ -21,7 +21,7 @@ public class DivideExpression implements Expression {
         EffectiveValue rightValue = right.eval(sheet);
 
         if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC)
-            throw new RuntimeException("Not all items are numeric values");
+            return new EffectiveValueImp(CellType.UNDEFINED, UNDEFINED_NUMBER);
 
         double rightNum = rightValue.extractValueWithExpectation(Double.class);
         if (rightNum == 0)
