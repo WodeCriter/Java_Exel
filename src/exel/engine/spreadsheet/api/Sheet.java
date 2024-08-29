@@ -8,7 +8,7 @@ import java.util.List;
 public interface Sheet {
     int getVersion();
     Cell getCell(String coordinate);
-    void setCell(String coordinate, String value) throws IllegalArgumentException;
+    Cell setCell(String coordinate, String value) throws IllegalArgumentException;
     List<Cell> getCells();
     String getName();
     int getNumOfCols();
