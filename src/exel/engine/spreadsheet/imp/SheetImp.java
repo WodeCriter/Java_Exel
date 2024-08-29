@@ -4,6 +4,7 @@ import exel.engine.expressions.imp.FunctionParser;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
+import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
 import java.util.*;
@@ -14,6 +15,7 @@ public class SheetImp implements Sheet, Serializable
     private Map<String, CellImp> activeCells;
     private String sheetName;
     private int version;
+    private VersionManager versionManager;
     private int cellHeight;
     private int cellWidth;
     private int numOfCols;
@@ -29,6 +31,7 @@ public class SheetImp implements Sheet, Serializable
         this.numOfCols = numOfCols;
         this.numOfRows = numOfRows;
         this.version = 1;
+        versionManager = new VersionManager(this.copySheet());
     }
 
     @Override
@@ -46,6 +49,7 @@ public class SheetImp implements Sheet, Serializable
     @Override
     public int getVersion()
     {
+        versionManager.displayVersionChanges();
         return version;
     }
 
@@ -104,8 +108,10 @@ public class SheetImp implements Sheet, Serializable
 
         List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
         orderedCells.forEach(Cell::calculateEffectiveValue);
+        versionManager.recordChanges(orderedCells);
         return copySheet;
     }
+
 
     private List<Cell> orderCellsForCalculation(Cell startingCell)
     {
@@ -134,7 +140,7 @@ public class SheetImp implements Sheet, Serializable
         orderedCells.addFirst(cell);
     }
 
-    private SheetImp copySheet() {
+    public SheetImp copySheet() {
         // lots of options here:
         // 1. implement clone all the way (yac... !)
         // 2. implement copy constructor for CellImpl and SheetImpl

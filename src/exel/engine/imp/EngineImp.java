@@ -80,6 +80,7 @@ public class EngineImp implements Engine {
 
     @Override
     public String getVersion() {
+        currentSheet.getVersion();
         return currentSheet != null ? String.valueOf(currentSheet.getVersion()) : "No sheet loaded.";
     }
 
