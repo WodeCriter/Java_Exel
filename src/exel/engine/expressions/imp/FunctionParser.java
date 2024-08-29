@@ -176,7 +176,7 @@ public enum FunctionParser
     public static Expression parseExpression(String input)
     {
         String trimmedInput = input.trim();
-        if (trimmedInput.startsWith("{") && trimmedInput.endsWith("}"))
+        if (isStringAFunction(trimmedInput))
         {
             String functionContent = trimmedInput.substring(1, trimmedInput.length() - 1);
             List<String> topLevelParts = parseMainParts(functionContent);
@@ -194,7 +194,7 @@ public enum FunctionParser
             //If you get an exception (probably from the enum) tell user the function does not exist
             catch (IllegalArgumentException e )
             {
-                throw new IllegalArgumentException("Invalid function name: " + functionName);
+                throw new IllegalArgumentException("\"" + functionName + "\" is not a valid function");
             }
 
             return func.parse(topLevelParts);
@@ -237,14 +237,10 @@ public enum FunctionParser
     public static List<String> getCellCordsInOriginalValue(String input)
     {
         List<String> cellsList = new LinkedList<>();
-        if (input == null || input.isEmpty())
+        if (!isStringAFunction(input))
             return cellsList;
 
-        String improvedInput = input.replaceAll(" ", "");
-        if (!improvedInput.startsWith("{") || !improvedInput.endsWith("}"))
-            return cellsList;
-
-        improvedInput = improvedInput.toUpperCase();
+        String improvedInput = input.replaceAll(" ", "").toUpperCase();
         int refIndex = 0;
 
         while (refIndex < improvedInput.length())
@@ -291,6 +287,14 @@ public enum FunctionParser
 
         // If we've parsed through all characters, it's a valid coordinate
         return i == length;
+    }
+
+    public static Boolean isStringAFunction(String input)
+    {
+        if (input == null || input.isEmpty())
+            return false;
+        input = input.trim();
+        return input.startsWith("{") && input.endsWith("}");
     }
 
     private static AbstractMap.SimpleEntry<Expression, Expression> checkArgsAndParseExpressions
