@@ -4,9 +4,12 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class VersionManager {
+public class VersionManager implements Serializable
+{
+    private static final long serialVersionUID = 1L;
     private SheetImp baseSheet;
     private List<Map<String, String>> changesPerVersion = new LinkedList<>();
 

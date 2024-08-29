@@ -61,7 +61,7 @@ public class VersionMenu implements Menu {
 
     private void displaySheetForVersion() {
         System.out.print("Enter version number: ");
-        int versionNumber = inputHandler.readInt() - 1;
+        int versionNumber = inputHandler.readIntRange(1,changesPerVersion.size()+1) - 1;
         try{
             ReadOnlySheet readSheet = engineAPI.getSheetOfVersion(versionNumber);
             displayVersionSheet(readSheet);
