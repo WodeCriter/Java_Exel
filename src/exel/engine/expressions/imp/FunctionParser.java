@@ -234,20 +234,34 @@ public enum FunctionParser
         return parts;
     }
 
-    public static List<String> getCellCordsInOriginalValue(String input) {
+    public static List<String> getCellCordsInOriginalValue(String input)
+    {
         List<String> cellsList = new LinkedList<>();
+        if (input == null || input.isEmpty())
+            return cellsList;
 
-        if (isStringACellCoordinate(input))
-            cellsList.add(input);
-        else if (input.startsWith("{") && input.endsWith("}"))
+        String improvedInput = input.replaceAll(" ", "");
+        if (!improvedInput.startsWith("{") || !improvedInput.endsWith("}"))
+            return cellsList;
+
+        improvedInput = improvedInput.toUpperCase();
+        int refIndex = 0;
+
+        while (refIndex < improvedInput.length())
         {
-            String functionContent = input.substring(1, input.length() - 1);
-            List<String> mainParts = parseMainParts(functionContent);
-            mainParts.removeFirst(); //Removes function name
+            refIndex = improvedInput.indexOf("{REF,", refIndex);
 
-            for (String part : mainParts)
-                cellsList.addAll(getCellCordsInOriginalValue(part));
+            if (refIndex == -1)
+                return cellsList;
+            refIndex += 5;
+
+            int endIndex = improvedInput.indexOf('}', refIndex);
+            String supposedCell = improvedInput.substring(refIndex, endIndex);
+            if (isStringACellCoordinate(supposedCell))
+                cellsList.add(supposedCell);
+            refIndex = endIndex + 1;
         }
+
         return cellsList;
     }
 

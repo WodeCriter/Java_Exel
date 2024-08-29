@@ -108,10 +108,7 @@ public class SheetImp implements Sheet, Serializable
         cell.updateDependencies();
 
         List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
-        for (Cell orderedCell : orderedCells)
-        {
-            orderedCell.calculateEffectiveValue();
-        }
+        orderedCells.forEach(Cell::calculateEffectiveValue);
         return copySheet;
     }
 
