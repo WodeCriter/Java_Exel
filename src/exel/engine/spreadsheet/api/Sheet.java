@@ -1,7 +1,7 @@
 package exel.engine.spreadsheet.api;
 
 import exel.engine.spreadsheet.cell.api.Cell;
-import exel.engine.spreadsheet.imp.SheetImp;
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 
 import java.util.List;
 
@@ -16,4 +16,7 @@ public interface Sheet {
     int getCellWidth();
     int getCellHeight();
     Sheet updateCellValueAndCalculate(String coordinate, String newValue);
+    Sheet getSheetByVersion(int version);
+    List<Integer> getNumOfChangesInEachVersion();
+    List<ReadOnlyCell> getReadOnlyCells();
 }

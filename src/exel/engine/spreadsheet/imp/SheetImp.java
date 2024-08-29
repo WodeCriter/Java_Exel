@@ -1,9 +1,10 @@
 package exel.engine.spreadsheet.imp;
 
-import exel.engine.expressions.imp.FunctionParser;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
+import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
 import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
@@ -31,7 +32,7 @@ public class SheetImp implements Sheet, Serializable
         this.numOfCols = numOfCols;
         this.numOfRows = numOfRows;
         this.version = 1;
-        versionManager = new VersionManager(this.copySheet());
+        this.versionManager = new VersionManager(this.copySheet());
     }
 
     @Override
@@ -47,10 +48,38 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
+    public List<ReadOnlyCell> getReadOnlyCells() {
+        List<ReadOnlyCell> readOnlyCellsList = new LinkedList<>();
+        for (Cell cell : activeCells.values()) {
+            ReadOnlyCell readOnlyCell = new ReadOnlyCellImp(
+                    cell.getCoordinate(),
+                    cell.getOriginalValue(),
+                    cell.getEffectiveValue(),
+                    cell.getVersion(),
+                    cell.getDependsOn(),
+                    cell.getInfluencingOn()
+            );
+            readOnlyCellsList.add(readOnlyCell);
+        }
+        return readOnlyCellsList; // return the list
+    }
+
+    @Override
     public int getVersion()
     {
-        versionManager.displayVersionChanges();
         return version;
+    }
+
+    @Override
+    public Sheet getSheetByVersion(int version)
+    {
+        return versionManager.getSheetByVersion(version);
+    }
+
+    @Override
+    public List<Integer> getNumOfChangesInEachVersion()
+    {
+        return versionManager.getNumOfChangesInEachVersion();
     }
 
     @Override

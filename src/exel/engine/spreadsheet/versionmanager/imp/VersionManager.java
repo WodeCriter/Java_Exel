@@ -32,15 +32,14 @@ public class VersionManager {
         return versionSheet;
     }
 
-    private void applyChanges(SheetImp sheet, Map<String, String> changes) {
-        changes.forEach(sheet::setCell);
+    public List<Integer> getNumOfChangesInEachVersion()
+    {
+        List<Integer> numOfChanges = new LinkedList<>();
+        changesPerVersion.forEach(changes->numOfChanges.add(changes.size()));
+        return numOfChanges;
     }
 
-    public void displayVersionChanges() {
-        for (int version = 1; version < changesPerVersion.size(); version++) {
-            System.out.println("Version " + version + " changes:");
-            changesPerVersion.get(version).forEach((cell, value) ->
-                    System.out.println("Cell " + cell + " changed to: " + value));
-        }
+    private void applyChanges(SheetImp sheet, Map<String, String> changes) {
+        changes.forEach(sheet::setCell);
     }
 }

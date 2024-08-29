@@ -14,6 +14,7 @@ import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EngineImp implements Engine {
     private Sheet currentSheet;
@@ -29,7 +30,7 @@ public class EngineImp implements Engine {
 
         // Create a new modifiable Sheet and its ReadOnly counterpart
         this.currentSheet = new SheetImp(cellHeight, cellWidth, numOfCols, numOfRows, sheetName);
-        this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet.getVersion(), new ArrayList<>(), currentSheet.getName(), currentSheet.getNumOfCols(), currentSheet.getNumOfRows(), currentSheet.getCellWidth(), currentSheet.getCellHeight());
+        this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
         System.out.println("New spreadsheet created.");
     }
 
@@ -39,8 +40,7 @@ public class EngineImp implements Engine {
         this.filePath = filePath;
         // parse the xml and create a sheet and a copy sheet object
         this.currentSheet = xmlFileLoader.loadSpreadsheet(filePath);
-        this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet.getVersion(), new ArrayList<>(), currentSheet.getName(), currentSheet.getNumOfCols(), currentSheet.getNumOfRows(), currentSheet.getCellWidth(), currentSheet.getCellHeight());
-
+        this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
     }
 
     @Override
@@ -49,13 +49,23 @@ public class EngineImp implements Engine {
         this.filePath = filePath;
         // create a sheet object from the binary file
         this.currentSheet = sysStateLoader.loadSysState(filePath);
-        this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet.getVersion(), new ArrayList<>(), currentSheet.getName(), currentSheet.getNumOfCols(), currentSheet.getNumOfRows(), currentSheet.getCellWidth(), currentSheet.getCellHeight());
-
+        this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
     }
 
     @Override
     public ReadOnlySheet getSheet() {
         return readOnlyCurrentSheet;
+    }
+
+    @Override
+    public ReadOnlySheet getSheetOfVersion(int version) {
+        Sheet verSheet = currentSheet.getSheetByVersion(version);
+        return new ReadOnlySheetImp(verSheet);
+    }
+
+    @Override
+    public List<Integer> getListOfVersionChanges() {
+        return currentSheet.getNumOfChangesInEachVersion();
     }
 
     @Override
@@ -75,14 +85,9 @@ public class EngineImp implements Engine {
         //update the current sheet to a copy created inside
         currentSheet = currentSheet.updateCellValueAndCalculate(coordinate, value); // Directly set the cell's value in the modifiable sheet
         //update your read only sheet based on the copy you just got
-        readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet.getVersion(), new ArrayList<>(), currentSheet.getName(), currentSheet.getNumOfCols(), currentSheet.getNumOfRows(), currentSheet.getCellWidth(), currentSheet.getCellHeight());
+        readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
     }
 
-    @Override
-    public String getVersion() {
-        currentSheet.getVersion();
-        return currentSheet != null ? String.valueOf(currentSheet.getVersion()) : "No sheet loaded.";
-    }
 
     @Override
     public void saveXmlFile(String filePath, String fileName) throws Exception {
