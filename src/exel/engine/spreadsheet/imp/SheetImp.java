@@ -141,7 +141,10 @@ public class SheetImp implements Sheet, Serializable
 
         List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
         orderedCells.forEach(Cell::calculateEffectiveValue);
+        for (Cell orderedCell : orderedCells)
+            orderedCell.setVersion(copySheet.version);
         versionManager.recordChanges(orderedCells);
+        copySheet.passVersionManager(versionManager);
         return copySheet;
     }
 
@@ -225,6 +228,11 @@ public class SheetImp implements Sheet, Serializable
         // Check if the column index and row index are within the allowed range.
         return column > 0 && column <= this.numOfCols && row > 0 && row <= this.numOfRows;
     }
+
+    private void passVersionManager(VersionManager newMan){
+        this.versionManager = newMan;
+    }
 }
+
 
 

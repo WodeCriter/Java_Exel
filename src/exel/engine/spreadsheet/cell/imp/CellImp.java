@@ -97,6 +97,12 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
     }
 
     @Override
+    public void setVersion(int version)
+    {
+        this.version = version;
+    }
+
+    @Override
     public List<CellImp> getDependsOn() {
         return dependsOn;
     }

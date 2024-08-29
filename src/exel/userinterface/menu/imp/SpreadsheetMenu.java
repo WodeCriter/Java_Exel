@@ -6,7 +6,9 @@ import exel.userinterface.menu.api.Menu;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SpreadsheetMenu implements Menu {
     private InputHandler inputHandler;
@@ -19,6 +21,8 @@ public class SpreadsheetMenu implements Menu {
 
     @Override
     public void displayOptions() {
+        System.out.println();
+        System.out.println("---Spreadsheet Menu---");
         System.out.println("1. Show sheet");
         System.out.println("2. Show cell contents");
         System.out.println("3. Update cell contents");
@@ -28,6 +32,7 @@ public class SpreadsheetMenu implements Menu {
         System.out.println("7. Load file");
         System.out.println("8. Exit to main menu");
         System.out.println("9. Exit program");
+        System.out.println("----------------------");
         int choice = this.inputHandler.readInt();
         handleUserChoice(choice);
     }
@@ -79,8 +84,14 @@ public class SpreadsheetMenu implements Menu {
         System.out.println("Spreadsheet: " + sheet.getName());
         System.out.println("Version: " + sheet.getVersion());
 
-        // Get cell width and height from the sheet properties
+        // Get cell width from the sheet properties
         int cellWidth = sheet.getCellWidth();
+
+        // Initialize a map to quickly access cell values by coordinates
+        Map<String, String> cellMap = new HashMap<>();
+        for (ReadOnlyCell cell : sheet.getCells()) {
+            cellMap.put(cell.getCoordinate(), cell.getEffectiveValue() != null ? cell.getEffectiveValue() : "");
+        }
 
         // Print column headers with proper formatting
         System.out.print("   | ");
@@ -95,8 +106,7 @@ public class SpreadsheetMenu implements Menu {
             System.out.printf("%02d | ", i);
             for (int j = 0; j < sheet.getNumOfCols(); j++) {
                 String cellCoordinate = "" + (char)('A' + j) + i;
-                ReadOnlyCell cell = engineAPI.getCellContents(cellCoordinate);
-                String cellValue = (cell != null && cell.getEffectiveValue() != null) ? cell.getEffectiveValue() : "";
+                String cellValue = cellMap.getOrDefault(cellCoordinate, "");
                 cellValue = formatCellValue(cellValue, cellWidth);  // Ensure cell value is formatted correctly
                 System.out.print(cellValue + " | ");
             }
@@ -113,7 +123,7 @@ public class SpreadsheetMenu implements Menu {
                 System.out.println("Cell: " + coordinate);
                 System.out.println("Original Value: " + cell.getOriginalValue());
                 System.out.println("Effective Value: " + cell.getEffectiveValue());
-                System.out.println("Version: " + cell.getVersion());
+                System.out.println("Last changed in sheet version: " + cell.getVersion());
                 printDependenciesAndInfluences(cell);
             } else {
                 System.out.println("No contents found at " + coordinate);
@@ -124,9 +134,10 @@ public class SpreadsheetMenu implements Menu {
     }
 
     private void updateCellContents() {
-        System.out.print("Enter cell coordinate (e.g., A1): ");
+        System.out.println("Enter cell coordinate (e.g., A1): ");
         String coordinate = inputHandler.readLine().toUpperCase();
-        System.out.print("Enter new value for the cell: ");
+        System.out.println("Function format: '{FUNC_NAME,ARG1,....}'");
+        System.out.println("Enter new value for the cell (a value or a function): ");
         String value = inputHandler.readLine();
         try {
             engineAPI.updateCellContents(coordinate, value);
