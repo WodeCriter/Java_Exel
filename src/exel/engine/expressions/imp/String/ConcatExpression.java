@@ -23,7 +23,7 @@ public class ConcatExpression implements Expression
         EffectiveValue rightValue = right.eval(sheet);
 
         if (leftValue.getCellType() != CellType.STRING || rightValue.getCellType() != CellType.STRING )
-            throw new RuntimeException("All items should be strings");
+            return new EffectiveValueImp(CellType.STRING, UNDEFINED_STRING);
 
         String leftStr = leftValue.extractValueWithExpectation(String.class);
         String rightStr = rightValue.extractValueWithExpectation(String.class);

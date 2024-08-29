@@ -9,6 +9,7 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.util.file_man.load.imp.xmlFileLoader;
+import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 
 import java.io.File;
@@ -38,7 +39,6 @@ public class EngineImp implements Engine {
         this.filePath = filePath;
         // Real implementation would involve parsing XML and creating a Sheet object
         this.currentSheet = xmlFileLoader.loadSpreadsheet(filePath);
-        //Todo: insure sheet is loaded with a version of 1
         this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet.getVersion(), new ArrayList<>(), currentSheet.getName(), currentSheet.getNumOfCols(), currentSheet.getNumOfRows(), currentSheet.getCellWidth(), currentSheet.getCellHeight());
 
     }
@@ -74,9 +74,17 @@ public class EngineImp implements Engine {
     }
 
     @Override
-    public void saveXmlFile(String filePath) throws Exception {
-        // Simulated save logic
-        xmlFileSaver.saveSpreadsheet(this.currentSheet , filePath);
+    public void saveXmlFile(String filePath, String fileName) throws Exception {
+        if (fileName.isEmpty())
+            fileName = currentSheet.getName() + "_sheet_v" + currentSheet.getVersion();
+        xmlFileSaver.saveSpreadsheet(this.currentSheet , filePath+ '/' + fileName + ".xml");
+    }
+
+    @Override
+    public void saveSysStateFile(String filePath, String fileName) {
+        if (fileName.isEmpty())
+            fileName = currentSheet.getName() + "_systemState_v"+ currentSheet.getVersion();
+        sysStateSaver.saveSheetState(filePath +"/"+ fileName + ".bin", this.currentSheet);
     }
 
     @Override

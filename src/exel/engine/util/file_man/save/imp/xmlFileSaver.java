@@ -34,7 +34,7 @@ public class xmlFileSaver {
             STLSheet stlSheet = STLConverter.toSTLSheet(sheet);
 
             // Marshal the STLSheet object to a file
-            File file = new File(filePath + '/' +sheet.getName() + "_sheet.xml");
+            File file = new File(filePath);
             marshaller.marshal(stlSheet, file);
 
             return true;  // Return true to indicate success

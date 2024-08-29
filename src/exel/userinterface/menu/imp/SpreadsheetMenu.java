@@ -23,8 +23,9 @@ public class SpreadsheetMenu implements Menu {
         System.out.println("2. Show cell contents");
         System.out.println("3. Update cell contents");
         System.out.println("4. Show version");
-        System.out.println("5. Save file");
-        System.out.println("6. Load file");
+        System.out.println("5. Save file as XML");
+        System.out.println("6. Save system state");
+        System.out.println("7. Load file");
         System.out.println("8. Exit to main menu");
         System.out.println("9. Exit program");
         int choice = this.inputHandler.readInt();
@@ -47,9 +48,12 @@ public class SpreadsheetMenu implements Menu {
                 showVersion();
                 break;
             case 5:
-                saveFile();
+                saveXmlFile();
                 break;
             case 6:
+                saveSysStateFile();
+                break;
+            case 7:
                 loadFile();
                 break;
             case 8:
@@ -138,11 +142,26 @@ public class SpreadsheetMenu implements Menu {
         System.out.println("FIX:Current spreadsheet version: " + version);
     }
 
-    private void saveFile(){
+    private void saveXmlFile(){
         System.out.print("Enter file path to the folder: ");
         String filePath = inputHandler.readLine();
+        System.out.print("Enter file name (no need for suffix): ");
+        String fileName = inputHandler.readLine();
         try {
-            engineAPI.saveXmlFile(filePath);
+            engineAPI.saveXmlFile(filePath, fileName);
+            System.out.println("File saved successfully at " + filePath);
+        }catch (Exception e){
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void saveSysStateFile(){
+        System.out.print("Enter file path to the folder: ");
+        String filePath = inputHandler.readLine();
+        System.out.print("Enter file name (no need for suffix): ");
+        String fileName = inputHandler.readLine();
+        try {
+            engineAPI.saveSysStateFile(filePath, fileName);
             System.out.println("File saved successfully at " + filePath);
         }catch (Exception e){
             System.out.println("Error: " + e.getMessage());

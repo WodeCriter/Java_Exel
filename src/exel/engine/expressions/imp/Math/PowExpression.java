@@ -21,10 +21,15 @@ public class PowExpression implements Expression {
         EffectiveValue rightValue = right.eval(sheet);
 
         if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC )
-            throw new RuntimeException("Not all items are numeric values");
+            return new EffectiveValueImp(CellType.STRING, UNDEFINED_NUMBER);
 
-        double result = Math.pow(leftValue.extractValueWithExpectation(Double.class), rightValue.extractValueWithExpectation(Double.class));
+        double leftNum = leftValue.extractValueWithExpectation(Double.class);
+        double rightNum = rightValue.extractValueWithExpectation(Double.class);
 
+        if (leftNum == 0 && rightNum == 0)
+            throw new RuntimeException("0 to the power of 0 is an undefined expression");
+
+        double result = Math.pow(leftNum, rightNum);
         return new EffectiveValueImp(CellType.NUMERIC, result);
     }
 

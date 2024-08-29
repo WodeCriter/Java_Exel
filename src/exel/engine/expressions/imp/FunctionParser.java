@@ -17,17 +17,18 @@ public enum FunctionParser
                 public Expression parse(List<String> arguments)
                 {
                     // validations of the function. it should have exactly one argument
-                    if (arguments.size() != 1)
-                        throw new IllegalArgumentException("Invalid number of arguments for IDENTITY function. Expected 1, but got " + arguments.size());
+                    checkForArgumentSize(arguments.size(), 1, "IDENTITY");
 
                     // all is good. create the relevant function instance
-                    String actualValue = arguments.get(0).trim();
-                    if (isBoolean(actualValue))
-                        return new IdentityExpression(Boolean.parseBoolean(actualValue), CellType.BOOLEAN);
-                    else if (isNumeric(actualValue))
-                        return new IdentityExpression(Double.parseDouble(actualValue), CellType.NUMERIC);
+                    String actualValueWithSpaces = arguments.get(0);
+                    String actualValueTrimmed = actualValueWithSpaces.trim();
+
+                    if (isBoolean(actualValueTrimmed))
+                        return new IdentityExpression(Boolean.parseBoolean(actualValueTrimmed), CellType.BOOLEAN);
+                    else if (isNumeric(actualValueTrimmed))
+                        return new IdentityExpression(Double.parseDouble(actualValueTrimmed), CellType.NUMERIC);
                     else
-                        return new IdentityExpression(actualValue, CellType.STRING);
+                        return new IdentityExpression(actualValueWithSpaces, CellType.STRING);
                 }
 
                 private boolean isBoolean(String value)
@@ -52,7 +53,7 @@ public enum FunctionParser
                 @Override
                 public Expression parse(List<String> arguments)
                 {
-                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "PLUS", CellType.NUMERIC);
+                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "PLUS");
                     return new PlusExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
@@ -61,7 +62,7 @@ public enum FunctionParser
                 @Override
                 public Expression parse(List<String> arguments)
                 {
-                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "MINUS", CellType.NUMERIC);
+                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "MINUS");
                     return new MinusExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
@@ -70,16 +71,14 @@ public enum FunctionParser
                 @Override
                 public Expression parse(List<String> arguments)
                 {
-                    // validations of the function. it should have exactly two arguments
-                    if (arguments.size() != 1)
-                        throw new IllegalArgumentException("Invalid number of arguments for ABS function. Expected 1, but got " + arguments.size());
+                    checkForArgumentSize(arguments.size(), 1, "ABS");
 
                     //structure is good. parse arguments
                     Expression exp = parseExpression(arguments.get(0).trim());
 
                     // more validations on the expected argument types
-                    if (!exp.getFunctionResultType().equals(CellType.NUMERIC) && !exp.getFunctionResultType().equals(CellType.UNKNOWN))
-                        throw new IllegalArgumentException("Invalid argument types for ABS function. Expected NUMERIC, but got " + exp.getFunctionResultType());
+//                    if (!exp.getFunctionResultType().equals(CellType.NUMERIC) && !exp.getFunctionResultType().equals(CellType.UNKNOWN))
+//                        throw new IllegalArgumentException("Invalid argument types for ABS function. Expected NUMERIC, but got " + exp.getFunctionResultType());
 
                     return new AbsExpression(exp);
                 }
@@ -89,7 +88,7 @@ public enum FunctionParser
                 @Override
                 public Expression parse(List<String> arguments)
                 {
-                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "DIVIDE", CellType.NUMERIC);
+                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "DIVIDE");
                     return new DivideExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
@@ -98,7 +97,7 @@ public enum FunctionParser
                 @Override
                 public Expression parse(List<String> arguments)
                 {
-                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "MOD", CellType.NUMERIC);
+                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "MOD");
                     return new ModExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
@@ -107,7 +106,7 @@ public enum FunctionParser
                 @Override
                 public Expression parse(List<String> arguments)
                 {
-                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "POW", CellType.NUMERIC);
+                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "POW");
                     return new PowExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
@@ -116,7 +115,7 @@ public enum FunctionParser
                 @Override
                 public Expression parse(List<String> arguments)
                 {
-                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "TIMES", CellType.NUMERIC);
+                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "TIMES");
                     return new TimesExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
@@ -125,8 +124,12 @@ public enum FunctionParser
                 @Override
                 public Expression parse(List<String> arguments)
                 {
-                    AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "CONCAT", CellType.STRING);
-                    return new ConcatExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
+                    checkForArgumentSize(arguments.size(), 2, "CONCAT");
+
+                    //structure is good. parse arguments
+                    Expression left = parseExpression(arguments.get(0));
+                    Expression right = parseExpression(arguments.get(1));
+                    return new ConcatExpression(left, right);
                 }
             },
     SUB
@@ -135,11 +138,10 @@ public enum FunctionParser
                 public Expression parse(List<String> arguments)
                 {
                     // validations of the function. it should have exactly two arguments
-                    if (arguments.size() != 3)
-                        throw new IllegalArgumentException("Invalid number of arguments for SUB function. Expected 3, but got " + arguments.size());
+                    checkForArgumentSize(arguments.size(), 3, "SUB");
 
                     //structure is good. parse arguments
-                    Expression stringToCut = parseExpression(arguments.get(0).trim());
+                    Expression stringToCut = parseExpression(arguments.get(0));
                     Expression startIndex = parseExpression(arguments.get(1).trim());
                     Expression endIndex = parseExpression(arguments.get(2).trim());
 
@@ -147,10 +149,10 @@ public enum FunctionParser
                     CellType startIndexType = startIndex.getFunctionResultType();
                     CellType endIndexType = endIndex.getFunctionResultType();
 
-                    if ((!stringToCutType.equals(CellType.STRING) && !stringToCutType.equals(CellType.UNKNOWN)) ||
-                            (!startIndexType.equals(CellType.NUMERIC) && !startIndexType.equals(CellType.UNKNOWN)) ||
-                            (!endIndexType.equals(CellType.NUMERIC) && !endIndexType.equals(CellType.UNKNOWN)))
-                        throw new IllegalArgumentException("Invalid argument types for SUB function. Expected String and 2 Numerics, but got " + stringToCut.getFunctionResultType() + ", " + startIndex.getFunctionResultType() + ", " + endIndex.getFunctionResultType());
+//                    if ((!stringToCutType.equals(CellType.STRING) && !stringToCutType.equals(CellType.UNKNOWN)) ||
+//                            (!startIndexType.equals(CellType.NUMERIC) && !startIndexType.equals(CellType.UNKNOWN)) ||
+//                            (!endIndexType.equals(CellType.NUMERIC) && !endIndexType.equals(CellType.UNKNOWN)))
+//                        throw new IllegalArgumentException("Invalid argument types for SUB function. Expected String and 2 Numerics, but got " + stringToCut.getFunctionResultType() + ", " + startIndex.getFunctionResultType() + ", " + endIndex.getFunctionResultType());
 
                     return new SubExpression(stringToCut, startIndex, endIndex);
                 }
@@ -159,8 +161,7 @@ public enum FunctionParser
         @Override
         public Expression parse(List<String> arguments)
         {
-            if (arguments.size() != 1)
-                throw new IllegalArgumentException("Invalid number of arguments for REF function. Expected 1, but got " + arguments.size());
+            checkForArgumentSize(arguments.size(), 1, "REF");
 
             String coordinate = arguments.getFirst().trim();
             if (!isStringACellCoordinate(coordinate))
@@ -218,7 +219,7 @@ public enum FunctionParser
             if (c == ',' && stack.isEmpty())
             {
                 // If we are at a comma and the stack is empty, it's a separator for top-level parts
-                parts.add(buffer.toString().trim());
+                parts.add(buffer.toString());
                 buffer.setLength(0); // Clear the buffer for the next part
             }
             else
@@ -278,26 +279,30 @@ public enum FunctionParser
     }
 
     private static AbstractMap.SimpleEntry<Expression, Expression> checkArgsAndParseExpressions
-            (List<String> arguments, String funcName, CellType expectedArgsType)
+            (List<String> arguments, String funcName)
     {
-        // validations of the function. it should have exactly two arguments
-        if (arguments.size() != 2)
-            throw new IllegalArgumentException("Invalid number of arguments for " + funcName + " function. Expected 2, but got " + arguments.size());
+        checkForArgumentSize(arguments.size(), 2, funcName);
 
         //structure is good. parse arguments
         Expression left = parseExpression(arguments.get(0).trim());
         Expression right = parseExpression(arguments.get(1).trim());
 
-        CellType leftType = left.getFunctionResultType();
-        CellType rightType = right.getFunctionResultType();
-
-        // more validations on the expected argument types
-        if ((!leftType.equals(expectedArgsType) && !leftType.equals(CellType.UNKNOWN)) ||
-                (!rightType.equals(expectedArgsType) && !rightType.equals(CellType.UNKNOWN)))
-            throw new IllegalArgumentException("Invalid argument types for " + funcName + " function. " +
-                    "Expected " + expectedArgsType.toString() + ", but got " + left.getFunctionResultType() + " and " + right.getFunctionResultType());
+//        CellType leftType = left.getFunctionResultType();
+//        CellType rightType = right.getFunctionResultType();
+//
+//        // more validations on the expected argument types
+//        if ((!leftType.equals(expectedArgsType) && !leftType.equals(CellType.UNKNOWN)) ||
+//                (!rightType.equals(expectedArgsType) && !rightType.equals(CellType.UNKNOWN)))
+//            throw new IllegalArgumentException("Invalid argument types for " + funcName + " function. " +
+//                    "Expected " + expectedArgsType.toString() + ", but got " + left.getFunctionResultType() + " and " + right.getFunctionResultType());
 
         return new AbstractMap.SimpleEntry<>(left, right);
+    }
+
+    private static void checkForArgumentSize(int argumentsSize, int expectedSize, String funcName)
+    {
+        if (argumentsSize != expectedSize)
+            throw new IllegalArgumentException("Invalid number of arguments for " + funcName + " function. Expected " + expectedSize + ", but got " + argumentsSize);
     }
 }
 
