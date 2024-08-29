@@ -21,7 +21,7 @@ public class PowExpression implements Expression {
         EffectiveValue rightValue = right.eval(sheet);
 
         if (leftValue.getCellType() != CellType.NUMERIC || rightValue.getCellType() != CellType.NUMERIC )
-            return new EffectiveValueImp(CellType.STRING, UNDEFINED_NUMBER);
+            return new EffectiveValueImp(CellType.UNDEFINED, UNDEFINED_NUMBER);
 
         double leftNum = leftValue.extractValueWithExpectation(Double.class);
         double rightNum = rightValue.extractValueWithExpectation(Double.class);

@@ -26,7 +26,7 @@ public class SubExpression implements Expression
         EffectiveValue endValue = this.endIndex.eval(sheet);
 
         if (sourceValue.getCellType() != CellType.STRING || startValue.getCellType() != CellType.NUMERIC || endValue.getCellType() != CellType.NUMERIC)
-            return new EffectiveValueImp(CellType.STRING, UNDEFINED_STRING);
+            return new EffectiveValueImp(CellType.UNDEFINED, UNDEFINED_STRING);
 
         String sourceStr = sourceValue.extractValueWithExpectation(String.class);
         int startIndex = startValue.extractValueWithExpectation(Double.class).intValue();
@@ -41,7 +41,7 @@ public class SubExpression implements Expression
         endIndex++;
 
         if (startIndex < 0 || endIndex < 0 || startIndex >= sourceStr.length() || endIndex >= sourceStr.length())
-            return new EffectiveValueImp(CellType.STRING, UNDEFINED_STRING);
+            return new EffectiveValueImp(CellType.UNDEFINED, UNDEFINED_STRING);
 
         return new EffectiveValueImp(CellType.STRING, sourceStr.substring(startIndex, endIndex));
     }

@@ -175,9 +175,10 @@ public enum FunctionParser
 
     public static Expression parseExpression(String input)
     {
-        if (input.startsWith("{") && input.endsWith("}"))
+        String trimmedInput = input.trim();
+        if (trimmedInput.startsWith("{") && trimmedInput.endsWith("}"))
         {
-            String functionContent = input.substring(1, input.length() - 1);
+            String functionContent = trimmedInput.substring(1, trimmedInput.length() - 1);
             List<String> topLevelParts = parseMainParts(functionContent);
             String functionName = topLevelParts.get(0).trim().toUpperCase();
 
@@ -200,7 +201,7 @@ public enum FunctionParser
         }
 
         // handle identity expression
-        return FunctionParser.IDENTITY.parse(List.of(input.trim()));
+        return FunctionParser.IDENTITY.parse(List.of(input));
     }
 
     private static List<String> parseMainParts(String input)
@@ -228,7 +229,7 @@ public enum FunctionParser
 
         // Add the last part
         if (buffer.length() > 0)
-            parts.add(buffer.toString().trim());
+            parts.add(buffer.toString());
 
         return parts;
     }

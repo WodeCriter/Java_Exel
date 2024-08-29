@@ -18,7 +18,7 @@ public class AbsExpression implements Expression {
         EffectiveValue expValue = exp.eval(sheet);
 
         if (expValue.getCellType() != CellType.NUMERIC)
-            return new EffectiveValueImp(CellType.STRING, UNDEFINED_NUMBER);
+            return new EffectiveValueImp(CellType.UNDEFINED, UNDEFINED_NUMBER);
 
         Double result = Math.abs(expValue.extractValueWithExpectation(Double.class));
         return new EffectiveValueImp(CellType.NUMERIC, result);

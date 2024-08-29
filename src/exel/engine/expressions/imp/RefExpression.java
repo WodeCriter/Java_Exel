@@ -26,7 +26,7 @@ public class RefExpression implements Expression
         if (cell.getEffectiveValue().getValue() == "")
         {
             type = CellType.STRING;
-            return new EffectiveValueImp(CellType.STRING, UNDEFINED_STRING);
+            return new EffectiveValueImp(CellType.UNDEFINED, UNDEFINED_STRING);
         }
 
         EffectiveValue value = cell.getEffectiveValue();
