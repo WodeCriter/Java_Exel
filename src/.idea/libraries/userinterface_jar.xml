@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="userinterface_jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/jakarta.activation-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/jaxb-jxc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/engine.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/angus-activation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/jaxb-impl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/jaxb-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/userinterface.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/jaxb-xjc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/SheetCell Ex1.zip!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/userinterface_jar/jakarta.xml.bind-api.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

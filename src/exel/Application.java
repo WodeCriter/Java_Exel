@@ -9,7 +9,8 @@ import exel.userinterface.menu.imp.SpreadsheetMenu;
 
 import java.util.Scanner;
 
-public class Application {
+public class Application
+{
     public static void main(String[] args) {
         Engine engine = new EngineImp();
         InputHandler inputHandler = new InputHandlerImp(new Scanner(System.in));
