@@ -1,4 +1,4 @@
-package exel;
+package exel.userinterface;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +12,7 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         try {
             // Assuming the FXML file is named "MainScreen.fxml" and is located in the "app" directory under resources
-            Parent root = FXMLLoader.load(getClass().getResource("resources/app/index.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/exel/resources/app/index.fxml"));
 
             // Setting the title of the stage (optional)
             primaryStage.setTitle("Exel");
