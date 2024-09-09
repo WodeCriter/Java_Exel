@@ -6,13 +6,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class App extends Application {
+public class UI {
 
-    @Override
-    public void start(Stage primaryStage) {
+    public void show(Stage primaryStage) {
         try {
             // Assuming the FXML file is named "MainScreen.fxml" and is located in the "app" directory under resources
-            Parent root = FXMLLoader.load(getClass().getResource("/exel/resources/app/index.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/exel/userinterface/resources/app/index.fxml"));
 
             // Setting the title of the stage (optional)
             primaryStage.setTitle("Exel");
@@ -28,9 +27,5 @@ public class App extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);  // Launch the JavaFX application
     }
 }
