@@ -1,4 +1,4 @@
-package exel.events;
+package exel.eventsys;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
