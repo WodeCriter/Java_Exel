@@ -2,6 +2,7 @@ package exel;
 
 import exel.engine.api.Engine;
 import exel.engine.imp.EngineImp;
+import exel.eventsys.EventBus;
 import exel.userinterface.UI;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +15,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            EventBus eventBus = new EventBus();
             // Initialize the engine
-            Engine engine = new EngineImp();
+            Engine engine = new EngineImp(eventBus);
 
 
             Thread engineThread = new Thread(() -> {

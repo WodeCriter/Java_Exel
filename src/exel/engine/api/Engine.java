@@ -2,6 +2,7 @@ package exel.engine.api;
 
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
+import exel.eventsys.events.CreateNewSheetEvent;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface Engine {
     /**
      * Creates a new spreadsheet.
      */
-    void createSheet(String sheetName, int cellHeight, int cellWidth,int numOfCols , int numOfRows);
+    void createSheet(CreateNewSheetEvent event);
 
     /**
      * Loads a spreadsheet from an XML file.

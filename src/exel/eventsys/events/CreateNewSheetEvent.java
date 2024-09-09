@@ -1,16 +1,21 @@
 package exel.eventsys.events;
 
 public class CreateNewSheetEvent {
+    private final String sheetName;
     private final int height;
     private final int width;
     private final int cols;
     private final int rows;
 
-    public CreateNewSheetEvent(int height, int width, int cols, int rows) {
+    public CreateNewSheetEvent(String sheetName, int height, int width, int cols, int rows) {
+        this.sheetName = sheetName;
         this.height = height;
         this.width = width;
         this.cols = cols;
         this.rows = rows;
+    }
+    public String getSheetName() {
+        return sheetName;
     }
 
     // Getter for height
