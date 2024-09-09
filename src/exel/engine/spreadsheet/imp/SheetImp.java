@@ -129,51 +129,20 @@ public class SheetImp implements Sheet, Serializable
         return numOfRows;
     }
 
+    @Override
     public Sheet updateCellValueAndCalculate(String coordinate, String newValue)
     {
-        SheetImp copySheet = copySheet();
-        copySheet.version++;
-        copySheet.setCell(coordinate, newValue);//update the cell in the copy sheet
-        Cell cell = copySheet.activeCells.get(coordinate);
-        if (cell == null)
-            throw new IllegalArgumentException("Cell " + coordinate + " not found in map after set cell");
-        cell.updateDependencies();
+        CellImp cell = getCell(coordinate);
+        if (cell == null) throw new IllegalArgumentException("Cell " + coordinate + " not found in map.");
+        List<Cell> orderedCells = cell.setOriginalValueIfPossible(newValue);
 
-        List<Cell> orderedCells = copySheet.orderCellsForCalculation(cell);
+        version++;
         orderedCells.forEach(Cell::calculateEffectiveValue);
-        for (Cell orderedCell : orderedCells)
-            orderedCell.setVersion(copySheet.version);
+        orderedCells.forEach(orderedCell -> orderedCell.setVersion(version));
         versionManager.recordChanges(orderedCells);
-        copySheet.passVersionManager(versionManager);
-        return copySheet;
-    }
+        passVersionManager(versionManager);
 
-
-    private List<Cell> orderCellsForCalculation(Cell startingCell)
-    {
-        List<Cell> orderedCells = new LinkedList<>();
-        Map<Cell, Boolean> coloredCells = new HashMap<>();
-
-        orderCellsForCalculationHelper(startingCell, coloredCells, orderedCells);
-        return orderedCells;
-    }
-
-    private void orderCellsForCalculationHelper(Cell cell, Map<Cell, Boolean> coloredCells, List<Cell> orderedCells)
-    {
-        Boolean GREY = true, BLACK = false, WHITE = null; //DFS Colors
-        coloredCells.put(cell, GREY); //color Cell Grey
-
-        for (Cell dependentCell : cell.getInfluencingOn())
-        {
-            Boolean color = coloredCells.get(dependentCell);
-            if (color == WHITE)
-                orderCellsForCalculationHelper(dependentCell, coloredCells, orderedCells);
-            if (color == GREY)
-                throw new IllegalArgumentException("Cell update failed, dependency circle found.");
-        }
-
-        coloredCells.put(cell, BLACK); //color Cell Black
-        orderedCells.addFirst(cell);
+        return this;
     }
 
     public SheetImp copySheet() {

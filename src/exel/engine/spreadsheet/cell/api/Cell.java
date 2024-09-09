@@ -11,7 +11,6 @@ public interface Cell {
     String getCoordinate();
     String getOriginalValue();
     void setCellOriginalValue(String value);
-    void updateDependencies();
     EffectiveValue getEffectiveValue();
     void calculateEffectiveValue();
     void setVersion(int version);
