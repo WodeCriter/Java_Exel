@@ -1,7 +1,6 @@
 package exel.engine.spreadsheet.versionmanager.imp;
 
 import exel.engine.spreadsheet.cell.api.Cell;
-import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 
 import java.io.Serializable;
@@ -35,9 +34,14 @@ public class VersionManager implements Serializable
 
     public SheetImp getSheetByVersion(int version) {
         SheetImp versionSheet = baseSheet.copySheet(); // Start with the base state
-        for (int i = 1; i <= version; i++) {
-            applyChanges(versionSheet, changesPerVersion.get(i));
-        }
+        ListIterator<Map<String, String>> changesIterator = changesPerVersion.listIterator(1);
+
+        for (int i = 1; i <= version && changesIterator.hasNext(); i++)
+            applyChanges(versionSheet, changesIterator.next());
+
+//        for (int i = 1; i <= version; i++) {
+//            applyChanges(versionSheet, changesPerVersion.get(i));
+//        }
         return versionSheet;
     }
 
