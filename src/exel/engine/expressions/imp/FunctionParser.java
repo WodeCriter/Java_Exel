@@ -161,11 +161,6 @@ public enum FunctionParser
                     CellType startIndexType = startIndex.getFunctionResultType();
                     CellType endIndexType = endIndex.getFunctionResultType();
 
-//                    if ((!stringToCutType.equals(CellType.STRING) && !stringToCutType.equals(CellType.UNKNOWN)) ||
-//                            (!startIndexType.equals(CellType.NUMERIC) && !startIndexType.equals(CellType.UNKNOWN)) ||
-//                            (!endIndexType.equals(CellType.NUMERIC) && !endIndexType.equals(CellType.UNKNOWN)))
-//                        throw new IllegalArgumentException("Invalid argument types for SUB function. Expected String and 2 Numerics, but got " + stringToCut.getFunctionResultType() + ", " + startIndex.getFunctionResultType() + ", " + endIndex.getFunctionResultType());
-
                     return new SubExpression(stringToCut, startIndex, endIndex);
                 }
             },
