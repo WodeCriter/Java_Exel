@@ -27,21 +27,12 @@ public class EngineImp implements Engine {
     public EngineImp() {
     }
 
-    public EngineImp(EventBus eventBus) {
-        this.eventBus = eventBus;
-        this.eventBus.subscribe(CreateNewSheetEvent.class, this::createSheet);
-    }
-
     @Override
-    public void createSheet(CreateNewSheetEvent event) {
+    public void createSheet(String sheetName, int rowNum , int colNum , int cellWidth , int cellHeight) {
         //Todo: check for validity of size
 
         // Create a new modifiable Sheet and its ReadOnly counterpart
-        this.currentSheet = new SheetImp(event.getHeight(),
-                event.getWidth(),
-                event.getCols(),
-                event.getRows(),
-                event.getSheetName());
+        this.currentSheet = new SheetImp(cellHeight, cellWidth, colNum, rowNum, sheetName);
         this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
     }
 

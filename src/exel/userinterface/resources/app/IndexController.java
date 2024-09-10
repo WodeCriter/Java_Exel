@@ -14,8 +14,14 @@ import exel.userinterface.resources.app.popups.newsheet.CreateNewSheetScreenCont
 
 public class IndexController {
 
+    private EventBus eventBus;
+
     @FXML
     private MenuItem buttonNewFile;
+
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
 
     @FXML
     void newFileEventLisener(ActionEvent event) {
@@ -23,6 +29,12 @@ public class IndexController {
             // Load the FXML file for the new sheet popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/newsheet/CreateNewSheetScreen.fxml"));
             VBox popupRoot = loader.load();
+
+            Object controller = loader.getController();
+
+            if (controller instanceof CreateNewSheetScreenController) {
+                ((CreateNewSheetScreenController) controller).setEventBus(eventBus);
+            }
 
             // Get the controller and set the EventBus
             CreateNewSheetScreenController popupController = loader.getController();

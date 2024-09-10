@@ -16,18 +16,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             EventBus eventBus = new EventBus();
-            // Initialize the engine
-            Engine engine = new EngineImp(eventBus);
+            Engine engine = new EngineImp();
 
 
-            Thread engineThread = new Thread(() -> {
-                //engine.start();
-            });
-            engineThread.setDaemon(true);
-            engineThread.start();
-
-
-            UI ui = new UI();
+            UI ui = new UI(engine, eventBus);
             ui.show(primaryStage);
 
         } catch (Exception e) {

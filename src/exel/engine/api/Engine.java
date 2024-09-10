@@ -10,7 +10,7 @@ public interface Engine {
     /**
      * Creates a new spreadsheet.
      */
-    void createSheet(CreateNewSheetEvent event);
+    void createSheet(String sheetName, int rowNum , int colNum , int cellWidth , int cellHeight);
 
     /**
      * Loads a spreadsheet from an XML file.
