@@ -1,6 +1,9 @@
 package exel.engine.expressions.imp;
 
 import exel.engine.expressions.api.Expression;
+import exel.engine.expressions.imp.Boolean.BiggerExpression;
+import exel.engine.expressions.imp.Boolean.EqualExpression;
+import exel.engine.expressions.imp.Boolean.LessExpression;
 import exel.engine.expressions.imp.Math.*;
 import exel.engine.expressions.imp.String.ConcatExpression;
 import exel.engine.expressions.imp.String.SubExpression;
@@ -169,7 +172,42 @@ public enum FunctionParser
 
             return new RefExpression(coordinate);
         }
-    };
+    },
+
+    BIGGER{
+        @Override
+        public Expression parse(List<String> arguments) {
+            FunctionParser.checkForArgumentSize(arguments.size(), 2, "BIGGER");
+
+            Expression left = parseExpression(arguments.get(0));
+            Expression right = parseExpression(arguments.get(1));
+
+            return new BiggerExpression(left, right);
+        }
+    },
+    LESS{
+        @Override
+        public Expression parse(List<String> arguments) {
+            FunctionParser.checkForArgumentSize(arguments.size(), 2, "LESS");
+
+            Expression left = parseExpression(arguments.get(0));
+            Expression right = parseExpression(arguments.get(1));
+
+            return new LessExpression(left, right);
+        }
+    },
+    EQUAL{
+        @Override
+        public Expression parse(List<String> arguments) {
+            FunctionParser.checkForArgumentSize(arguments.size(), 2, "EQUAL");
+
+            Expression left = parseExpression(arguments.get(0));
+            Expression right = parseExpression(arguments.get(1));
+
+            return new EqualExpression(left, right);
+        }
+    }
+    ;
 
     abstract public Expression parse(List<String> arguments);
 

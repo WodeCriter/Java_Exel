@@ -7,6 +7,19 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Java_Exel" level="project" />
+    <orderEntry type="library" exported="" name="Java_Exel" level="project" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://C:/Program Files/Java/jdk-21/Jaxb" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://C:/Program Files/Java/jdk-21/Jaxb" />
+        </SOURCES>
+        <jarDirectory url="file://C:/Program Files/Java/jdk-21/Jaxb" recursive="false" />
+        <jarDirectory url="file://C:/Program Files/Java/jdk-21/Jaxb" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>

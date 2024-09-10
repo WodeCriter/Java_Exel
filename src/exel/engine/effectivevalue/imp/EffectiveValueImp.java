@@ -33,5 +33,22 @@ public class EffectiveValueImp implements EffectiveValue, Serializable {
         // error handling... exception ? return null ?
         return null;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!o.getClass().isAssignableFrom(EffectiveValueImp.class))
+            return false;
+
+        return equals((EffectiveValue) o);
+    }
+
+    private boolean equals(EffectiveValue other)
+    {
+        if (!cellType.equals(other.getCellType()))
+            return false;
+
+        return value.equals(other.getValue());
+    }
 }
 
