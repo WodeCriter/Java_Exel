@@ -1,9 +1,7 @@
 package exel.engine.spreadsheet.cell.imp;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.expressions.imp.FunctionParser;
@@ -30,7 +28,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
         this.version = 1;
         this.influencingOn = new LinkedList<>();
         calculateEffectiveValue();
-        setUpDependsOn();
+        this.dependsOn = makeCellDependent(originalValue);
     }
 
     public CellImp(String coordinate, SheetImp sheet){
@@ -42,18 +40,24 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
         this.dependsOn = new LinkedList<>();
     }
 
-    private void setUpDependsOn(){
-        dependsOn = new LinkedList<>();
-        List<String> influencingCellsCords = FunctionParser.getCellCordsInOriginalValue(originalValue);
+    private List<CellImp> makeCellDependent(String newValue){
+        List<CellImp> newDependsOn = new LinkedList<>();
+        List<String> influencingCellsCords = FunctionParser.getCellCordsInOriginalValue(newValue);
         for (String cellCord : influencingCellsCords)
         {
             CellImp influencingCell = sheet.getCell(cellCord);
-            dependsOn.add(influencingCell);
+            newDependsOn.add(influencingCell);
             influencingCell.influencingOn.add(this);
         }
+        return newDependsOn;
     }
 
-    private void stopCellFromDepending() {
+    private void makeCellDependent(List<CellImp> dependsOn)
+    {
+        dependsOn.forEach(influencingCell -> influencingCell.influencingOn.add(this));
+    }
+
+    private void stopCellFromDepending(List<CellImp> dependsOn) {
         for (CellImp influencingCell : dependsOn)
             influencingCell.influencingOn.remove(this);
     }
@@ -71,13 +75,6 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
     @Override
     public void setCellOriginalValue(String value) {
         this.originalValue = value;
-    }
-
-    @Override
-    public void updateDependencies(){
-        stopCellFromDepending();
-        setUpDependsOn();
-        version++;
     }
 
     @Override
@@ -110,5 +107,54 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
     @Override
     public List<CellImp> getInfluencingOn() {
         return influencingOn;
+    }
+
+    public List<Cell> setOriginalValueIfPossible(String newValue)
+    {
+        stopCellFromDepending(dependsOn);
+        List<CellImp> newDependsOn = makeCellDependent(newValue);
+        List<Cell> orderedCells;
+
+        try
+        {
+            orderedCells = orderCellsForCalculation();
+        }
+        catch (Exception e)
+        {
+            stopCellFromDepending(newDependsOn);
+            makeCellDependent(dependsOn);
+            throw e;
+        }
+
+        dependsOn = newDependsOn;
+        originalValue = newValue;
+        return orderedCells;
+    }
+
+    private List<Cell> orderCellsForCalculation()
+    {
+        List<Cell> orderedCells = new LinkedList<>();
+        Map<Cell, Boolean> coloredCells = new HashMap<>();
+
+        orderCellsForCalculationHelper(this, coloredCells, orderedCells);
+        return orderedCells;
+    }
+
+    private void orderCellsForCalculationHelper(Cell cell, Map<Cell, Boolean> coloredCells, List<Cell> orderedCells)
+    {
+        Boolean GREY = true, BLACK = false, WHITE = null; //DFS Colors
+        coloredCells.put(cell, GREY); //color Cell Grey
+
+        for (Cell dependentCell : cell.getInfluencingOn())
+        {
+            Boolean color = coloredCells.get(dependentCell);
+            if (color == WHITE)
+                orderCellsForCalculationHelper(dependentCell, coloredCells, orderedCells);
+            if (color == GREY)
+                throw new IllegalArgumentException("Cell update failed, dependency circle found.");
+        }
+
+        coloredCells.put(cell, BLACK); //color Cell Black
+        orderedCells.addFirst(cell);
     }
 }
