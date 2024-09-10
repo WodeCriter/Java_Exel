@@ -1,4 +1,4 @@
-package exel.engine.expressions.imp.Boolean;
+package exel.engine.expressions.imp.Boolean.Compare;
 
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.effectivevalue.imp.EffectiveValueImp;

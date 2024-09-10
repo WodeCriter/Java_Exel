@@ -1,21 +1,21 @@
 package exel.engine.expressions.imp;
 
 import exel.engine.expressions.api.Expression;
-import exel.engine.expressions.imp.Boolean.BiggerExpression;
-import exel.engine.expressions.imp.Boolean.EqualExpression;
-import exel.engine.expressions.imp.Boolean.LessExpression;
+import exel.engine.expressions.imp.Boolean.Compare.BiggerExpression;
+import exel.engine.expressions.imp.Boolean.Compare.EqualExpression;
+import exel.engine.expressions.imp.Boolean.Logic.AndExpression;
+import exel.engine.expressions.imp.Boolean.Logic.NotExpression;
+import exel.engine.expressions.imp.Boolean.Logic.OrExpression;
 import exel.engine.expressions.imp.Math.*;
 import exel.engine.expressions.imp.String.ConcatExpression;
 import exel.engine.expressions.imp.String.SubExpression;
-import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.CellType;
 
 import java.util.*;
 
 public enum FunctionParser
 {
-    IDENTITY
-            {
+    IDENTITY {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -51,8 +51,21 @@ public enum FunctionParser
                     }
                 }
             },
-    PLUS
-            {
+    REF {
+        @Override
+        public Expression parse(List<String> arguments)
+        {
+            checkForArgumentSize(arguments.size(), 1, "REF");
+
+            String coordinate = arguments.getFirst().trim();
+            if (!isStringACellCoordinate(coordinate))
+                throw new IllegalArgumentException("Invalid argument for REF function. Expected a valid cell reference, but got " + coordinate);
+
+            return new RefExpression(coordinate);
+        }
+    },
+
+    PLUS {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -60,8 +73,7 @@ public enum FunctionParser
                     return new PlusExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
-    MINUS
-            {
+    MINUS {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -69,8 +81,7 @@ public enum FunctionParser
                     return new MinusExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
-    ABS
-            {
+    ABS {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -79,15 +90,10 @@ public enum FunctionParser
                     //structure is good. parse arguments
                     Expression exp = parseExpression(arguments.get(0).trim());
 
-                    // more validations on the expected argument types
-//                    if (!exp.getFunctionResultType().equals(CellType.NUMERIC) && !exp.getFunctionResultType().equals(CellType.UNKNOWN))
-//                        throw new IllegalArgumentException("Invalid argument types for ABS function. Expected NUMERIC, but got " + exp.getFunctionResultType());
-
                     return new AbsExpression(exp);
                 }
             },
-    DIVIDE
-            {
+    DIVIDE {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -95,8 +101,7 @@ public enum FunctionParser
                     return new DivideExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
-    MOD
-            {
+    MOD {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -104,8 +109,7 @@ public enum FunctionParser
                     return new ModExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
-    POW
-            {
+    POW {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -113,8 +117,7 @@ public enum FunctionParser
                     return new PowExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
-    TIMES
-            {
+    TIMES {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -122,8 +125,15 @@ public enum FunctionParser
                     return new TimesExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
                 }
             },
-    CONCAT
-            {
+    PERCENT{
+        @Override
+        public Expression parse(List<String> arguments) {
+            AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "PERCENT");
+            return new PercentExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
+        }
+    },
+
+    CONCAT {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -135,8 +145,7 @@ public enum FunctionParser
                     return new ConcatExpression(left, right);
                 }
             },
-    SUB
-            {
+    SUB {
                 @Override
                 public Expression parse(List<String> arguments)
                 {
@@ -160,51 +169,50 @@ public enum FunctionParser
                     return new SubExpression(stringToCut, startIndex, endIndex);
                 }
             },
-    REF {
-        @Override
-        public Expression parse(List<String> arguments)
-        {
-            checkForArgumentSize(arguments.size(), 1, "REF");
-
-            String coordinate = arguments.getFirst().trim();
-            if (!isStringACellCoordinate(coordinate))
-                throw new IllegalArgumentException("Invalid argument for REF function. Expected a valid cell reference, but got " + coordinate);
-
-            return new RefExpression(coordinate);
-        }
-    },
 
     BIGGER{
         @Override
         public Expression parse(List<String> arguments) {
-            FunctionParser.checkForArgumentSize(arguments.size(), 2, "BIGGER");
-
-            Expression left = parseExpression(arguments.get(0));
-            Expression right = parseExpression(arguments.get(1));
-
-            return new BiggerExpression(left, right);
+            AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "BIGGER");
+            return new BiggerExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
         }
     },
     LESS{
         @Override
         public Expression parse(List<String> arguments) {
-            FunctionParser.checkForArgumentSize(arguments.size(), 2, "LESS");
-
-            Expression left = parseExpression(arguments.get(0));
-            Expression right = parseExpression(arguments.get(1));
-
-            return new LessExpression(left, right);
+            AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "LESS");
+            return new BiggerExpression(parsedExpressions.getValue(), parsedExpressions.getKey());
         }
     },
     EQUAL{
         @Override
         public Expression parse(List<String> arguments) {
-            FunctionParser.checkForArgumentSize(arguments.size(), 2, "EQUAL");
+            AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "EQUAL");
+            return new EqualExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
+        }
+    },
 
-            Expression left = parseExpression(arguments.get(0));
-            Expression right = parseExpression(arguments.get(1));
+    NOT{
+        @Override
+        public Expression parse(List<String> arguments) {
+            checkForArgumentSize(arguments.size(), 1, "NOT");
 
-            return new EqualExpression(left, right);
+            Expression exp = parseExpression(arguments.get(0));
+            return new NotExpression(exp);
+        }
+    },
+    AND{
+        @Override
+        public Expression parse(List<String> arguments) {
+            AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "AND");
+            return new AndExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
+        }
+    },
+    OR{
+        @Override
+        public Expression parse(List<String> arguments) {
+            AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "OR");
+            return new OrExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
         }
     }
     ;
@@ -343,15 +351,6 @@ public enum FunctionParser
         //structure is good. parse arguments
         Expression left = parseExpression(arguments.get(0).trim());
         Expression right = parseExpression(arguments.get(1).trim());
-
-//        CellType leftType = left.getFunctionResultType();
-//        CellType rightType = right.getFunctionResultType();
-//
-//        // more validations on the expected argument types
-//        if ((!leftType.equals(expectedArgsType) && !leftType.equals(CellType.UNKNOWN)) ||
-//                (!rightType.equals(expectedArgsType) && !rightType.equals(CellType.UNKNOWN)))
-//            throw new IllegalArgumentException("Invalid argument types for " + funcName + " function. " +
-//                    "Expected " + expectedArgsType.toString() + ", but got " + left.getFunctionResultType() + " and " + right.getFunctionResultType());
 
         return new AbstractMap.SimpleEntry<>(left, right);
     }
