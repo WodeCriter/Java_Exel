@@ -26,6 +26,12 @@ public class Coordinate
         row = coordinate.substring(separator);
     }
 
+    @Override
+    public String toString()
+    {
+        return col + row;
+    }
+
     public String getCol()
     {
         return col;

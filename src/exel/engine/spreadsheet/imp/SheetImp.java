@@ -5,6 +5,7 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
+import exel.engine.spreadsheet.coordinate.imp.Coordinate;
 import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
@@ -13,7 +14,7 @@ import java.util.*;
 public class SheetImp implements Sheet, Serializable
 {
     private static final long serialVersionUID = 1L;
-    private Map<String, CellImp> activeCells;
+    private Map<Coordinate, CellImp> activeCells;
     private String sheetName;
     private int version;
     private VersionManager versionManager;
@@ -89,7 +90,7 @@ public class SheetImp implements Sheet, Serializable
     @Override
     public CellImp getCell(String coordinate)
     {
-        CellImp cellToReturn = activeCells.get(coordinate);
+        CellImp cellToReturn = activeCells.get(new Coordinate(coordinate));
         if (cellToReturn == null)
             cellToReturn = (CellImp) setCell(coordinate, "");
 
@@ -100,7 +101,7 @@ public class SheetImp implements Sheet, Serializable
     public Cell setCell(String coordinate, String value) throws IllegalArgumentException
     {
         if (isCoordinateInRange(coordinate)){
-            Cell cell = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
+            Cell cell = activeCells.computeIfAbsent(new Coordinate(coordinate), s -> new CellImp(s, this));
             cell.setCellOriginalValue(value);
             return cell;
         }

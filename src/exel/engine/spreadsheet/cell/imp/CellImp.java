@@ -6,13 +6,14 @@ import java.util.*;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.expressions.imp.FunctionParser;
 import exel.engine.spreadsheet.cell.api.Cell;
+import exel.engine.spreadsheet.coordinate.imp.Coordinate;
 import exel.engine.spreadsheet.imp.SheetImp;
 
 
 public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final String coordinate;
+    private final Coordinate coordinate;
     private String originalValue;
     private EffectiveValue effectiveValue;
     private final SheetImp sheet;
@@ -22,7 +23,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
 
 
     public CellImp(String coordinate, String originalValue, SheetImp sheet) {
-        this.coordinate = coordinate;
+        this.coordinate = new Coordinate(coordinate);
         this.originalValue = originalValue;
         this.sheet = sheet;
         this.version = 1;
@@ -32,6 +33,10 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
     }
 
     public CellImp(String coordinate, SheetImp sheet){
+        this(new Coordinate(coordinate), sheet);
+    }
+
+    public CellImp(Coordinate coordinate, SheetImp sheet){
         this.coordinate = coordinate;
         this.originalValue = "";
         this.sheet = sheet;
@@ -64,7 +69,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
 
     @Override
     public String getCoordinate() {
-        return coordinate;
+        return coordinate.toString();
     }
 
     @Override
