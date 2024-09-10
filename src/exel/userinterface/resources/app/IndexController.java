@@ -45,7 +45,7 @@ public class IndexController {
             popupStage.setTitle("Create New Sheet");
             popupStage.initModality(Modality.WINDOW_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 400, 300));
+            popupStage.setScene(new Scene(popupRoot, 200, 150));
 
             // Show the popup
             popupStage.showAndWait();
