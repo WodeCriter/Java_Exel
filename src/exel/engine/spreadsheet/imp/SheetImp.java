@@ -148,7 +148,6 @@ public class SheetImp implements Sheet, Serializable
         return copySheet;
     }
 
-
     private List<Cell> orderCellsForCalculation(Cell startingCell)
     {
         List<Cell> orderedCells = new LinkedList<>();
