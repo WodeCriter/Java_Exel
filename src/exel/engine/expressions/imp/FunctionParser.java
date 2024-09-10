@@ -57,7 +57,7 @@ public enum FunctionParser
         {
             checkForArgumentSize(arguments.size(), 1, "REF");
 
-            String coordinate = arguments.getFirst().trim();
+            String coordinate = arguments.getFirst().trim().toUpperCase();
             if (!isStringACellCoordinate(coordinate))
                 throw new IllegalArgumentException("Invalid argument for REF function. Expected a valid cell reference, but got " + coordinate);
 

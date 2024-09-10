@@ -6,22 +6,23 @@ import exel.engine.expressions.api.Expression;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.CellType;
+import exel.engine.spreadsheet.coordinate.imp.Coordinate;
 
 public class RefExpression implements Expression
 {
-    private final String coordinate;
+    private final Coordinate coordinate;
     private CellType type;
 
     public RefExpression(String coordinate)
     {
-        this.coordinate = coordinate.toUpperCase();
+        this.coordinate = new Coordinate(coordinate.toUpperCase());
         type = CellType.UNDEFINED;
     }
 
     @Override
     public EffectiveValue eval(Sheet sheet)
     {
-        Cell cell = sheet.getCell(coordinate);
+        Cell cell = sheet.getCell(coordinate.toString());
 
         if (cell.getEffectiveValue().getValue() == "")
         {
