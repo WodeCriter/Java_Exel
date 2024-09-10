@@ -3,11 +3,8 @@ package exel;
 import exel.engine.api.Engine;
 import exel.engine.imp.EngineImp;
 import exel.eventsys.EventBus;
-import exel.userinterface.UI;
+import exel.userinterface.UIManager;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -19,8 +16,8 @@ public class Main extends Application {
             Engine engine = new EngineImp();
 
 
-            UI ui = new UI(engine, eventBus);
-            ui.show(primaryStage);
+            UIManager ui = new UIManager(engine, eventBus);
+            ui.showUI(primaryStage);
 
         } catch (Exception e) {
             e.printStackTrace();

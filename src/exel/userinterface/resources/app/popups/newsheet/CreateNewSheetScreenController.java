@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 
 public class CreateNewSheetScreenController {
 
@@ -28,11 +30,31 @@ public class CreateNewSheetScreenController {
 
     @FXML
     void createNewSheetListener(ActionEvent event) {
-        eventBus.publish(new CreateNewSheetEvent(textboxSheetName.getText()
-                ,5
-                ,5
-                ,Integer.parseInt(textboxColNum.getText())
-                ,Integer.parseInt(textboxRowNum.getText())));
+        try {
+            int rowNum = Integer.parseInt(textboxRowNum.getText());
+            int colNum = Integer.parseInt(textboxColNum.getText());
+            if (rowNum < 1 || colNum < 1) {
+                throw new IllegalArgumentException("Row and column numbers must be at least 1.");
+            }
+            eventBus.publish(new CreateNewSheetEvent(textboxSheetName.getText(),5,5, rowNum, colNum));
+            closeStage();
+        } catch (NumberFormatException e) {
+            showAlert("Invalid input", "Row and column numbers must be integers.");
+        } catch (IllegalArgumentException e) {
+            showAlert(e.getMessage(), null);
+        }
+    }
+
+    private void closeStage() {
+        Stage stage = (Stage) buttonCreateSheet.getScene().getWindow();
+        stage.close();
+    }
+
+    private void showAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 

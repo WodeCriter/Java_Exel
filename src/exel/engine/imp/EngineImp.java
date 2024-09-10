@@ -28,12 +28,13 @@ public class EngineImp implements Engine {
     }
 
     @Override
-    public void createSheet(String sheetName, int rowNum , int colNum , int cellWidth , int cellHeight) {
+    public ReadOnlySheet createSheet(String sheetName, int rowNum , int colNum , int cellWidth , int cellHeight) {
         //Todo: check for validity of size
 
         // Create a new modifiable Sheet and its ReadOnly counterpart
         this.currentSheet = new SheetImp(cellHeight, cellWidth, colNum, rowNum, sheetName);
         this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
+        return this.readOnlyCurrentSheet;
     }
 
     @Override
