@@ -47,8 +47,8 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
 
     private List<CellImp> makeCellDependent(String newValue){
         List<CellImp> newDependsOn = new LinkedList<>();
-        List<String> influencingCellsCords = FunctionParser.getCellCordsInOriginalValue(newValue);
-        for (String cellCord : influencingCellsCords)
+        List<Coordinate> influencingCellsCords = FunctionParser.getCellCordsInOriginalValue(newValue);
+        for (Coordinate cellCord : influencingCellsCords)
         {
             CellImp influencingCell = sheet.getCell(cellCord);
             newDependsOn.add(influencingCell);

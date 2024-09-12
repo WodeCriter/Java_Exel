@@ -22,7 +22,7 @@ public class RefExpression implements Expression
     @Override
     public EffectiveValue eval(Sheet sheet)
     {
-        Cell cell = sheet.getCell(coordinate.toString());
+        Cell cell = sheet.getCell(coordinate);
 
         if (cell.getEffectiveValue().getValue() == "")
         {

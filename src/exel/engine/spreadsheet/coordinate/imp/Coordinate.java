@@ -36,11 +36,13 @@ public class Coordinate
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Coordinate that = (Coordinate) o;
 
-        if (!Objects.equals(row, that.row)) return false;
+        if (!Objects.equals(row, that.row))
+            return false;
         return Objects.equals(col, that.col);
     }
 

@@ -10,6 +10,7 @@ import exel.engine.expressions.imp.Math.*;
 import exel.engine.expressions.imp.String.ConcatExpression;
 import exel.engine.expressions.imp.String.SubExpression;
 import exel.engine.spreadsheet.cell.api.CellType;
+import exel.engine.spreadsheet.coordinate.imp.Coordinate;
 
 import java.util.*;
 
@@ -275,9 +276,9 @@ public enum FunctionParser
         return parts;
     }
 
-    public static List<String> getCellCordsInOriginalValue(String input)
+    public static List<Coordinate> getCellCordsInOriginalValue(String input)
     {
-        List<String> cellsList = new LinkedList<>();
+        List<Coordinate> cellsList = new LinkedList<>();
         if (!isStringAFunction(input))
             return cellsList;
 
@@ -295,7 +296,7 @@ public enum FunctionParser
             int endIndex = improvedInput.indexOf('}', refIndex);
             String supposedCell = improvedInput.substring(refIndex, endIndex);
             if (isStringACellCoordinate(supposedCell))
-                cellsList.add(supposedCell);
+                cellsList.add(new Coordinate(supposedCell));
             refIndex = endIndex + 1;
         }
 

@@ -6,6 +6,7 @@ import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
 import exel.engine.spreadsheet.cell.api.Cell;
+import exel.engine.spreadsheet.coordinate.imp.Coordinate;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.util.file_man.load.imp.sysStateLoader;
@@ -71,7 +72,7 @@ public class EngineImp implements Engine {
     @Override
     public ReadOnlyCell getCellContents(String cellCoordinate) {
         if (currentSheet != null) {
-            Cell cell = currentSheet.getCell(cellCoordinate);
+            Cell cell = currentSheet.getCell(new Coordinate(cellCoordinate));
             return cell != null ? new ReadOnlyCellImp(cell.getCoordinate(), cell.getOriginalValue(), cell.getEffectiveValue(), cell.getVersion(), cell.getDependsOn(), cell.getInfluencingOn()) : null;
         }
         return null;

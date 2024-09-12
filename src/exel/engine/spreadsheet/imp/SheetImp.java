@@ -98,6 +98,12 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
+    public CellImp getCell(Coordinate coordinate)
+    {
+        return getCell(coordinate.toString());
+    }
+
+    @Override
     public Cell setCell(String coordinate, String value) throws IllegalArgumentException
     {
         if (isCoordinateInRange(coordinate)){
@@ -108,6 +114,12 @@ public class SheetImp implements Sheet, Serializable
         else {
             throw new IllegalArgumentException("Cell Coordinate outside of range");
         }
+    }
+
+    @Override
+    public Cell setCell(Coordinate coordinate, String value) throws IllegalArgumentException
+    {
+        return setCell(coordinate.toString(), value);
     }
 
     public int getCellHeight()
@@ -133,6 +145,7 @@ public class SheetImp implements Sheet, Serializable
     @Override
     public Sheet updateCellValueAndCalculate(String coordinate, String newValue)
     {
+        //todo: get coordinate instead
         CellImp cell = getCell(coordinate);
         if (cell == null) throw new IllegalArgumentException("Cell " + coordinate + " not found in map.");
         List<Cell> orderedCells = cell.setOriginalValueIfPossible(newValue);
@@ -144,6 +157,12 @@ public class SheetImp implements Sheet, Serializable
         passVersionManager(versionManager);
 
         return this;
+    }
+
+    @Override
+    public Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue)
+    {
+        return updateCellValueAndCalculate(coordinate.toString(), newValue);
     }
 
     public SheetImp copySheet() {
