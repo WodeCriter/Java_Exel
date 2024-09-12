@@ -38,8 +38,8 @@ class Range
     //todo: make it work for longer cords
     private boolean areCellsPositionsValid()
     {
-        char[] cord1 = topLeft.getCoordinate().toCharArray();
-        char[] cord2 = bottomRight.getCoordinate().toCharArray();
+        char[] cord1 = topLeft.getCoordinateStr().toCharArray();
+        char[] cord2 = bottomRight.getCoordinateStr().toCharArray();
 
         return cord1[0] <= cord2[0] && cord1[1] <= cord2[1];
     }

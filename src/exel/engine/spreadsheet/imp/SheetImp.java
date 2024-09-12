@@ -53,7 +53,7 @@ public class SheetImp implements Sheet, Serializable
         List<ReadOnlyCell> readOnlyCellsList = new LinkedList<>();
         for (Cell cell : activeCells.values()) {
             ReadOnlyCell readOnlyCell = new ReadOnlyCellImp(
-                    cell.getCoordinate(),
+                    cell.getCoordinateStr(),
                     cell.getOriginalValue(),
                     cell.getEffectiveValue(),
                     cell.getVersion(),

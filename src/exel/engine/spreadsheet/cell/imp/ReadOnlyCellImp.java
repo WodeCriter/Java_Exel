@@ -25,9 +25,9 @@ public class ReadOnlyCellImp implements ReadOnlyCell {
         // Convert CellImp lists to ReadOnlyCellImp lists
         // Convert CellImp lists to list of strings containing cell coordinates
         this.dependsOn = dependsOn == null ? Collections.emptyList() :
-                dependsOn.stream().map(CellImp::getCoordinate).collect(Collectors.toList());
+                dependsOn.stream().map(CellImp::getCoordinateStr).collect(Collectors.toList());
         this.influencingOn = influencingOn == null ? Collections.emptyList() :
-                influencingOn.stream().map(CellImp::getCoordinate).collect(Collectors.toList());
+                influencingOn.stream().map(CellImp::getCoordinateStr).collect(Collectors.toList());
     }
 
     @Override

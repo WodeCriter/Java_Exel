@@ -14,7 +14,6 @@ import exel.engine.util.file_man.load.imp.xmlFileLoader;
 import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EngineImp implements Engine {
@@ -73,7 +72,7 @@ public class EngineImp implements Engine {
     public ReadOnlyCell getCellContents(String cellCoordinate) {
         if (currentSheet != null) {
             Cell cell = currentSheet.getCell(new Coordinate(cellCoordinate));
-            return cell != null ? new ReadOnlyCellImp(cell.getCoordinate(), cell.getOriginalValue(), cell.getEffectiveValue(), cell.getVersion(), cell.getDependsOn(), cell.getInfluencingOn()) : null;
+            return cell != null ? new ReadOnlyCellImp(cell.getCoordinateStr(), cell.getOriginalValue(), cell.getEffectiveValue(), cell.getVersion(), cell.getDependsOn(), cell.getInfluencingOn()) : null;
         }
         return null;
     }

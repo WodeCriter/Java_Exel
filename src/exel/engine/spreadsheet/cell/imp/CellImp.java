@@ -68,8 +68,13 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
     }
 
     @Override
-    public String getCoordinate() {
+    public String getCoordinateStr() {
         return coordinate.toString();
+    }
+
+    @Override
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
     @Override

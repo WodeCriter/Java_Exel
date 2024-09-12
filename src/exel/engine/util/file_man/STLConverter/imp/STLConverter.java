@@ -1,14 +1,9 @@
 package exel.engine.util.file_man.STLConverter.imp;
 
-import exel.engine.effectivevalue.api.EffectiveValue;
-import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.util.jaxb.classes.*;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.api.Sheet;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class STLConverter {
 
@@ -35,7 +30,7 @@ public class STLConverter {
             STLCell stlCell = new STLCell();
 
             // Extracting coordinate data
-            String coordinate = cell.getCoordinate();
+            String coordinate = cell.getCoordinateStr();
             int i = 0;
             // Find where the letters stop and the numbers start
             while (i < coordinate.length() && Character.isLetter(coordinate.charAt(i))) {

@@ -3,12 +3,15 @@ package exel.engine.spreadsheet.cell.api;
 //import exel.engine.spreadsheet.api.EffectiveValue;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.spreadsheet.cell.imp.CellImp;
-import exel.engine.spreadsheet.imp.SheetImp;
+import exel.engine.spreadsheet.coordinate.imp.Coordinate;
 
 import java.util.List;
 
 public interface Cell {
-    String getCoordinate();
+    String getCoordinateStr();
+
+    Coordinate getCoordinate();
+
     String getOriginalValue();
     void setCellOriginalValue(String value);
     EffectiveValue getEffectiveValue();
