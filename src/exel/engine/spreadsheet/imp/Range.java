@@ -12,12 +12,10 @@ import java.util.List;
 public class Range
 {
     private Coordinate topLeft, bottomRight;
-    private Sheet sheet;
 
-    public Range(Coordinate cellCord1, Coordinate cellCord2, Sheet sheet)
+    public Range(Coordinate cellCord1, Coordinate cellCord2)
     {
         //todo: Make sure range is actually inside sheet borders.
-        this.sheet = sheet;
         topLeft = cellCord1;
         bottomRight = cellCord2;
         handleInvalidCellsInput();
@@ -70,15 +68,15 @@ public class Range
                 row <= bottomRight.getRow();
     }
 
-    public List<Cell> getCellsInRange()
+    public List<Cell> getCellsInRange(Sheet sheet)
     {
-        if (getNumOfCellsInRange() <= sheet.getMaxNumOfCells()/2)
-            return getCellsInRangeUsingIterator();
+        if (getNumOfCellsInRange() < sheet.getMaxNumOfCells()/2)
+            return getCellsInRangeUsingIterator(sheet);
         else
             return sheet.getCells().stream().filter(cell -> isCoordinateInRange(cell.getCoordinate())).toList();
     }
 
-    private List<Cell> getCellsInRangeUsingIterator()
+    private List<Cell> getCellsInRangeUsingIterator(Sheet sheet)
     {
         List<Cell> cells = new LinkedList<>();
         CoordinateIterator iterator = new CoordinateIterator(topLeft, this);

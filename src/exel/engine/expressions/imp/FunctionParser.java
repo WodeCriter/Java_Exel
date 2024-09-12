@@ -133,6 +133,20 @@ public enum FunctionParser
             return new PercentExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
         }
     },
+    SUM{
+        @Override
+        public Expression parse(List<String> arguments)
+        {
+            return null;
+        }
+    }, //todo: Complete SUM Parser
+    AVERAGE{
+        @Override
+        public Expression parse(List<String> arguments)
+        {
+            return null;
+        }
+    }, //todo: Complete AVERAGE Parser
 
     CONCAT {
                 @Override
