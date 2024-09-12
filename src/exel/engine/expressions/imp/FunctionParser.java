@@ -59,7 +59,7 @@ public enum FunctionParser
             checkForArgumentSize(arguments.size(), 1, "REF");
 
             String coordinate = arguments.getFirst().trim().toUpperCase();
-            if (!isStringACellCoordinate(coordinate))
+            if (!Coordinate.isStringACellCoordinate(coordinate))
                 throw new IllegalArgumentException("Invalid argument for REF function. Expected a valid cell reference, but got " + coordinate);
 
             return new RefExpression(coordinate);
@@ -295,40 +295,12 @@ public enum FunctionParser
 
             int endIndex = improvedInput.indexOf('}', refIndex);
             String supposedCell = improvedInput.substring(refIndex, endIndex);
-            if (isStringACellCoordinate(supposedCell))
+            if (Coordinate.isStringACellCoordinate(supposedCell))
                 cellsList.add(new Coordinate(supposedCell));
             refIndex = endIndex + 1;
         }
 
         return cellsList;
-    }
-
-    private static Boolean isStringACellCoordinate(String input) {
-        if (input == null || input.isEmpty()) {
-            return false;
-        }
-
-        input = input.trim();
-        int length = input.length();
-        int i = 0;
-
-        // Check for the presence of at least one letter at the start
-        while (i < length && Character.isLetter(input.charAt(i))) {
-            i++;
-        }
-
-        // There should be at least one letter and one digit
-        if (i == 0 || i == length) {
-            return false;
-        }
-
-        // Check that the rest of the string is digits
-        while (i < length && Character.isDigit(input.charAt(i))) {
-            i++;
-        }
-
-        // If we've parsed through all characters, it's a valid coordinate
-        return i == length;
     }
 
     public static Boolean isStringAFunction(String input)

@@ -35,7 +35,7 @@ public class STLConverter {
 
             // Separate the column letters and row numbers based on the index found
             String column = coordinate.getCol(); // Column letters
-            int row = Integer.parseInt(coordinate.getRow()); // Row numbers
+            int row = coordinate.getRow(); // Row numbers
 
             // Set properties from Cell to STLCell
             stlCell.setSTLOriginalValue(cell.getOriginalValue());

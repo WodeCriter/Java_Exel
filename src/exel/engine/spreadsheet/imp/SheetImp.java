@@ -179,20 +179,12 @@ public class SheetImp implements Sheet, Serializable
 
         // Split the string into the alphabetic part and the numeric part.
         String columnPart = coordinate.getCol();
-        String rowPart = coordinate.getRow();
+        int row = coordinate.getRow();
 
         // Convert the column letters to a column index (0-based).
         int column = 0;
         for (int j = 0; j < columnPart.length(); j++) {
             column = column * 26 + (Character.toUpperCase(columnPart.charAt(j)) - 'A' + 1);
-        }
-
-        // Convert the row string to an integer.
-        int row;
-        try {
-            row = Integer.parseInt(rowPart);
-        } catch (NumberFormatException e) {
-            return false; // Return false if row part is not an integer.
         }
 
         // Check if the column index and row index are within the allowed range.
