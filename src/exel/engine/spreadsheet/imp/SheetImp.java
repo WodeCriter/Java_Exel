@@ -100,20 +100,21 @@ public class SheetImp implements Sheet, Serializable
     @Override
     public Cell setCell(String coordinate, String value) throws IllegalArgumentException
     {
-        if (isCoordinateInRange(coordinate)){
-            Cell cell = activeCells.computeIfAbsent(new Coordinate(coordinate), s -> new CellImp(s, this));
+        return setCell(new Coordinate(coordinate), value);
+    }
+
+    @Override
+    public Cell setCell(Coordinate coordinate, String value) throws IllegalArgumentException
+    {
+        if (isCoordinateInRange(coordinate))
+        {
+            Cell cell = activeCells.computeIfAbsent(coordinate, cord -> new CellImp(cord, this));
             cell.setCellOriginalValue(value);
             return cell;
         }
         else {
             throw new IllegalArgumentException("Cell Coordinate outside of range");
         }
-    }
-
-    @Override
-    public Cell setCell(Coordinate coordinate, String value) throws IllegalArgumentException
-    {
-        return setCell(coordinate.toString(), value);
     }
 
     public int getCellHeight()
@@ -172,20 +173,13 @@ public class SheetImp implements Sheet, Serializable
         }
     }
 
-    private Boolean isCoordinateInRange(String coordinate) {
-        if (coordinate == null || coordinate.isEmpty()) {
+    private Boolean isCoordinateInRange(Coordinate coordinate) {
+        if (coordinate == null)
             return false; // Early return for null or empty string input.
-        }
-
-        // Separate the column letter(s) from the row number.
-        int i = 0;
-        while (i < coordinate.length() && Character.isLetter(coordinate.charAt(i))) {
-            i++;
-        }
 
         // Split the string into the alphabetic part and the numeric part.
-        String columnPart = coordinate.substring(0, i);
-        String rowPart = coordinate.substring(i);
+        String columnPart = coordinate.getCol();
+        String rowPart = coordinate.getRow();
 
         // Convert the column letters to a column index (0-based).
         int column = 0;
