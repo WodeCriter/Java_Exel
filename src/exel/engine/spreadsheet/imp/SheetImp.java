@@ -88,19 +88,13 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
-    public CellImp getCell(String coordinate)
+    public CellImp getCell(Coordinate coordinate)
     {
-        CellImp cellToReturn = activeCells.get(new Coordinate(coordinate));
+        CellImp cellToReturn = activeCells.get(coordinate);
         if (cellToReturn == null)
             cellToReturn = (CellImp) setCell(coordinate, "");
 
         return cellToReturn;
-    }
-
-    @Override
-    public CellImp getCell(Coordinate coordinate)
-    {
-        return getCell(coordinate.toString());
     }
 
     @Override
@@ -143,9 +137,8 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
-    public Sheet updateCellValueAndCalculate(String coordinate, String newValue)
+    public Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue)
     {
-        //todo: get coordinate instead
         CellImp cell = getCell(coordinate);
         if (cell == null) throw new IllegalArgumentException("Cell " + coordinate + " not found in map.");
         List<Cell> orderedCells = cell.setOriginalValueIfPossible(newValue);
@@ -157,12 +150,6 @@ public class SheetImp implements Sheet, Serializable
         passVersionManager(versionManager);
 
         return this;
-    }
-
-    @Override
-    public Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue)
-    {
-        return updateCellValueAndCalculate(coordinate.toString(), newValue);
     }
 
     public SheetImp copySheet() {

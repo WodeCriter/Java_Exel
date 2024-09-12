@@ -3,6 +3,7 @@ package exel.engine.spreadsheet.imp;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
+import exel.engine.spreadsheet.coordinate.imp.Coordinate;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ class Range
     private Cell topLeft, bottomRight;
     private Sheet sheet;
 
-    public Range(String cellCord1, String cellCord2, Sheet sheet)
+    public Range(Coordinate cellCord1, Coordinate cellCord2, Sheet sheet)
     {
         this(sheet.getCell(cellCord1), sheet.getCell(cellCord2), sheet);
     }

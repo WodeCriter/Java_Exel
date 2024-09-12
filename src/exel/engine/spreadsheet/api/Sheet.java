@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface Sheet {
     int getVersion();
-    Cell getCell(String coordinate);
     Cell getCell(Coordinate coordinate);
 
     Cell setCell(String coordinate, String value) throws IllegalArgumentException;
@@ -22,7 +21,6 @@ public interface Sheet {
     Cell setCell(Coordinate coordinate, String value) throws IllegalArgumentException;
 
     int getCellHeight();
-    Sheet updateCellValueAndCalculate(String coordinate, String newValue);
     Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue);
     Sheet getSheetByVersion(int version);
     List<Integer> getNumOfChangesInEachVersion();
