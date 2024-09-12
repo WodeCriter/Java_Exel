@@ -72,7 +72,7 @@ public class EngineImp implements Engine {
     public ReadOnlyCell getCellContents(String cellCoordinate) {
         if (currentSheet != null) {
             Cell cell = currentSheet.getCell(new Coordinate(cellCoordinate));
-            return cell != null ? new ReadOnlyCellImp(cell.getCoordinateStr(), cell.getOriginalValue(), cell.getEffectiveValue(), cell.getVersion(), cell.getDependsOn(), cell.getInfluencingOn()) : null;
+            return cell != null ? new ReadOnlyCellImp(cellCoordinate, cell.getOriginalValue(), cell.getEffectiveValue(), cell.getVersion(), cell.getDependsOn(), cell.getInfluencingOn()) : null;
         }
         return null;
     }

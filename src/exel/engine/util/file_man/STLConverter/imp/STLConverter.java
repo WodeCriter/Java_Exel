@@ -1,5 +1,6 @@
 package exel.engine.util.file_man.STLConverter.imp;
 
+import exel.engine.spreadsheet.coordinate.imp.Coordinate;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.util.jaxb.classes.*;
 import exel.engine.spreadsheet.cell.api.Cell;
@@ -30,16 +31,11 @@ public class STLConverter {
             STLCell stlCell = new STLCell();
 
             // Extracting coordinate data
-            String coordinate = cell.getCoordinateStr();
-            int i = 0;
-            // Find where the letters stop and the numbers start
-            while (i < coordinate.length() && Character.isLetter(coordinate.charAt(i))) {
-                i++;
-            }
+            Coordinate coordinate = cell.getCoordinate();
 
             // Separate the column letters and row numbers based on the index found
-            String column = coordinate.substring(0, i).trim(); // Column letters
-            int row = Integer.parseInt(coordinate.substring(i).trim()); // Row numbers
+            String column = coordinate.getCol(); // Column letters
+            int row = Integer.parseInt(coordinate.getRow()); // Row numbers
 
             // Set properties from Cell to STLCell
             stlCell.setSTLOriginalValue(cell.getOriginalValue());
