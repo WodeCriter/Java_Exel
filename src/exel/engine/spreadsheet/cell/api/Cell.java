@@ -3,7 +3,7 @@ package exel.engine.spreadsheet.cell.api;
 //import exel.engine.spreadsheet.api.EffectiveValue;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.spreadsheet.cell.imp.CellImp;
-import exel.engine.spreadsheet.coordinate.imp.Coordinate;
+import exel.exel.engine.spreadsheet.coordinate.Coordinate;
 
 import java.util.List;
 

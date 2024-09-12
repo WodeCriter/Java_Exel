@@ -6,7 +6,7 @@ import exel.engine.expressions.api.Expression;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.CellType;
-import exel.engine.spreadsheet.coordinate.imp.Coordinate;
+import exel.exel.engine.spreadsheet.coordinate.Coordinate;
 
 public class RefExpression implements Expression
 {

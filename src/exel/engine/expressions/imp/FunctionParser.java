@@ -10,7 +10,7 @@ import exel.engine.expressions.imp.Math.*;
 import exel.engine.expressions.imp.String.ConcatExpression;
 import exel.engine.expressions.imp.String.SubExpression;
 import exel.engine.spreadsheet.cell.api.CellType;
-import exel.engine.spreadsheet.coordinate.imp.Coordinate;
+import exel.exel.engine.spreadsheet.coordinate.Coordinate;
 
 import java.util.*;
 

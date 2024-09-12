@@ -5,7 +5,7 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
-import exel.engine.spreadsheet.coordinate.imp.Coordinate;
+import exel.exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
@@ -173,19 +173,14 @@ public class SheetImp implements Sheet, Serializable
         }
     }
 
-    private Boolean isCoordinateInRange(Coordinate coordinate) {
+    @Override
+    public Boolean isCoordinateInRange(Coordinate coordinate) {
         if (coordinate == null)
             return false; // Early return for null or empty string input.
 
         // Split the string into the alphabetic part and the numeric part.
-        String columnPart = coordinate.getCol();
+        int column = coordinate.getColIndex();
         int row = coordinate.getRow();
-
-        // Convert the column letters to a column index (0-based).
-        int column = 0;
-        for (int j = 0; j < columnPart.length(); j++) {
-            column = column * 26 + (Character.toUpperCase(columnPart.charAt(j)) - 'A' + 1);
-        }
 
         // Check if the column index and row index are within the allowed range.
         return column > 0 && column <= this.numOfCols && row > 0 && row <= this.numOfRows;

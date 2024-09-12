@@ -2,8 +2,7 @@ package exel.engine.spreadsheet.api;
 
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
-import exel.engine.spreadsheet.cell.imp.CellImp;
-import exel.engine.spreadsheet.coordinate.imp.Coordinate;
+import exel.exel.engine.spreadsheet.coordinate.Coordinate;
 
 import java.util.List;
 
@@ -25,4 +24,6 @@ public interface Sheet {
     Sheet getSheetByVersion(int version);
     List<Integer> getNumOfChangesInEachVersion();
     List<ReadOnlyCell> getReadOnlyCells();
+
+    Boolean isCoordinateInRange(Coordinate coordinate);
 }

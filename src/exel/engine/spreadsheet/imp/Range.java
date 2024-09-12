@@ -2,51 +2,69 @@ package exel.engine.spreadsheet.imp;
 
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
-import exel.engine.spreadsheet.cell.imp.CellImp;
-import exel.engine.spreadsheet.coordinate.imp.Coordinate;
+import exel.exel.engine.spreadsheet.coordinate.Coordinate;
 
 import java.util.List;
 
-class Range
+public class Range
 {
     private Cell topLeft, bottomRight;
     private Sheet sheet;
 
     public Range(Coordinate cellCord1, Coordinate cellCord2, Sheet sheet)
     {
-        this(sheet.getCell(cellCord1), sheet.getCell(cellCord2), sheet);
-    }
-
-    private Range(Cell cell1, Cell cell2, Sheet sheet)
-    {
+        //todo: Make sure range is actually inside sheet borders.
+        handleInvalidCellsInput(cellCord1, cellCord2);
         this.sheet = sheet;
-        topLeft = cell1;
-        bottomRight = cell2;
-        flipCellsIfNeeded();
+        topLeft = sheet.getCell(cellCord1);
+        bottomRight = sheet.getCell(cellCord2);
     }
 
-    private void flipCellsIfNeeded()
+    private void handleInvalidCellsInput(Coordinate topLeftCord, Coordinate bottomRightCord)
     {
-        if (!areCellsPositionsValid())
+        if (topLeftCord.getRow() <= bottomRightCord.getRow())
         {
-            Cell tmp = topLeft;
-            topLeft = bottomRight;
-            bottomRight = tmp;
+            if (topLeftCord.getColIndex() > bottomRightCord.getColIndex())
+            {
+                String leftCol = topLeftCord.getCol();
+                topLeftCord.setCol(bottomRightCord.getCol());
+                bottomRightCord.setCol(leftCol);
+            }
+        }
+        else
+        {
+            if (topLeftCord.getColIndex() <= bottomRightCord.getColIndex())
+            {
+                int leftRow = topLeftCord.getRow();
+                topLeftCord.setRow(bottomRightCord.getRow());
+                bottomRightCord.setRow(leftRow);
+            }
+            else
+            {
+                Coordinate tmp = topLeftCord;
+                topLeftCord = bottomRightCord;
+                bottomRightCord = tmp;
+            }
         }
     }
 
-    //todo: make it work for longer cords
-    private boolean areCellsPositionsValid()
-    {
-        char[] cord1 = topLeft.getCoordinateStr().toCharArray();
-        char[] cord2 = bottomRight.getCoordinateStr().toCharArray();
+    public Boolean isCoordinateInRange(Coordinate coordinate) {
+        if (coordinate == null)
+            return false; // Early return for null or empty string input.
 
-        return cord1[0] <= cord2[0] && cord1[1] <= cord2[1];
+        int column = coordinate.getColIndex();
+        int row = coordinate.getRow();
+
+        // Check if the column index and row index are within the allowed range.
+        return column >= topLeft.getCoordinate().getColIndex() &&
+                column <= bottomRight.getCoordinate().getColIndex() &&
+                row >= topLeft.getCoordinate().getRow() &&
+                row <= bottomRight.getCoordinate().getRow();
     }
 
-    //todo: complete this
-    public List<CellImp> getCellsInRange()
+    public List<Cell> getCellsInRange()
     {
+        Coordinate iterate = topLeft.getCoordinate();
         return null;
     }
 }

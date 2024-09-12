@@ -6,7 +6,7 @@ import java.util.*;
 import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.expressions.imp.FunctionParser;
 import exel.engine.spreadsheet.cell.api.Cell;
-import exel.engine.spreadsheet.coordinate.imp.Coordinate;
+import exel.exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.SheetImp;
 
 
