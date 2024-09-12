@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Range
 {
-    private Cell topLeft, bottomRight;
+    private Coordinate topLeft, bottomRight;
     private Sheet sheet;
 
     public Range(Coordinate cellCord1, Coordinate cellCord2, Sheet sheet)
@@ -16,8 +16,8 @@ public class Range
         //todo: Make sure range is actually inside sheet borders.
         handleInvalidCellsInput(cellCord1, cellCord2);
         this.sheet = sheet;
-        topLeft = sheet.getCell(cellCord1);
-        bottomRight = sheet.getCell(cellCord2);
+        topLeft = cellCord1;
+        bottomRight = cellCord2;
     }
 
     private void handleInvalidCellsInput(Coordinate topLeftCord, Coordinate bottomRightCord)
@@ -56,15 +56,15 @@ public class Range
         int row = coordinate.getRow();
 
         // Check if the column index and row index are within the allowed range.
-        return column >= topLeft.getCoordinate().getColIndex() &&
-                column <= bottomRight.getCoordinate().getColIndex() &&
-                row >= topLeft.getCoordinate().getRow() &&
-                row <= bottomRight.getCoordinate().getRow();
+        return column >= topLeft.getColIndex() &&
+                column <= bottomRight.getColIndex() &&
+                row >= topLeft.getRow() &&
+                row <= bottomRight.getRow();
     }
 
     public List<Cell> getCellsInRange()
     {
-        Coordinate iterate = topLeft.getCoordinate();
+        Coordinate iterate = topLeft;
         return null;
     }
 }
