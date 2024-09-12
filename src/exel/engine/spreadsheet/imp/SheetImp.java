@@ -5,7 +5,7 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
-import exel.exel.engine.spreadsheet.coordinate.Coordinate;
+import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
@@ -95,6 +95,18 @@ public class SheetImp implements Sheet, Serializable
             cellToReturn = (CellImp) setCell(coordinate, "");
 
         return cellToReturn;
+    }
+
+    @Override
+    public int getMaxNumOfCells()
+    {
+        return numOfCols * numOfRows;
+    }
+
+    @Override
+    public boolean isCellActive(Coordinate coordinate)
+    {
+        return activeCells.containsKey(coordinate);
     }
 
     @Override

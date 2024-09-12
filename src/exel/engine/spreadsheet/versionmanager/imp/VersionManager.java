@@ -1,7 +1,7 @@
 package exel.engine.spreadsheet.versionmanager.imp;
 
 import exel.engine.spreadsheet.cell.api.Cell;
-import exel.exel.engine.spreadsheet.coordinate.Coordinate;
+import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.SheetImp;
 
 import java.io.Serializable;

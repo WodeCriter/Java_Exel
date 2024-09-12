@@ -2,8 +2,11 @@ package exel.engine.spreadsheet.imp;
 
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
-import exel.exel.engine.spreadsheet.coordinate.Coordinate;
+import exel.engine.spreadsheet.coordinate.Coordinate;
+import exel.engine.spreadsheet.coordinate.CoordinateIterator;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Range
@@ -14,36 +17,41 @@ public class Range
     public Range(Coordinate cellCord1, Coordinate cellCord2, Sheet sheet)
     {
         //todo: Make sure range is actually inside sheet borders.
-        handleInvalidCellsInput(cellCord1, cellCord2);
         this.sheet = sheet;
         topLeft = cellCord1;
         bottomRight = cellCord2;
+        handleInvalidCellsInput();
     }
 
-    private void handleInvalidCellsInput(Coordinate topLeftCord, Coordinate bottomRightCord)
+    public int getNumOfCellsInRange()
     {
-        if (topLeftCord.getRow() <= bottomRightCord.getRow())
+        return (bottomRight.getRow() - topLeft.getRow() + 1) * (bottomRight.getColIndex() - topLeft.getColIndex() + 1);
+    }
+
+    private void handleInvalidCellsInput()
+    {
+        if (topLeft.getRow() <= bottomRight.getRow())
         {
-            if (topLeftCord.getColIndex() > bottomRightCord.getColIndex())
+            if (topLeft.getColIndex() > bottomRight.getColIndex())
             {
-                String leftCol = topLeftCord.getCol();
-                topLeftCord.setCol(bottomRightCord.getCol());
-                bottomRightCord.setCol(leftCol);
+                String leftCol = topLeft.getCol();
+                topLeft.setCol(bottomRight.getCol());
+                bottomRight.setCol(leftCol);
             }
         }
         else
         {
-            if (topLeftCord.getColIndex() <= bottomRightCord.getColIndex())
+            if (topLeft.getColIndex() <= bottomRight.getColIndex())
             {
-                int leftRow = topLeftCord.getRow();
-                topLeftCord.setRow(bottomRightCord.getRow());
-                bottomRightCord.setRow(leftRow);
+                int leftRow = topLeft.getRow();
+                topLeft.setRow(bottomRight.getRow());
+                bottomRight.setRow(leftRow);
             }
             else
             {
-                Coordinate tmp = topLeftCord;
-                topLeftCord = bottomRightCord;
-                bottomRightCord = tmp;
+                Coordinate tmp = topLeft;
+                topLeft = bottomRight;
+                bottomRight = tmp;
             }
         }
     }
@@ -64,7 +72,22 @@ public class Range
 
     public List<Cell> getCellsInRange()
     {
-        Coordinate iterate = topLeft;
-        return null;
+        if (getNumOfCellsInRange() <= sheet.getMaxNumOfCells()/2)
+            return getCellsInRangeUsingIterator();
+        else
+            return sheet.getCells().stream().filter(cell -> isCoordinateInRange(cell.getCoordinate())).toList();
+    }
+
+    private List<Cell> getCellsInRangeUsingIterator()
+    {
+        List<Cell> cells = new LinkedList<>();
+        CoordinateIterator iterator = new CoordinateIterator(topLeft, this);
+        while (iterator.hasNext())
+        {
+            Coordinate coordinate = iterator.next();
+            if (sheet.isCellActive(coordinate))
+                cells.add(sheet.getCell(coordinate));
+        }
+        return cells;
     }
 }

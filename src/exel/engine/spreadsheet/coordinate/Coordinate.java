@@ -1,4 +1,4 @@
-package exel.exel.engine.spreadsheet.coordinate;
+package exel.engine.spreadsheet.coordinate;
 
 import java.util.Objects;
 

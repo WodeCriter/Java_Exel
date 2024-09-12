@@ -1,6 +1,6 @@
 package exel.engine.util.file_man.STLConverter.imp;
 
-import exel.exel.engine.spreadsheet.coordinate.Coordinate;
+import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.util.jaxb.classes.*;
 import exel.engine.spreadsheet.cell.api.Cell;

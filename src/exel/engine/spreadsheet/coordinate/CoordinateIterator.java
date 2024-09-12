@@ -1,13 +1,13 @@
 package exel.engine.spreadsheet.coordinate;
 
-import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.imp.Range;
-import exel.exel.engine.spreadsheet.coordinate.Coordinate;
+
 import java.util.Iterator;
 
 public class CoordinateIterator implements Iterator<Coordinate>
 {
     private static final boolean LEFT = true, RIGHT = false;
+
     private final Range range;
     private Coordinate current;
     private boolean direction;
