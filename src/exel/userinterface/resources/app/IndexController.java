@@ -1,16 +1,21 @@
 package exel.userinterface.resources.app;
 
 
+import exel.eventsys.events.CreateNewSheetEvent;
+import exel.eventsys.events.SheetCreatedEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import exel.eventsys.EventBus;
 import exel.userinterface.resources.app.popups.newsheet.CreateNewSheetScreenController;
+import exel.userinterface.resources.app.Sheet.SheetController;
 
 public class IndexController {
 
@@ -19,8 +24,16 @@ public class IndexController {
     @FXML
     private MenuItem buttonNewFile;
 
+    @FXML
+    private AnchorPane sheetContainer;
+
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
+        subscribeToEvents();
+    }
+
+    private void subscribeToEvents() {
+        // Subscribe to SheetCreatedEvent
     }
 
     @FXML
@@ -55,5 +68,33 @@ public class IndexController {
     }
 
 
+    public void refreshSheetPlane() {
+        try {
+            // Load the sheet FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/Sheet/Sheet.fxml"));
+            Pane sheetRoot = loader.load();
+
+            Object controller = loader.getController();
+
+            if (controller instanceof SheetController) {
+                ((SheetController) controller).setEventBus(eventBus);
+            }
+
+            // Remove any existing content
+            sheetContainer.getChildren().clear();
+
+            // Add the sheet to the container
+            sheetContainer.getChildren().add(sheetRoot);
+
+            // Anchor the sheet to all sides
+            AnchorPane.setTopAnchor(sheetRoot, 0.0);
+            AnchorPane.setBottomAnchor(sheetRoot, 0.0);
+            AnchorPane.setLeftAnchor(sheetRoot, 0.0);
+            AnchorPane.setRightAnchor(sheetRoot, 0.0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -135,12 +135,8 @@
                   </VBox>
                </left>
                <center>
-                  <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
-                    </columns>
-                  </TableView>
+                   <AnchorPane fx:id="sheetContainer" prefHeight="200.0" prefWidth="200.0"
+                               BorderPane.alignment="CENTER"/>
                </center>
             </BorderPane>
       </children>
