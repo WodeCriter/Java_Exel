@@ -6,6 +6,7 @@ import exel.eventsys.events.SheetCreatedEvent;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,9 @@ public class SheetController {
 
     @FXML
     private GridPane spreadsheetGrid;
+
+    @FXML
+    private ScrollPane sheetScrollPane; // Reference to ScrollPane (optional)
 
     private EventBus eventBus;
 
@@ -51,6 +55,7 @@ public class SheetController {
             for (int row = 1; row <= numRows; row++) {
                 Label label = new Label(String.valueOf(row));
                 label.setStyle("-fx-font-weight: bold;");
+                label.setMinWidth(15);
                 spreadsheetGrid.add(label, 0, row); // Row headers at column 0
             }
 
@@ -58,8 +63,8 @@ public class SheetController {
             for (int row = 1; row <= numRows; row++) {
                 for (int col = 1; col <= numCols; col++) {
                     Label cellLabel = new Label();
-                    cellLabel.setPrefWidth(event.getCellWidth());
-                    cellLabel.setPrefHeight(event.getCellHeight());
+                    cellLabel.setMinWidth(event.getCellWidth());
+                    cellLabel.setMinHeight(event.getCellHeight());
                     cellLabel.setStyle("-fx-border-color: lightgrey;");
                     // Add any additional cell properties or event handlers here
 
