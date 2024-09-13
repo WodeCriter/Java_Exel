@@ -11,6 +11,8 @@ import exel.engine.expressions.imp.String.ConcatExpression;
 import exel.engine.expressions.imp.String.SubExpression;
 import exel.engine.spreadsheet.cell.api.CellType;
 import exel.engine.spreadsheet.coordinate.Coordinate;
+import exel.engine.spreadsheet.range.Range;
+import exel.engine.spreadsheet.range.RangeDatabase;
 
 import java.util.*;
 
@@ -137,16 +139,26 @@ public enum FunctionParser
         @Override
         public Expression parse(List<String> arguments)
         {
-            return null;
+            checkForArgumentSize(arguments.size(), 1, "SUM");
+
+            Range range = RangeDatabase.getRange(arguments.getFirst());
+            if (range == null)
+                throw new IllegalArgumentException("Range does not exist in the database.");
+            return new SumExpression(range);
         }
-    }, //todo: Complete SUM Parser
+    },
     AVERAGE{
         @Override
         public Expression parse(List<String> arguments)
         {
-            return null;
+            checkForArgumentSize(arguments.size(), 1, "AVERAGE");
+
+            Range range = RangeDatabase.getRange(arguments.getFirst());
+            if (range == null)
+                throw new IllegalArgumentException("Range does not exist in the database.");
+            return new AverageExpression(range);
         }
-    }, //todo: Complete AVERAGE Parser
+    },
 
     CONCAT {
                 @Override

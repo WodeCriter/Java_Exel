@@ -1,6 +1,6 @@
 package exel.engine.spreadsheet.coordinate;
 
-import exel.engine.spreadsheet.imp.Range;
+import exel.engine.spreadsheet.range.Range;
 
 import java.util.Iterator;
 

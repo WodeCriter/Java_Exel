@@ -1,11 +1,10 @@
-package exel.engine.spreadsheet.imp;
+package exel.engine.spreadsheet.range;
 
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.coordinate.CoordinateIterator;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,12 +12,13 @@ public class Range
 {
     private Coordinate topLeft, bottomRight;
 
-    public Range(Coordinate cellCord1, Coordinate cellCord2)
+    public Range(Coordinate cellCord1, Coordinate cellCord2, String rangeName)
     {
         //todo: Make sure range is actually inside sheet borders.
         topLeft = cellCord1;
         bottomRight = cellCord2;
         handleInvalidCellsInput();
+        RangeDatabase.addRange(rangeName, this);
     }
 
     public int getNumOfCellsInRange()

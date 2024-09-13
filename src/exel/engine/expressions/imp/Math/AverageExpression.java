@@ -6,7 +6,7 @@ import exel.engine.expressions.api.Expression;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.CellType;
-import exel.engine.spreadsheet.imp.Range;
+import exel.engine.spreadsheet.range.Range;
 
 import java.util.List;
 
