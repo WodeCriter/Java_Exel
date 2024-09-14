@@ -108,7 +108,7 @@ public class SheetController {
     // Event handler for cell clicks
     private void handleCellClick(MouseEvent event, int row, int col) {
         String cellId = getCellId(row, col);
-        System.out.println("Cell clicked: " + cellId);
+        //System.out.println("Cell clicked: " + cellId);
 
         // Get the clicked cell Label from the map
         Label clickedCell = cellLabelMap.get(cellId);

@@ -1,13 +1,18 @@
 package exel.userinterface.resources.app;
 
 
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.events.CreateNewSheetEvent;
+import exel.eventsys.events.DisplaySelectedCellEvent;
 import exel.eventsys.events.SheetCreatedEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -19,6 +24,8 @@ import exel.userinterface.resources.app.Sheet.SheetController;
 
 public class IndexController {
 
+    private ReadOnlyCell selectedCell;
+
     private EventBus eventBus;
 
     @FXML
@@ -27,13 +34,28 @@ public class IndexController {
     @FXML
     private AnchorPane sheetContainer;
 
+    @FXML
+    private Label labelOriginalVal;
+
+    @FXML
+    private Label labelCoordinate;
+
+    @FXML
+    private Label labelCellVersion;
+
+    @FXML
+    private TextField textFiledOriginalVal;
+
+    @FXML
+    private Button buttonUpdateCell;
+
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
         subscribeToEvents();
     }
 
     private void subscribeToEvents() {
-        // Subscribe to SheetCreatedEvent
+        eventBus.subscribe(DisplaySelectedCellEvent.class, this::handleDisplaySelectedCell);
     }
 
     @FXML
@@ -95,6 +117,14 @@ public class IndexController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleDisplaySelectedCell(DisplaySelectedCellEvent event){
+        this.selectedCell = event.getCell();
+        labelCoordinate.setText("Cell: " + selectedCell.getCoordinate());
+        labelOriginalVal.setText("original value:" + selectedCell.getOriginalValue());
+        labelCellVersion.setText("Cell version:" + String.valueOf(selectedCell.getVersion()));
+        textFiledOriginalVal.setText(selectedCell.getOriginalValue());
     }
 
 }

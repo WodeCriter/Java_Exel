@@ -9,8 +9,6 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -86,15 +84,15 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Original cell value" GridPane.columnIndex="1" />
-                                          <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Cell id (coordinate)" wrapText="true" />
-                                          <Label text="Last Cell version" GridPane.columnIndex="2" />
+                                          <Label fx:id="labelOriginalVal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Original cell value" GridPane.columnIndex="1" />
+                                          <Label fx:id="labelCoordinate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Cell id (coordinate)" wrapText="true" />
+                                          <Label fx:id="labelCellVersion" text="Last Cell version" GridPane.columnIndex="2" />
                                        </children>
                                     </GridPane>
                                     <HBox prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <TextField prefHeight="25.0" prefWidth="424.0" />
-                                          <Button mnemonicParsing="false" text="Update cell" />
+                                          <TextField fx:id="textFiledOriginalVal" prefHeight="25.0" prefWidth="424.0" promptText="Original Cell Value" />
+                                          <Button fx:id="buttonUpdateCell" mnemonicParsing="false" text="Update cell" />
                                        </children>
                                        <padding>
                                           <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
@@ -135,8 +133,7 @@
                   </VBox>
                </left>
                <center>
-                   <AnchorPane fx:id="sheetContainer" prefHeight="200.0" prefWidth="200.0"
-                               BorderPane.alignment="CENTER"/>
+                   <AnchorPane fx:id="sheetContainer" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                </center>
             </BorderPane>
       </children>

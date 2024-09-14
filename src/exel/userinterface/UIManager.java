@@ -2,8 +2,11 @@ package exel.userinterface;
 
 import exel.engine.api.Engine;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.EventBus;
+import exel.eventsys.events.CellSelectedEvent;
 import exel.eventsys.events.CreateNewSheetEvent;
+import exel.eventsys.events.DisplaySelectedCellEvent;
 import exel.eventsys.events.SheetCreatedEvent;
 import exel.userinterface.resources.app.IndexController;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +30,7 @@ public class UIManager {
     private void subscribeToEvents() {
         // Subscribe to the CreateNewSheetEvent
         eventBus.subscribe(CreateNewSheetEvent.class, this::handleCreateNewSheet);
+        eventBus.subscribe(CellSelectedEvent.class, this::handleCellSelected);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -40,7 +44,14 @@ public class UIManager {
                 readOnlySheet.getNumOfRows(),
                 readOnlySheet.getNumOfCols()));
 
-        System.out.println("Sheet created: " + event.getSheetName());
+        //System.out.println("Sheet created: " + event.getSheetName());
+    }
+
+
+    private void handleCellSelected(CellSelectedEvent event) {
+        // Call the engine to create a new sheet based on the event details
+        ReadOnlyCell cell = engine.getCellContents(event.getCellId());
+        eventBus.publish(new DisplaySelectedCellEvent(cell));
     }
 
 
