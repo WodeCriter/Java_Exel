@@ -50,5 +50,47 @@ public class EffectiveValueImp implements EffectiveValue, Serializable {
 
         return value.equals(other.getValue());
     }
+
+    @Override
+    public int compareTo(EffectiveValue o)
+    {
+        if (this.cellType == CellType.NUMERIC && o.getCellType() == CellType.NUMERIC)
+        {
+            double thisNum = extractValueWithExpectation(Double.class);
+            double otherNum = o.extractValueWithExpectation(Double.class);
+            return Double.compare(thisNum, otherNum);
+        }
+        else if (this.cellType == CellType.STRING && o.getCellType() == CellType.STRING)
+        {
+            String thisStr = extractValueWithExpectation(String.class);
+            String otherStr = o.extractValueWithExpectation(String.class);
+            return thisStr.compareTo(otherStr);
+        }
+        else if (this.cellType == CellType.BOOLEAN && o.getCellType() == CellType.BOOLEAN)
+        {
+            boolean thisBool = extractValueWithExpectation(Boolean.class);
+            boolean otherBool = o.extractValueWithExpectation(Boolean.class);
+            return Boolean.compare(thisBool, otherBool);
+        }
+        else if (this.cellType == CellType.UNDEFINED && o.getCellType() == CellType.UNDEFINED)
+        {
+            return 0;
+        }
+
+        else if (this.cellType == CellType.UNDEFINED)
+            return -1;
+        else if (this.cellType == CellType.STRING)
+            return 1;
+        else if (o.getCellType() == CellType.UNDEFINED)
+            return 1;
+        else if (o.getCellType() == CellType.STRING)
+            return -1;
+        else if (this.cellType == CellType.BOOLEAN && o.getCellType() == CellType.NUMERIC)
+            return -1;
+        else if (this.cellType == CellType.NUMERIC && o.getCellType() == CellType.BOOLEAN)
+            return 1;
+
+        return 0;
+    }
 }
 

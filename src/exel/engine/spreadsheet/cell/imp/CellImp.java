@@ -173,4 +173,10 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
         coloredCells.put(cell, BLACK); //color Cell Black
         orderedCells.addFirst(cell);
     }
+
+    @Override
+    public int compareTo(Cell o)
+    {
+        return effectiveValue.compareTo(o.getEffectiveValue());
+    }
 }

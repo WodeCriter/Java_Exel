@@ -166,11 +166,6 @@ public class SheetImp implements Sheet, Serializable
     }
 
     public SheetImp copySheet() {
-        // lots of options here:
-        // 1. implement clone all the way (yac... !)
-        // 2. implement copy constructor for CellImpl and SheetImpl
-
-        // 3. how about serialization ?
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);

@@ -5,9 +5,11 @@ import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.coordinate.Coordinate;
 
+import java.util.Comparator;
 import java.util.List;
 
-public interface Cell {
+public interface Cell extends Comparable<Cell>
+{
     String getCoordinateStr();
 
     Coordinate getCoordinate();
