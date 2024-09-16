@@ -24,7 +24,7 @@ public interface Sheet {
     Cell setCell(Coordinate coordinate, String value) throws IllegalArgumentException;
 
     int getCellHeight();
-    Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue);
+    Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue) throws Exception;
     Sheet getSheetByVersion(int version);
     List<Integer> getNumOfChangesInEachVersion();
     List<ReadOnlyCell> getReadOnlyCells();

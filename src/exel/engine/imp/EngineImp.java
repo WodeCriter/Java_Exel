@@ -78,7 +78,8 @@ public class EngineImp implements Engine {
     }
 
     @Override
-    public void updateCellContents(String coordinate, String value) throws IllegalStateException {
+    public void updateCellContents(String coordinate, String value) throws Exception
+    {
         if (currentSheet == null) {
             throw new IllegalStateException("No sheet is currently loaded.");
         }

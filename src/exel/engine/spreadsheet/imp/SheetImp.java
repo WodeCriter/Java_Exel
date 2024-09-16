@@ -150,7 +150,7 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
-    public Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue)
+    public Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue) throws Exception
     {
         CellImp cell = getCell(coordinate);
         if (cell == null) throw new IllegalArgumentException("Cell " + coordinate + " not found in map.");

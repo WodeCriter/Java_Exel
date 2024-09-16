@@ -119,8 +119,14 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
         return influencingOn;
     }
 
-    public List<Cell> setOriginalValueIfPossible(String newValue)
+    public List<Cell> setOriginalValueIfPossible(String newValue) throws Exception
     {
+        if (originalValue.equals(newValue))
+            return orderCellsForCalculation();
+
+        Exception possibleException = FunctionParser.isStringAValidOriginalValue(newValue);
+        if (possibleException != null) throw possibleException;
+
         stopCellFromDepending(dependsOn);
         List<CellImp> newDependsOn = makeCellDependent(newValue);
         List<Cell> orderedCells;
@@ -161,7 +167,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
             if (color == WHITE)
                 orderCellsForCalculationHelper(dependentCell, coloredCells, orderedCells);
             if (color == GREY)
-                throw new IllegalArgumentException("Cell update failed, dependency circle found.");
+                throw new IllegalArgumentException("Dependency circle found.");
         }
 
         coloredCells.put(cell, BLACK); //color Cell Black

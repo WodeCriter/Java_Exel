@@ -248,15 +248,16 @@ public enum FunctionParser
         {
             String functionContent = trimmedInput.substring(1, trimmedInput.length() - 1);
             List<String> topLevelParts = parseMainParts(functionContent);
-            String functionName = topLevelParts.get(0).trim().toUpperCase();
+            String functionName = topLevelParts.removeFirst().trim().toUpperCase();
 
             //remove the first element from the array
-            topLevelParts.removeFirst();
+            //topLevelParts.removeFirst();
 
             //Idea: topLevelParts now has either cells, functions, or numbers.
             //If it's a cell, it should be added to the "dependsOn" list given in the method.
             FunctionParser func;
-            try {
+            try
+            {
                 func = FunctionParser.valueOf(functionName);
             }
             //If you get an exception (probably from the enum) tell user the function does not exist
@@ -270,6 +271,21 @@ public enum FunctionParser
 
         // handle identity expression
         return FunctionParser.IDENTITY.parse(List.of(input));
+    }
+
+    //If the string in not a valid original value, it returns the exception (which explains why).
+    //If it is valid, it returns null.
+    public static Exception isStringAValidOriginalValue(String input)
+    {
+        try
+        {
+            parseExpression(input);
+            return null;
+        }
+        catch (Exception e)
+        {
+            return e;
+        }
     }
 
     private static List<String> parseMainParts(String input)
