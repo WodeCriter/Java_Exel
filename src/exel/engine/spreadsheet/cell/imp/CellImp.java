@@ -13,7 +13,7 @@ import exel.engine.spreadsheet.imp.SheetImp;
 public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final Coordinate coordinate;
+    private Coordinate coordinate;
     private String originalValue;
     private EffectiveValue effectiveValue;
     private final SheetImp sheet;
@@ -75,6 +75,11 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
     @Override
     public Coordinate getCoordinate() {
         return coordinate;
+    }
+
+    @Override
+    public void setCoordinateRowNum(int row){
+        coordinate.setRow(row);
     }
 
     @Override
