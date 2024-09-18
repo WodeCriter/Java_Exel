@@ -24,7 +24,7 @@ public class AverageExpression implements Expression
     @Override
     public EffectiveValue eval(Sheet sheet)
     {
-        List<Cell> cells = range.getCellsInRange(sheet);
+        List<Cell> cells = range.getCellsInRange();
         double sum = 0;
         boolean numericCellExist = false;
 

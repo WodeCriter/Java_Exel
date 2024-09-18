@@ -11,14 +11,18 @@ import java.util.List;
 public class Range
 {
     private Coordinate topLeft, bottomRight;
+    private final Sheet sheet;
+    private int numOfUsages;
 
-    public Range(Coordinate cellCord1, Coordinate cellCord2, String rangeName)
+    public Range(Coordinate cellCord1, Coordinate cellCord2, String rangeName, Sheet sheet)
     {
         //todo: Make sure range is actually inside sheet borders.
         topLeft = cellCord1;
         bottomRight = cellCord2;
         handleInvalidCellsInput();
         RangeDatabase.addRange(rangeName, this);
+        this.sheet = sheet;
+        numOfUsages = 0;
     }
 
     public int getNumOfCellsInRange()
@@ -68,15 +72,15 @@ public class Range
                 row <= bottomRight.getRow();
     }
 
-    public List<Cell> getCellsInRange(Sheet sheet)
+    public List<Cell> getCellsInRange()
     {
         if (getNumOfCellsInRange() < sheet.getMaxNumOfCells()/2)
-            return getCellsInRangeUsingIterator(sheet);
+            return getCellsInRangeUsingIterator();
         else
             return sheet.getCells().stream().filter(cell -> isCoordinateInRange(cell.getCoordinate())).toList();
     }
 
-    private List<Cell> getCellsInRangeUsingIterator(Sheet sheet)
+    private List<Cell> getCellsInRangeUsingIterator()
     {
         List<Cell> cells = new LinkedList<>();
         CoordinateIterator iterator = new CoordinateIterator(topLeft, this);
@@ -87,5 +91,31 @@ public class Range
                 cells.add(sheet.getCell(coordinate));
         }
         return cells;
+    }
+
+    public Coordinate getTopLeft()
+    {
+        return topLeft;
+    }
+
+    public Coordinate getBottomRight()
+    {
+        return bottomRight;
+    }
+
+    public void countUseOfRange()
+    {
+        numOfUsages++;
+    }
+
+    //todo: Need to call this method when an expression that uses this range is removed
+    public void removeUseOfRange()
+    {
+        numOfUsages--;
+    }
+
+    public boolean isRangeUsed()
+    {
+        return numOfUsages > 0;
     }
 }

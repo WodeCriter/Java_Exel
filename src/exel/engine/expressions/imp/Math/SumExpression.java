@@ -24,7 +24,7 @@ public class SumExpression implements Expression
     @Override
     public EffectiveValue eval(Sheet sheet)
     {
-        List<Cell> cells = range.getCellsInRange(sheet);
+        List<Cell> cells = range.getCellsInRange();
         double sum = 0;
 
         for (Cell cell : cells)
