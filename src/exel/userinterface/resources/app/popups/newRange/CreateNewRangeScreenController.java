@@ -37,10 +37,6 @@ public class CreateNewRangeScreenController
             eventBus.publish(new CreateNewRangeEvent(rangeName, topLeftCord, bottomRightCord));
             closeStage();
         }
-        catch (NumberFormatException e)
-        {
-            showAlert("Invalid input", "Row and column numbers must be integers.");
-        }
         catch (IllegalArgumentException e)
         {
             showAlert(e.getMessage(), null);
@@ -48,7 +44,7 @@ public class CreateNewRangeScreenController
     }
 
     private void closeStage() {
-        Stage stage = (Stage) buttonCreateRange.getScene().getWindow();
+        Stage stage = (Stage) textboxRangeName.getScene().getWindow();
         stage.close();
     }
 

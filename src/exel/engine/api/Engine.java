@@ -65,4 +65,6 @@ public interface Engine {
 
     // Method to clear the current sheet
     void clearSheet();
+
+    void addNewRange(String rangeName, String topLeftCord, String bottomRightCord);
 }

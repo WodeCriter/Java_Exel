@@ -9,12 +9,12 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
+import exel.engine.spreadsheet.range.Range;
 import exel.engine.util.file_man.load.imp.sysStateLoader;
 import exel.engine.util.file_man.load.imp.xmlFileLoader;
 import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 import exel.eventsys.EventBus;
-import exel.eventsys.events.CreateNewSheetEvent;
 
 import java.util.List;
 
@@ -92,7 +92,6 @@ public class EngineImp implements Engine {
         readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
     }
 
-
     @Override
     public void saveXmlFile(String filePath, String fileName) throws Exception {
         if (fileName.isEmpty())
@@ -115,5 +114,11 @@ public class EngineImp implements Engine {
     @Override
     public void clearSheet() {
         this.currentSheet = null;
+    }
+
+    @Override
+    public void addNewRange(String rangeName, String topLeftCord, String bottomRightCord)
+    {
+        new Range(new Coordinate(topLeftCord), new Coordinate(bottomRightCord), rangeName, currentSheet);
     }
 }

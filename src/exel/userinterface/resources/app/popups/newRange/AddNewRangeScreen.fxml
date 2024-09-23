@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.popups.newsheet.CreateNewSheetScreenController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.popups.newRange.CreateNewRangeScreenController">
    <children>
       <GridPane prefHeight="463.0" prefWidth="600.0">
         <columnConstraints>
@@ -29,7 +29,7 @@
             <Label text="Top Left Cell Coordinate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Range Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Bottom Right Cell Coordinate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Button fx:id="buttomCreateRange" mnemonicParsing="false" onAction="#createNewSheetListener" text="Create Range" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <Button fx:id="buttomCreateRange" mnemonicParsing="false" onAction="#createNewRangeListener" text="Create Range" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
             <TextField fx:id="textboxRangeName" promptText="Name" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <TextField fx:id="textboxTopLeft" promptText="1-50" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <TextField fx:id="textboxBottomRight" promptText="1-50" GridPane.columnIndex="2" GridPane.rowIndex="3" />

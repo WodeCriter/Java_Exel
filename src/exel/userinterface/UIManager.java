@@ -48,7 +48,8 @@ public class UIManager {
 
     private void handleCreateNewRange(CreateNewRangeEvent event)
     {
-        //todo: complete this
+        engine.addNewRange(event.getRangeName(), event.getTopLeftCord(), event.getBottomRightCord());
+        eventBus.publish(new RangeCreatedEvent(event.getRangeName(), event.getTopLeftCord(), event.getBottomRightCord()));
     }
 
     private void handleCellSelected(CellSelectedEvent event) {
@@ -58,7 +59,14 @@ public class UIManager {
     }
 
     private void handleCellUpdate(CellUpdateEvent event) {
-        engine.updateCellContents(event.getCoordinate(), event.getOriginalValue());
+        try
+        {
+            engine.updateCellContents(event.getCoordinate(), event.getOriginalValue());
+        }
+        catch (Exception e)
+        {
+            //handle what happens if cell is not updated
+        }
         ReadOnlySheet updatedSheet = engine.getSheet();
         eventBus.publish(new SheetDisplayEvent(updatedSheet));
     }

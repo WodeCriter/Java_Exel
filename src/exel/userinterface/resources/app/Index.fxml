@@ -122,7 +122,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <Button fx:id="addRangeButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="31.0" text="+" />
+                        <Button mnemonicParsing="false" onAction="#addNewRangeButtonListener" prefHeight="25.0" prefWidth="31.0" text="+" />
                         <ListView fx:id="rangesList" prefHeight="269.0" prefWidth="90.0" VBox.vgrow="ALWAYS" />
                      </children>
                      <BorderPane.margin>

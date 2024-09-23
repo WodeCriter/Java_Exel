@@ -2,10 +2,8 @@ package exel.userinterface.resources.app;
 
 
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
-import exel.eventsys.events.CellUpdateEvent;
-import exel.eventsys.events.CreateNewSheetEvent;
-import exel.eventsys.events.DisplaySelectedCellEvent;
-import exel.eventsys.events.SheetCreatedEvent;
+import exel.eventsys.events.*;
+import exel.userinterface.resources.app.popups.newRange.CreateNewRangeScreenController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,6 +47,9 @@ public class IndexController {
     @FXML
     private Button buttonUpdateCell;
 
+    @FXML
+    private ListView rangesList;
+
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
         subscribeToEvents();
@@ -56,6 +57,7 @@ public class IndexController {
 
     private void subscribeToEvents() {
         eventBus.subscribe(DisplaySelectedCellEvent.class, this::handleDisplaySelectedCell);
+        eventBus.subscribe(RangeCreatedEvent.class, this::handleNewRangeCreated);
     }
 
     @FXML
@@ -145,6 +147,40 @@ public class IndexController {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    void addNewRangeButtonListener(ActionEvent event)
+    {
+        try {
+            // Load the FXML file for the new sheet popup
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/newRange/AddNewRangeScreen.fxml"));
+            VBox popupRoot = loader.load();
+
+            Object controller = loader.getController();
+
+            if (controller instanceof CreateNewRangeScreenController)
+                ((CreateNewRangeScreenController) controller).setEventBus(eventBus);
+
+            // Create a new stage for the popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Add New Range");
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            //popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
+            popupStage.setScene(new Scene(popupRoot, 200, 150));
+
+            // Show the popup
+            popupStage.showAndWait();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();  // Handle exceptions appropriately
+        }
+    }
+
+    private void handleNewRangeCreated(RangeCreatedEvent event)
+    {
+        rangesList.getItems().add(event.getRangeName());
     }
 
 }
