@@ -4,10 +4,7 @@ import exel.engine.api.Engine;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.EventBus;
-import exel.eventsys.events.CellSelectedEvent;
-import exel.eventsys.events.CreateNewSheetEvent;
-import exel.eventsys.events.DisplaySelectedCellEvent;
-import exel.eventsys.events.SheetCreatedEvent;
+import exel.eventsys.events.*;
 import exel.userinterface.resources.app.IndexController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -31,6 +28,7 @@ public class UIManager {
         // Subscribe to the CreateNewSheetEvent
         eventBus.subscribe(CreateNewSheetEvent.class, this::handleCreateNewSheet);
         eventBus.subscribe(CellSelectedEvent.class, this::handleCellSelected);
+        eventBus.subscribe(CellUpdateEvent.class, this::handleCellUpdate);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -52,6 +50,12 @@ public class UIManager {
         // Call the engine to create a new sheet based on the event details
         ReadOnlyCell cell = engine.getCellContents(event.getCellId());
         eventBus.publish(new DisplaySelectedCellEvent(cell));
+    }
+
+    private void handleCellUpdate(CellUpdateEvent event) {
+        engine.updateCellContents(event.getCoordinate(), event.getOriginalValue());
+        ReadOnlySheet updatedSheet = engine.getSheet();
+        eventBus.publish(new SheetDisplayEvent(updatedSheet));
     }
 
 

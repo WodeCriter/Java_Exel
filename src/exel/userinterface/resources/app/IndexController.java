@@ -2,6 +2,7 @@ package exel.userinterface.resources.app;
 
 
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
+import exel.eventsys.events.CellUpdateEvent;
 import exel.eventsys.events.CreateNewSheetEvent;
 import exel.eventsys.events.DisplaySelectedCellEvent;
 import exel.eventsys.events.SheetCreatedEvent;
@@ -9,10 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -21,6 +19,8 @@ import javafx.stage.Stage;
 import exel.eventsys.EventBus;
 import exel.userinterface.resources.app.popups.newsheet.CreateNewSheetScreenController;
 import exel.userinterface.resources.app.Sheet.SheetController;
+
+import java.util.Objects;
 
 public class IndexController {
 
@@ -125,6 +125,27 @@ public class IndexController {
         labelOriginalVal.setText("original value:" + selectedCell.getOriginalValue());
         labelCellVersion.setText("Cell version:" + String.valueOf(selectedCell.getVersion()));
         textFiledOriginalVal.setText(selectedCell.getOriginalValue());
+    }
+
+    @FXML
+    void updateCellButtonListener(ActionEvent event) {
+        try{
+            String NewCellValue = textFiledOriginalVal.getText();
+            if(!Objects.equals(NewCellValue, selectedCell.getOriginalValue())){
+                eventBus.publish(new CellUpdateEvent(selectedCell.getCoordinate(), NewCellValue));
+            }
+        }
+        catch(Exception e){
+
+            showAlert("Failed to update cell", e.getMessage());
+        }
+    }
+
+    private void showAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 }

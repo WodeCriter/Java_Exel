@@ -1,9 +1,12 @@
 package exel.userinterface.resources.app.Sheet;
 
 
+import exel.engine.spreadsheet.api.ReadOnlySheet;
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.EventBus;
 import exel.eventsys.events.CellSelectedEvent;
 import exel.eventsys.events.SheetCreatedEvent;
+import exel.eventsys.events.SheetDisplayEvent;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -35,6 +38,7 @@ public class SheetController {
 
     private void subscribeToEvents() {
         eventBus.subscribe(SheetCreatedEvent.class, this::handleSheetCreated);
+        eventBus.subscribe(SheetDisplayEvent.class, this::handleSheetDisplay);
         // Subscribe to other events if needed (e.g., cell update events)
     }
 
@@ -95,13 +99,35 @@ public class SheetController {
     }
 
     // Method to update a cell value
-    public void updateCell(int row, int col, String value) {
+    private void updateCellUI(String coordinate, String value) {
+        Label cellLabel = cellLabelMap.get(coordinate);
+        if (cellLabel != null) {
+            cellLabel.setText(value);
+        } else {
+            // Handle the case where the cell label is not found
+            System.err.println("Cell label not found for coordinate: " + coordinate);
+        }
+    }
+
+    private void handleSheetDisplay(SheetDisplayEvent event) {
+        ReadOnlySheet sheet = event.getSheet();
+
         Platform.runLater(() -> {
-            String cellId = getCellId(row, col);
-            Label cellLabel = cellLabelMap.get(cellId);
-            if (cellLabel != null) {
-                cellLabel.setText(value);
+            // Optionally, you might want to clear existing cells or headers here
+            // depending on your application's logic.
+
+            // Iterate through all cells in the sheet
+            for (ReadOnlyCell cell : sheet.getCells()) {
+                String coordinate = cell.getCoordinate();
+                String value = cell.getEffectiveValue(); // Or cell.getValue() if applicable
+
+                // Update the cell in the UI
+                updateCellUI(coordinate, value);
             }
+
+            // Optionally, update sheet metadata such as version if needed
+            // For example:
+            // labelSheetVersion.setText(String.valueOf(sheet.getVersion()));
         });
     }
 
