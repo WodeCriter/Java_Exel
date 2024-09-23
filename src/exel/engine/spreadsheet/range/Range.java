@@ -74,10 +74,11 @@ public class Range
 
     public List<Cell> getCellsInRange()
     {
-        if (getNumOfCellsInRange() < sheet.getMaxNumOfCells()/2)
-            return getCellsInRangeUsingIterator();
-        else
-            return sheet.getCells().stream().filter(cell -> isCoordinateInRange(cell.getCoordinate())).toList();
+//        if (getNumOfCellsInRange() < sheet.getMaxNumOfCells()/2)
+//            return getCellsInRangeUsingIterator();
+//        else
+//            return sheet.getCells().stream().filter(cell -> isCoordinateInRange(cell.getCoordinate())).toList();
+        return getCellsInRangeUsingIterator();
     }
 
     private List<Cell> getCellsInRangeUsingIterator()
@@ -91,6 +92,17 @@ public class Range
                 cells.add(sheet.getCell(coordinate));
         }
         return cells;
+    }
+
+    public List<String> getCordsStrInRange()
+    {
+        List<String> cords = new LinkedList<>();
+        CoordinateIterator iterator = new CoordinateIterator(topLeft, this);
+        while (iterator.hasNext())
+        {
+            cords.add(iterator.next().toString());
+        }
+        return cords;
     }
 
     public Coordinate getTopLeft()

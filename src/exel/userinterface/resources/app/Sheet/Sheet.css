@@ -29,3 +29,9 @@
     -fx-effect: dropshadow(three-pass-box, rgba(255, 215, 0, 0.8), 15, 0, 0, 0);
     -fx-background-color: #FFF8DC; /* Optional: Light Cornsilk background to highlight selection */
 }
+
+.cell-marked {
+    -fx-border-color: #8FCE00; /* Green */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 255, 34, 0.8), 15, 0, 0, 0);
+    -fx-background-color: #D9EAD3; /* Optional: Light Cornsilk background to highlight selection */
+}

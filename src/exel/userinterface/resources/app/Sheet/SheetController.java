@@ -5,6 +5,7 @@ import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.EventBus;
 import exel.eventsys.events.CellSelectedEvent;
+import exel.eventsys.events.CellsMarkedEvent;
 import exel.eventsys.events.SheetCreatedEvent;
 import exel.eventsys.events.SheetDisplayEvent;
 import javafx.application.Platform;
@@ -14,6 +15,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SheetController {
@@ -39,6 +41,7 @@ public class SheetController {
     private void subscribeToEvents() {
         eventBus.subscribe(SheetCreatedEvent.class, this::handleSheetCreated);
         eventBus.subscribe(SheetDisplayEvent.class, this::handleSheetDisplay);
+        eventBus.subscribe(CellsMarkedEvent.class, this::handleMarkCell);
         // Subscribe to other events if needed (e.g., cell update events)
     }
 
@@ -153,5 +156,16 @@ public class SheetController {
         // Create and publish the CellSelectedEvent
         CellSelectedEvent cellSelectedEvent = new CellSelectedEvent(cellId, row, col);
         eventBus.publish(cellSelectedEvent);
+    }
+
+    private void handleMarkCell(CellsMarkedEvent event)
+    {
+        List<String> cellsCordsToMark = event.getCellsMarkedCords();
+        for (String cellId : cellsCordsToMark)
+        {
+            Label cellLabel = cellLabelMap.get(cellId);
+            if (!cellLabel.getStyleClass().contains("cell-marked"))
+                cellLabel.getStyleClass().add("cell-marked");
+        }
     }
 }

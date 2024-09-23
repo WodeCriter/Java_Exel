@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -181,6 +182,13 @@ public class IndexController {
     private void handleNewRangeCreated(RangeCreatedEvent event)
     {
         rangesList.getItems().add(event.getRangeName());
+    }
+
+    @FXML
+    void pressListViewTest(MouseEvent event)
+    {
+        String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
+        eventBus.publish(new RangeSelectedEvent(selectedRange));
     }
 
 }

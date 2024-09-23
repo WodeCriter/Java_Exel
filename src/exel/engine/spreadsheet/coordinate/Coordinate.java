@@ -151,11 +151,15 @@ public class Coordinate
 
     public Coordinate getCordAbove()
     {
+        if (getRow() == 1)
+            return null;
         return new Coordinate(getCol(), getRow() - 1, colIndex);
     }
 
     public Coordinate getCordOnLeft()
     {
+        if (colIndex == 1)
+            return null;
         return new Coordinate(calculateColFromIndex(colIndex - 1), getRow(), colIndex - 1);
     }
 

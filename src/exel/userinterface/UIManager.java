@@ -11,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class UIManager {
 
     private Engine engine;
@@ -30,6 +32,7 @@ public class UIManager {
         eventBus.subscribe(CellSelectedEvent.class, this::handleCellSelected);
         eventBus.subscribe(CellUpdateEvent.class, this::handleCellUpdate);
         eventBus.subscribe(CreateNewRangeEvent.class, this::handleCreateNewRange);
+        eventBus.subscribe(RangeSelectedEvent.class, this::handleRangeSelected);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -69,6 +72,12 @@ public class UIManager {
         }
         ReadOnlySheet updatedSheet = engine.getSheet();
         eventBus.publish(new SheetDisplayEvent(updatedSheet));
+    }
+
+    private void handleRangeSelected(RangeSelectedEvent event)
+    {
+        List<String> cords = engine.getCordsOfCellsInRange(event.getRangeName());
+        eventBus.publish(new CellsMarkedEvent(cords));
     }
 
     public void showUI(Stage primaryStage) {

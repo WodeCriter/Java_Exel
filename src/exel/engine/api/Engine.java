@@ -67,4 +67,6 @@ public interface Engine {
     void clearSheet();
 
     void addNewRange(String rangeName, String topLeftCord, String bottomRightCord);
+
+    List<String> getCordsOfCellsInRange(String rangeName);
 }

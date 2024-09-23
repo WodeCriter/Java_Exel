@@ -10,12 +10,14 @@ import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.spreadsheet.range.Range;
+import exel.engine.spreadsheet.range.RangeDatabase;
 import exel.engine.util.file_man.load.imp.sysStateLoader;
 import exel.engine.util.file_man.load.imp.xmlFileLoader;
 import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 import exel.eventsys.EventBus;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class EngineImp implements Engine {
@@ -120,5 +122,15 @@ public class EngineImp implements Engine {
     public void addNewRange(String rangeName, String topLeftCord, String bottomRightCord)
     {
         new Range(new Coordinate(topLeftCord), new Coordinate(bottomRightCord), rangeName, currentSheet);
+    }
+
+    @Override
+    public List<String> getCordsOfCellsInRange(String rangeName)
+    {
+        if (!RangeDatabase.isRangeInDatabase(rangeName))
+            throw new IllegalArgumentException("The range \"" + rangeName + "\" does not exist.");
+
+        Range range = RangeDatabase.getRange(rangeName);
+        return range.getCordsStrInRange();
     }
 }
