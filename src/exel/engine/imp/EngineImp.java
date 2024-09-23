@@ -17,7 +17,6 @@ import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 import exel.eventsys.EventBus;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class EngineImp implements Engine {
@@ -132,5 +131,12 @@ public class EngineImp implements Engine {
 
         Range range = RangeDatabase.getRange(rangeName);
         return range.getCordsStrInRange();
+    }
+
+    @Override
+    public void deleteRange(String rangeName)
+    {
+        //todo: What happens when we try to delete a range that's currently used
+        RangeDatabase.removeRange(rangeName);
     }
 }

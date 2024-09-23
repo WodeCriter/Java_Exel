@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -50,6 +51,7 @@ public class IndexController {
 
     @FXML
     private ListView rangesList;
+    private ContextMenu rangeDeleteMenu;
 
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
@@ -59,6 +61,7 @@ public class IndexController {
     private void subscribeToEvents() {
         eventBus.subscribe(DisplaySelectedCellEvent.class, this::handleDisplaySelectedCell);
         eventBus.subscribe(RangeCreatedEvent.class, this::handleNewRangeCreated);
+        eventBus.subscribe(DeletedRangeEvent.class, this::handleRangeDeleted);
     }
 
     @FXML
@@ -184,11 +187,45 @@ public class IndexController {
         rangesList.getItems().add(event.getRangeName());
     }
 
+    private void handleRangeDeleted(DeletedRangeEvent event)
+    {
+        rangesList.getItems().remove(event.getRangeName());
+    }
+
     @FXML
     void pressListViewTest(MouseEvent event)
     {
         String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
-        eventBus.publish(new RangeSelectedEvent(selectedRange));
+
+        if (event.getButton() == MouseButton.SECONDARY)
+            rangeDeleteMenu.show(rangesList, event.getScreenX(), event.getScreenY());
+        else
+            eventBus.publish(new RangeSelectedEvent(selectedRange));
     }
 
+    @FXML
+    private void initialize()
+    {
+        rangeDeleteMenu = new ContextMenu();
+        MenuItem deleteRange = new MenuItem("Delete Range");
+
+        String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
+        deleteRange.setOnAction(eventr -> {eventBus.publish(new RangeDeleteEvent(selectedRange));});
+
+        rangeDeleteMenu.getItems().add(deleteRange);
+
+        // Add a global mouse listener to the scene to hide the context menu when clicking elsewhere
+        rangesList.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, this::hideContextMenu);
+            }
+        });
+    }
+
+    private void hideContextMenu(MouseEvent event) {
+        // If the context menu is open and the click happens outside the context menu, hide it
+        if (rangeDeleteMenu.isShowing()) {
+            rangeDeleteMenu.hide();
+        }
+    }
 }

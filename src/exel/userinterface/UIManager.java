@@ -33,6 +33,7 @@ public class UIManager {
         eventBus.subscribe(CellUpdateEvent.class, this::handleCellUpdate);
         eventBus.subscribe(CreateNewRangeEvent.class, this::handleCreateNewRange);
         eventBus.subscribe(RangeSelectedEvent.class, this::handleRangeSelected);
+        eventBus.subscribe(RangeDeleteEvent.class, this::handleRangeDelete);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -78,6 +79,12 @@ public class UIManager {
     {
         List<String> cords = engine.getCordsOfCellsInRange(event.getRangeName());
         eventBus.publish(new CellsMarkedEvent(cords));
+    }
+
+    private void handleRangeDelete(RangeDeleteEvent event)
+    {
+        engine.deleteRange(event.getRangeName());
+        eventBus.publish(new DeletedRangeEvent(event.getRangeName()));
     }
 
     public void showUI(Stage primaryStage) {

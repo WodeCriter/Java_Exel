@@ -69,4 +69,6 @@ public interface Engine {
     void addNewRange(String rangeName, String topLeftCord, String bottomRightCord);
 
     List<String> getCordsOfCellsInRange(String rangeName);
+
+    void deleteRange(String rangeName);
 }
