@@ -21,6 +21,7 @@ import java.util.Map;
 public class SheetController {
 
     private Label currentlySelectedCell = null;
+    private List<String> currentlyMarkedCellCords = null;
 
     @FXML
     private GridPane spreadsheetGrid;
@@ -136,6 +137,7 @@ public class SheetController {
 
     // Event handler for cell clicks
     private void handleCellClick(MouseEvent event, int row, int col) {
+        unmarkCellsInList();
         String cellId = getCellId(row, col);
         //System.out.println("Cell clicked: " + cellId);
 
@@ -160,12 +162,23 @@ public class SheetController {
 
     private void handleMarkCell(CellsMarkedEvent event)
     {
+        unmarkCellsInList();
         List<String> cellsCordsToMark = event.getCellsMarkedCords();
         for (String cellId : cellsCordsToMark)
         {
             Label cellLabel = cellLabelMap.get(cellId);
             if (!cellLabel.getStyleClass().contains("cell-marked"))
                 cellLabel.getStyleClass().add("cell-marked");
+        }
+        currentlyMarkedCellCords = cellsCordsToMark;
+    }
+
+    private void unmarkCellsInList()
+    {
+        if (currentlyMarkedCellCords != null)
+        {
+            for (String cellId : currentlyMarkedCellCords)
+                cellLabelMap.get(cellId).getStyleClass().remove("cell-marked");
         }
     }
 }
