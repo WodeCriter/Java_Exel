@@ -6,6 +6,7 @@ import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
 import exel.engine.spreadsheet.cell.api.Cell;
+import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.util.file_man.load.imp.sysStateLoader;
@@ -15,7 +16,6 @@ import exel.engine.util.file_man.save.imp.xmlFileSaver;
 import exel.eventsys.EventBus;
 import exel.eventsys.events.CreateNewSheetEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EngineImp implements Engine {
@@ -74,19 +74,20 @@ public class EngineImp implements Engine {
     @Override
     public ReadOnlyCell getCellContents(String cellCoordinate) {
         if (currentSheet != null) {
-            Cell cell = currentSheet.getCell(cellCoordinate);
-            return cell != null ? new ReadOnlyCellImp(cell.getCoordinate(), cell.getOriginalValue(), cell.getEffectiveValue(), cell.getVersion(), cell.getDependsOn(), cell.getInfluencingOn()) : null;
+            Cell cell = currentSheet.getCell(new Coordinate(cellCoordinate));
+            return cell != null ? new ReadOnlyCellImp(cellCoordinate, cell.getOriginalValue(), cell.getEffectiveValue(), cell.getVersion(), cell.getDependsOn(), cell.getInfluencingOn()) : null;
         }
         return null;
     }
 
     @Override
-    public void updateCellContents(String coordinate, String value) throws IllegalStateException {
+    public void updateCellContents(String coordinate, String value) throws Exception
+    {
         if (currentSheet == null) {
             throw new IllegalStateException("No sheet is currently loaded.");
         }
         //update the current sheet to a copy created inside
-        currentSheet = currentSheet.updateCellValueAndCalculate(coordinate, value); // Directly set the cell's value in the modifiable sheet
+        currentSheet = currentSheet.updateCellValueAndCalculate(new Coordinate(coordinate), value); // Directly set the cell's value in the modifiable sheet
         //update your read only sheet based on the copy you just got
         readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
     }

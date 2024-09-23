@@ -5,7 +5,6 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
-import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
@@ -14,7 +13,7 @@ import java.util.*;
 public class SheetImp implements Sheet, Serializable
 {
     private static final long serialVersionUID = 1L;
-    private Map<Coordinate, CellImp> activeCells;
+    private Map<String, CellImp> activeCells;
     private String sheetName;
     private int version;
     private VersionManager versionManager;
@@ -53,7 +52,7 @@ public class SheetImp implements Sheet, Serializable
         List<ReadOnlyCell> readOnlyCellsList = new LinkedList<>();
         for (Cell cell : activeCells.values()) {
             ReadOnlyCell readOnlyCell = new ReadOnlyCellImp(
-                    cell.getCoordinateStr(),
+                    cell.getCoordinate(),
                     cell.getOriginalValue(),
                     cell.getEffectiveValue(),
                     cell.getVersion(),
@@ -88,7 +87,7 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
-    public CellImp getCell(Coordinate coordinate)
+    public CellImp getCell(String coordinate)
     {
         CellImp cellToReturn = activeCells.get(coordinate);
         if (cellToReturn == null)
@@ -98,29 +97,10 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
-    public int getMaxNumOfCells()
-    {
-        return numOfCols * numOfRows;
-    }
-
-    @Override
-    public boolean isCellActive(Coordinate coordinate)
-    {
-        return activeCells.containsKey(coordinate);
-    }
-
-    @Override
     public Cell setCell(String coordinate, String value) throws IllegalArgumentException
     {
-        return setCell(new Coordinate(coordinate), value);
-    }
-
-    @Override
-    public Cell setCell(Coordinate coordinate, String value) throws IllegalArgumentException
-    {
-        if (isCoordinateInRange(coordinate))
-        {
-            Cell cell = activeCells.computeIfAbsent(coordinate, cord -> new CellImp(cord, this));
+        if (isCoordinateInRange(coordinate)){
+            Cell cell = activeCells.computeIfAbsent(coordinate, s -> new CellImp(s, this));
             cell.setCellOriginalValue(value);
             return cell;
         }
@@ -150,7 +130,7 @@ public class SheetImp implements Sheet, Serializable
     }
 
     @Override
-    public Sheet updateCellValueAndCalculate(Coordinate coordinate, String newValue) throws Exception
+    public Sheet updateCellValueAndCalculate(String coordinate, String newValue)
     {
         CellImp cell = getCell(coordinate);
         if (cell == null) throw new IllegalArgumentException("Cell " + coordinate + " not found in map.");
@@ -166,6 +146,11 @@ public class SheetImp implements Sheet, Serializable
     }
 
     public SheetImp copySheet() {
+        // lots of options here:
+        // 1. implement clone all the way (yac... !)
+        // 2. implement copy constructor for CellImpl and SheetImpl
+
+        // 3. how about serialization ?
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -180,14 +165,34 @@ public class SheetImp implements Sheet, Serializable
         }
     }
 
-    @Override
-    public Boolean isCoordinateInRange(Coordinate coordinate) {
-        if (coordinate == null)
+    private Boolean isCoordinateInRange(String coordinate) {
+        if (coordinate == null || coordinate.isEmpty()) {
             return false; // Early return for null or empty string input.
+        }
+
+        // Separate the column letter(s) from the row number.
+        int i = 0;
+        while (i < coordinate.length() && Character.isLetter(coordinate.charAt(i))) {
+            i++;
+        }
 
         // Split the string into the alphabetic part and the numeric part.
-        int column = coordinate.getColIndex();
-        int row = coordinate.getRow();
+        String columnPart = coordinate.substring(0, i);
+        String rowPart = coordinate.substring(i);
+
+        // Convert the column letters to a column index (0-based).
+        int column = 0;
+        for (int j = 0; j < columnPart.length(); j++) {
+            column = column * 26 + (Character.toUpperCase(columnPart.charAt(j)) - 'A' + 1);
+        }
+
+        // Convert the row string to an integer.
+        int row;
+        try {
+            row = Integer.parseInt(rowPart);
+        } catch (NumberFormatException e) {
+            return false; // Return false if row part is not an integer.
+        }
 
         // Check if the column index and row index are within the allowed range.
         return column > 0 && column <= this.numOfCols && row > 0 && row <= this.numOfRows;

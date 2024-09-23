@@ -47,7 +47,7 @@ public interface Engine {
      * @param value The new value for the cell.
      * @throws IllegalStateException if there is an issue with updating the cell
      */
-    void updateCellContents(String coordinate, String value) throws IllegalStateException;
+    void updateCellContents(String coordinate, String value) throws Exception;
 
 
     /**
