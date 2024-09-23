@@ -53,6 +53,19 @@ public class IndexController {
     private ListView rangesList;
     private ContextMenu rangeDeleteMenu;
 
+    @FXML
+    private void initialize()
+    {
+        setUpRangeDeleteMenu();
+
+        // Add a global mouse listener to the scene to hide the context menu when clicking elsewhere
+        rangesList.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, this::hideContextMenu);
+            }
+        });
+    }
+
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
         subscribeToEvents();
@@ -215,8 +228,7 @@ public class IndexController {
             eventBus.publish(new RangeSelectedEvent(selectedRange));
     }
 
-    @FXML
-    private void initialize()
+    private void setUpRangeDeleteMenu()
     {
         rangeDeleteMenu = new ContextMenu();
         MenuItem deleteRange = new MenuItem("Delete Range");
@@ -225,13 +237,6 @@ public class IndexController {
         deleteRange.setOnAction(eventr -> {eventBus.publish(new RangeDeleteEvent(selectedRange));});
 
         rangeDeleteMenu.getItems().add(deleteRange);
-
-        // Add a global mouse listener to the scene to hide the context menu when clicking elsewhere
-        rangesList.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, this::hideContextMenu);
-            }
-        });
     }
 
     private void hideContextMenu(MouseEvent event) {

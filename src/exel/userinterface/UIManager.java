@@ -78,7 +78,7 @@ public class UIManager {
     private void handleRangeSelected(RangeSelectedEvent event)
     {
         List<String> cords = engine.getCordsOfCellsInRange(event.getRangeName());
-        eventBus.publish(new CellsMarkedEvent(cords));
+        eventBus.publish(new CellsRequestedToBeMarkedEvent(cords));
     }
 
     private void handleRangeDelete(RangeDeleteEvent event)

@@ -5,7 +5,7 @@ import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.EventBus;
 import exel.eventsys.events.CellSelectedEvent;
-import exel.eventsys.events.CellsMarkedEvent;
+import exel.eventsys.events.CellsRequestedToBeMarkedEvent;
 import exel.eventsys.events.SheetCreatedEvent;
 import exel.eventsys.events.SheetDisplayEvent;
 import javafx.application.Platform;
@@ -34,6 +34,17 @@ public class SheetController {
     // Map to store cell labels with their coordinates
     private Map<String, Label> cellLabelMap = new HashMap<>();
 
+    @FXML
+    private void initialize()
+    {
+        // Add a global mouse listener to the scene to hide the context menu when clicking elsewhere
+//        spreadsheetGrid.sceneProperty().addListener((obs, oldScene, newScene) -> {
+//            if (newScene != null) {
+//                newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, this::unmarkCellsInList);
+//            }
+//        });
+    }
+
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
         subscribeToEvents();
@@ -42,7 +53,7 @@ public class SheetController {
     private void subscribeToEvents() {
         eventBus.subscribe(SheetCreatedEvent.class, this::handleSheetCreated);
         eventBus.subscribe(SheetDisplayEvent.class, this::handleSheetDisplay);
-        eventBus.subscribe(CellsMarkedEvent.class, this::handleMarkCell);
+        eventBus.subscribe(CellsRequestedToBeMarkedEvent.class, this::handleMarkCell);
         // Subscribe to other events if needed (e.g., cell update events)
     }
 
@@ -138,6 +149,8 @@ public class SheetController {
     // Event handler for cell clicks
     private void handleCellClick(MouseEvent event, int row, int col) {
         unmarkCellsInList();
+        currentlyMarkedCellCords = null;
+
         String cellId = getCellId(row, col);
         //System.out.println("Cell clicked: " + cellId);
 
@@ -160,9 +173,16 @@ public class SheetController {
         eventBus.publish(cellSelectedEvent);
     }
 
-    private void handleMarkCell(CellsMarkedEvent event)
+    private void handleMarkCell(CellsRequestedToBeMarkedEvent event)
     {
+        //todo: If 2 ranges have the same cells, pressing the other range will unmark the currently picked range. Need to fix that.
         unmarkCellsInList();
+        if (event.getCellsMarkedCords().equals(currentlyMarkedCellCords))
+        {
+            currentlyMarkedCellCords = null;
+            return;
+        }
+
         List<String> cellsCordsToMark = event.getCellsMarkedCords();
         for (String cellId : cellsCordsToMark)
         {
