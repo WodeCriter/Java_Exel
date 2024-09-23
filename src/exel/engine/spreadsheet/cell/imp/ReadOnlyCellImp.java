@@ -1,6 +1,7 @@
 package exel.engine.spreadsheet.cell.imp;
 
 import exel.engine.effectivevalue.api.EffectiveValue;
+import exel.engine.spreadsheet.cell.api.CellType;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class ReadOnlyCellImp implements ReadOnlyCell {
                            int version, List<CellImp> dependsOn, List<CellImp> influencingOn) {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
-        this.effectiveValue = effectiveValue.getValue().toString();
+        this.effectiveValue = effectiveValue.toString();
         this.version = version;
         // Convert CellImp lists to ReadOnlyCellImp lists
         // Convert CellImp lists to list of strings containing cell coordinates

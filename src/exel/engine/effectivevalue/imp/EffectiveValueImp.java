@@ -92,5 +92,20 @@ public class EffectiveValueImp implements EffectiveValue, Serializable {
 
         return 0;
     }
+
+    @Override
+    public String toString()
+    {
+        if (cellType == CellType.NUMERIC)
+        {
+            double d = extractValueWithExpectation(Double.class);
+            if (d == Math.floor(d))
+                return Integer.toString((int) d);
+            else
+                return Double.toString(d);
+        }
+        else
+            return value.toString();
+    }
 }
 
