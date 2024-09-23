@@ -25,8 +25,8 @@ import java.util.Objects;
 public class IndexController {
 
     private ReadOnlyCell selectedCell;
-
     private EventBus eventBus;
+    private boolean wasSheetCreated = false;
 
     @FXML
     private MenuItem buttonNewFile;
@@ -62,10 +62,11 @@ public class IndexController {
         eventBus.subscribe(DisplaySelectedCellEvent.class, this::handleDisplaySelectedCell);
         eventBus.subscribe(RangeCreatedEvent.class, this::handleNewRangeCreated);
         eventBus.subscribe(DeletedRangeEvent.class, this::handleRangeDeleted);
+        eventBus.subscribe(SheetCreatedEvent.class, this::handleSheetCreated);
     }
 
     @FXML
-    void newFileEventLisener(ActionEvent event) {
+    void newFileEventListener(ActionEvent event) {
         try {
             // Load the FXML file for the new sheet popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/newsheet/CreateNewSheetScreen.fxml"));
@@ -93,6 +94,11 @@ public class IndexController {
         } catch (Exception e) {
             e.printStackTrace();  // Handle exceptions appropriately
         }
+    }
+
+    private void handleSheetCreated(SheetCreatedEvent event)
+    {
+        wasSheetCreated = true;
     }
 
     public void refreshSheetPlane() {
@@ -134,14 +140,17 @@ public class IndexController {
 
     @FXML
     void updateCellButtonListener(ActionEvent event) {
-        try{
-            String NewCellValue = textFiledOriginalVal.getText();
-            if(!Objects.equals(NewCellValue, selectedCell.getOriginalValue())){
-                eventBus.publish(new CellUpdateEvent(selectedCell.getCoordinate(), NewCellValue));
-            }
-        }
-        catch(Exception e){
+        if (!wasSheetCreated)
+            return;
 
+        try
+        {
+            String NewCellValue = textFiledOriginalVal.getText();
+            if(!Objects.equals(NewCellValue, selectedCell.getOriginalValue()))
+                eventBus.publish(new CellUpdateEvent(selectedCell.getCoordinate(), NewCellValue));
+        }
+        catch(Exception e)
+        {
             showAlert("Failed to update cell", e.getMessage());
         }
     }
@@ -156,6 +165,9 @@ public class IndexController {
     @FXML
     void addNewRangeButtonListener(ActionEvent event)
     {
+        if (!wasSheetCreated)
+            return;
+
         try {
             // Load the FXML file for the new sheet popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/newRange/AddNewRangeScreen.fxml"));
@@ -193,7 +205,7 @@ public class IndexController {
     }
 
     @FXML
-    void pressListViewTest(MouseEvent event)
+    void rangeSelectedListener(MouseEvent event)
     {
         String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
 
