@@ -12,8 +12,6 @@ import javafx.stage.Stage;
 
 public class CreateNewSheetScreenController {
 
-
-
     private EventBus eventBus;
 
     @FXML
@@ -56,7 +54,6 @@ public class CreateNewSheetScreenController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
 
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;

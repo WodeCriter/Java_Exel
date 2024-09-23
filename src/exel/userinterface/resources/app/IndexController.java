@@ -89,7 +89,6 @@ public class IndexController {
         }
     }
 
-
     public void refreshSheetPlane() {
         try {
             // Load the sheet FXML

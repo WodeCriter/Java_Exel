@@ -29,6 +29,7 @@ public class UIManager {
         eventBus.subscribe(CreateNewSheetEvent.class, this::handleCreateNewSheet);
         eventBus.subscribe(CellSelectedEvent.class, this::handleCellSelected);
         eventBus.subscribe(CellUpdateEvent.class, this::handleCellUpdate);
+        eventBus.subscribe(CreateNewRangeEvent.class, this::handleCreateNewRange);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -45,6 +46,10 @@ public class UIManager {
         //System.out.println("Sheet created: " + event.getSheetName());
     }
 
+    private void handleCreateNewRange(CreateNewRangeEvent event)
+    {
+        //todo: complete this
+    }
 
     private void handleCellSelected(CellSelectedEvent event) {
         // Call the engine to create a new sheet based on the event details
@@ -57,8 +62,6 @@ public class UIManager {
         ReadOnlySheet updatedSheet = engine.getSheet();
         eventBus.publish(new SheetDisplayEvent(updatedSheet));
     }
-
-
 
     public void showUI(Stage primaryStage) {
         try {

@@ -72,5 +72,15 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://C:/Program Files/Java/jdk-21/javafx-sdk-22.0.2/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://C:/Program Files/Java/jdk-21/javafx-sdk-22.0.2/lib" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
