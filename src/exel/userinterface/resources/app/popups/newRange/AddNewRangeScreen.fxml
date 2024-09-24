@@ -31,8 +31,8 @@
             <Label text="Bottom Right Cell Coordinate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Button fx:id="buttomCreateRange" mnemonicParsing="false" onAction="#createNewRangeListener" text="Create Range" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
             <TextField fx:id="textboxRangeName" promptText="Name" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <TextField fx:id="textboxTopLeft" promptText="1-50" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <TextField fx:id="textboxBottomRight" promptText="1-50" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextField fx:id="textboxTopLeft" promptText="example: A1" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="textboxBottomRight" promptText="example: B2" GridPane.columnIndex="2" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </children>

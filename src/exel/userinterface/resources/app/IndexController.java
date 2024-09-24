@@ -4,6 +4,7 @@ package exel.userinterface.resources.app;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.events.*;
 import exel.userinterface.resources.app.popups.newRange.CreateNewRangeScreenController;
+import exel.userinterface.resources.app.popups.sort.SetSortScreenController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -243,6 +244,35 @@ public class IndexController {
         // If the context menu is open and the click happens outside the context menu, hide it
         if (rangeDeleteMenu.isShowing()) {
             rangeDeleteMenu.hide();
+        }
+    }
+
+    @FXML
+    void sortRangeListener(ActionEvent event)
+    {
+        try {
+            // Load the FXML file for the new sheet popup
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/sort/SetSortScreen.fxml"));
+            VBox popupRoot = loader.load();
+
+            Object controller = loader.getController();
+
+            if (controller instanceof SetSortScreenController)
+                ((SetSortScreenController) controller).setEventBus(eventBus);
+
+            // Create a new stage for the popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Sort Range");
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
+            popupStage.setScene(new Scene(popupRoot, 200, 150));
+
+            // Show the popup
+            popupStage.showAndWait();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();  // Handle exceptions appropriately
         }
     }
 }

@@ -1,6 +1,7 @@
 package exel.userinterface;
 
 import exel.engine.api.Engine;
+import exel.engine.imp.EngineImp;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.EventBus;

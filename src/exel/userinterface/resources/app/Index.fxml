@@ -18,7 +18,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.Tooltip?>
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
@@ -58,6 +57,11 @@
             <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
           </items>
         </Menu>
+            <Menu mnemonicParsing="false" text="Data">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#sortRangeListener" text="Sort range" />
+              </items>
+            </Menu>
       </menus>
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
@@ -129,11 +133,7 @@
                            </rowConstraints>
                            <children>
                               <Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Ranges" textAlignment="CENTER" />
-                              <Button mnemonicParsing="false" onAction="#addNewRangeButtonListener" prefHeight="25.0" prefWidth="35.0" text="+" GridPane.columnIndex="1">
-                                  <tooltip>
-                                      <Tooltip text="Create New Range" />
-                                  </tooltip>
-                              </Button>
+                              <Button mnemonicParsing="false" onAction="#addNewRangeButtonListener" prefHeight="25.0" prefWidth="35.0" text="+" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <ListView fx:id="rangesList" onMouseClicked="#rangeSelectedListener" prefHeight="269.0" prefWidth="90.0" VBox.vgrow="ALWAYS" />

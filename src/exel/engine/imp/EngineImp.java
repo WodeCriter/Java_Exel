@@ -17,6 +17,7 @@ import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 import exel.eventsys.EventBus;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class EngineImp implements Engine {
@@ -138,5 +139,33 @@ public class EngineImp implements Engine {
     {
         //todo: What happens when we try to delete a range that's currently used
         RangeDatabase.removeRange(rangeName);
+    }
+
+    public static List<String> getAllColumnsBetween2Cords(String cord1Str, String cord2Str)
+    {
+        if (Coordinate.isStringACellCoordinate(cord1Str) && Coordinate.isStringACellCoordinate(cord2Str))
+        {
+            Coordinate cord1 = new Coordinate(cord1Str);
+            Coordinate cord2 = new Coordinate(cord2Str);
+
+            if (cord1.getColIndex() > cord2.getColIndex())
+            {
+                Coordinate tmp = cord1;
+                cord1 = cord2;
+                cord2 = tmp;
+            }
+
+            List<String> cordsInBetween = new LinkedList<>();
+
+            do
+            {
+                cordsInBetween.add(cord1.getCol());
+                cord1 = cord1.getCordOnRight();
+            } while (cord1.getColIndex() <= cord2.getColIndex());
+
+            return cordsInBetween;
+        }
+
+        return null;
     }
 }
