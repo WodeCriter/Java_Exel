@@ -153,7 +153,7 @@ public class IndexController {
 
     @FXML
     void updateCellButtonListener(ActionEvent event) {
-        if (!wasSheetCreated)
+        if (!wasSheetCreated || selectedCell == null)
             return;
 
         try

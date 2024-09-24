@@ -69,7 +69,7 @@ public class UIManager {
         }
         catch (Exception e)
         {
-            //handle what happens if cell is not updated
+            throw new IllegalArgumentException(e.getMessage());
         }
         ReadOnlySheet updatedSheet = engine.getSheet();
         eventBus.publish(new SheetDisplayEvent(updatedSheet));
