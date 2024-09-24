@@ -4,10 +4,7 @@ package exel.userinterface.resources.app.Sheet;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.EventBus;
-import exel.eventsys.events.CellSelectedEvent;
-import exel.eventsys.events.CellsRequestedToBeMarkedEvent;
-import exel.eventsys.events.SheetCreatedEvent;
-import exel.eventsys.events.SheetDisplayEvent;
+import exel.eventsys.events.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -17,6 +14,8 @@ import javafx.scene.layout.GridPane;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SheetController {
 
@@ -54,6 +53,7 @@ public class SheetController {
         eventBus.subscribe(SheetCreatedEvent.class, this::handleSheetCreated);
         eventBus.subscribe(SheetDisplayEvent.class, this::handleSheetDisplay);
         eventBus.subscribe(CellsRequestedToBeMarkedEvent.class, this::handleMarkCell);
+        eventBus.subscribe(DisplaySelectedCellEvent.class, this::handleDisplaySelectedCell);
         // Subscribe to other events if needed (e.g., cell update events)
     }
 
@@ -177,20 +177,37 @@ public class SheetController {
     {
         //todo: If 2 ranges have the same cells, pressing the other range will unmark the currently picked range. Need to fix that.
         unmarkCellsInList();
-        if (event.getCellsMarkedCords().equals(currentlyMarkedCellCords))
+        List<String> cellsCordsToMark = event.getCellsToMarkCords();
+        if (cellsCordsToMark.equals(currentlyMarkedCellCords))
         {
             currentlyMarkedCellCords = null;
             return;
         }
 
-        List<String> cellsCordsToMark = event.getCellsMarkedCords();
+        markAllCellsInList(cellsCordsToMark, "cell-marked-for-range");
+        currentlyMarkedCellCords = cellsCordsToMark;
+    }
+
+    private void handleDisplaySelectedCell(DisplaySelectedCellEvent event)
+    {
+        unmarkCellsInList();
+        currentlyMarkedCellCords = null;
+
+        List<String> dependsOnCords = event.getCell().getDependsOn();
+        List<String> influencingOnCords = event.getCell().getInfluencingOn();
+        markAllCellsInList(dependsOnCords, "cell-marked-for-dependency");
+        markAllCellsInList(influencingOnCords, "cell-marked-for-influencing");
+        currentlyMarkedCellCords = Stream.concat(dependsOnCords.stream(), influencingOnCords.stream()).collect(Collectors.toList());
+    }
+
+    private void markAllCellsInList(List<String> cellsCordsToMark, String headerToMarkBy)
+    {
         for (String cellId : cellsCordsToMark)
         {
             Label cellLabel = cellLabelMap.get(cellId);
-            if (!cellLabel.getStyleClass().contains("cell-marked"))
-                cellLabel.getStyleClass().add("cell-marked");
+            if (!cellLabel.getStyleClass().contains(headerToMarkBy))
+                cellLabel.getStyleClass().add(headerToMarkBy);
         }
-        currentlyMarkedCellCords = cellsCordsToMark;
     }
 
     private void unmarkCellsInList()
@@ -198,7 +215,7 @@ public class SheetController {
         if (currentlyMarkedCellCords != null)
         {
             for (String cellId : currentlyMarkedCellCords)
-                cellLabelMap.get(cellId).getStyleClass().remove("cell-marked");
+                cellLabelMap.get(cellId).getStyleClass().removeIf(str->str.contains("cell-marked"));
         }
     }
 }

@@ -11,7 +11,7 @@ public class CellsRequestedToBeMarkedEvent
         this.cellsMarkedCords = cellsMarkedCords;
     }
 
-    public List<String> getCellsMarkedCords()
+    public List<String> getCellsToMarkCords()
     {
         return cellsMarkedCords;
     }

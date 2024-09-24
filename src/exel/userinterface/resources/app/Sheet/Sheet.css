@@ -30,7 +30,19 @@
     -fx-background-color: #FFF8DC; /* Optional: Light Cornsilk background to highlight selection */
 }
 
-.cell-marked {
+.cell-marked-for-range {
+    -fx-border-color: #ce0000; /* Red */
+    -fx-effect: dropshadow(three-pass-box, rgb(252, 121, 121), 15, 0, 0, 0);
+    -fx-background-color: #ec9898; /* Optional: Light Cornsilk background to highlight selection */
+}
+
+.cell-marked-for-dependency {
+    -fx-border-color: #0040ff; /* Blue */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 119, 255, 0.8), 15, 0, 0, 0);
+    -fx-background-color: #8beef8; /* Optional: Light Cornsilk background to highlight selection */
+}
+
+.cell-marked-for-influencing {
     -fx-border-color: #8FCE00; /* Green */
     -fx-effect: dropshadow(three-pass-box, rgba(0, 255, 34, 0.8), 15, 0, 0, 0);
     -fx-background-color: #D9EAD3; /* Optional: Light Cornsilk background to highlight selection */
