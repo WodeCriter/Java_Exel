@@ -11,6 +11,7 @@ import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.spreadsheet.range.Range;
 import exel.engine.spreadsheet.range.RangeDatabase;
+import exel.engine.spreadsheet.rowSorter.RowSorter;
 import exel.engine.util.file_man.load.imp.sysStateLoader;
 import exel.engine.util.file_man.load.imp.xmlFileLoader;
 import exel.engine.util.file_man.save.imp.sysStateSaver;
@@ -39,8 +40,14 @@ public class EngineImp implements Engine {
         return this.readOnlyCurrentSheet;
     }
 
-    public ReadOnlySheet createNewSheet()
+    public ReadOnlySheet createSortedSheetFromCords(String cord1, String cord2, List<String> columnsToSortBy)
     {
+        Range range = new Range(new Coordinate(cord1), new Coordinate(cord2), currentSheet);
+        RowSorter sorter = new RowSorter(range, columnsToSortBy.stream().map(Coordinate::calculateColIndex).toList());
+        sorter.sortRows();
+        ReadOnlySheet toReturn = new ReadOnlySheetImp(currentSheet);
+        sorter.moveCellsToOriginalCoordinates();
+        return toReturn;
     }
 
     @Override
@@ -125,7 +132,10 @@ public class EngineImp implements Engine {
     @Override
     public void addNewRange(String rangeName, String topLeftCord, String bottomRightCord)
     {
-        new Range(new Coordinate(topLeftCord), new Coordinate(bottomRightCord), rangeName, currentSheet);
+        if (rangeName == null || rangeName.isEmpty())
+            throw new IllegalArgumentException("Name must be given to the range.");
+
+        RangeDatabase.addRange(rangeName, new Range(new Coordinate(topLeftCord), new Coordinate(bottomRightCord), currentSheet));
     }
 
     @Override

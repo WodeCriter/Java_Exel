@@ -90,12 +90,17 @@ public class Coordinate
     }
 
     // Convert the column letters to a column index (0-based).
-    private int calculateColIndex()
+    public static int calculateColIndex(String col)
     {
         int colIndex = 0;
         for (int j = 0; j < col.length(); j++)
             colIndex = colIndex * 26 + (Character.toUpperCase(col.charAt(j)) - 'A' + 1);
         return colIndex;
+    }
+
+    private int calculateColIndex()
+    {
+        return calculateColIndex(col);
     }
 
     private static String calculateColFromIndex(int colIndex)

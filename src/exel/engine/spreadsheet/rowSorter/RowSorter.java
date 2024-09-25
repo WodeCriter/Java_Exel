@@ -1,6 +1,7 @@
 package exel.engine.spreadsheet.rowSorter;
 
 import exel.engine.spreadsheet.cell.api.Cell;
+import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.range.Range;
 import exel.engine.spreadsheet.range.RangeDatabase;
 
@@ -16,21 +17,20 @@ public class RowSorter
 
     private int minRowNum, maxRowNum;
 
-    private RowSorter(Range range, int... colsToSortFrom)
+    public RowSorter(Range range, int... colsToSortFrom)
+    {
+        this(range, Arrays.stream(colsToSortFrom).boxed().collect(Collectors.toCollection(LinkedList::new)));
+    }
+
+    public RowSorter(Range range, List<Integer> colsToSortFrom)
     {
         this.range = range;
-        this.colsToSortFrom = Arrays.stream(colsToSortFrom).boxed().collect(Collectors.toCollection(LinkedList::new));
+        this.colsToSortFrom = colsToSortFrom;
         findMinAndMaxRowNum();
         this.rows = sortCellsToRows();
 
         this.originalRowOrder = new LinkedList<>();
         rows.forEach(row->originalRowOrder.add(row.getRowNum()));
-        sortRows();
-    }
-
-    public RowSorter(String rangeName, int... colsToSortFrom)
-    {
-        this(RangeDatabase.getRangeAndCountUse(rangeName), colsToSortFrom);
     }
 
     private void findMinAndMaxRowNum()
@@ -66,7 +66,7 @@ public class RowSorter
         return sortCellsToRows(range.getCellsInRange());
     }
 
-    private void sortRows()
+    public void sortRows()
     {
         rows.sort(Row::compareTo);
         fixCellCoordinatesAfterSort();
@@ -86,6 +86,5 @@ public class RowSorter
     {
         ListIterator<Integer> iterator = originalRowOrder.listIterator();
         rows.forEach(row -> row.changeRowNum(iterator.next()));
-        range.removeUseOfRange();
     }
 }

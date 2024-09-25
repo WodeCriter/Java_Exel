@@ -14,15 +14,12 @@ public class Range
     private final Sheet sheet;
     private int numOfUsages;
 
-    public Range(Coordinate cellCord1, Coordinate cellCord2, String rangeName, Sheet sheet)
+    public Range(Coordinate cellCord1, Coordinate cellCord2, Sheet sheet)
     {
-        if (rangeName == null || rangeName.isEmpty())
-            throw new IllegalArgumentException("Name must be given to the range.");
         //todo: Make sure range is actually inside sheet borders.
         topLeft = cellCord1;
         bottomRight = cellCord2;
         handleInvalidCellsInput();
-        RangeDatabase.addRange(rangeName, this);
         this.sheet = sheet;
         numOfUsages = 0;
     }
