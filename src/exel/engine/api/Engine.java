@@ -12,6 +12,8 @@ public interface Engine {
      */
     ReadOnlySheet createSheet(String sheetName, int rowNum , int colNum , int cellWidth , int cellHeight);
 
+    ReadOnlySheet createSortedSheetFromCords(String cord1, String cord2, List<String> columnsToSortBy);
+
     /**
      * Loads a spreadsheet from an XML file.
      * @param filePath The path to the XML file.

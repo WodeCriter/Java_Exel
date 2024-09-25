@@ -4,15 +4,15 @@ public class SheetCreatedEvent {
     private String sheetName;
     private int cellHeight;
     private int cellWidth;
-    private int numOfCols;
     private int numOfRows;
+    private int numOfCols;
 
-    public SheetCreatedEvent(String sheetName, int cellHeight, int cellWidth, int numOfCols, int numOfRows) {
+    public SheetCreatedEvent(String sheetName, int cellHeight, int cellWidth, int numOfRows, int numOfCols) {
         this.sheetName = sheetName;
         this.cellHeight = cellHeight;
         this.cellWidth = cellWidth;
-        this.numOfCols = numOfCols;
         this.numOfRows = numOfRows;
+        this.numOfCols = numOfCols;
     }
 
     public String getSheetName() {

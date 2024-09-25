@@ -40,7 +40,7 @@ public class UIManager {
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
         // Call the engine to create a new sheet based on the event details
-        ReadOnlySheet readOnlySheet = engine.createSheet(event.getSheetName(), event.getCols(), event.getRows(), event.getWidth(), event.getHeight());
+        ReadOnlySheet readOnlySheet = engine.createSheet(event.getSheetName(), event.getRows(), event.getCols(), event.getWidth(), event.getHeight());
         indexController.refreshSheetPlane();
         eventBus.publish(new SheetCreatedEvent(
                 readOnlySheet.getName(),
@@ -91,7 +91,8 @@ public class UIManager {
 
     private void handleSortRequested(SortRequestedEvent event)
     {
-        //todo: complete this
+        ReadOnlySheet sortedSheet = engine.createSortedSheetFromCords(event.getCord1(), event.getCord2(), event.getPickedColumns());
+        eventBus.publish(new SheetDisplayEvent(sortedSheet));
     }
 
     public void showUI(Stage primaryStage) {
