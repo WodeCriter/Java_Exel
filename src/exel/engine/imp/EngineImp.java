@@ -39,6 +39,10 @@ public class EngineImp implements Engine {
         return this.readOnlyCurrentSheet;
     }
 
+    public ReadOnlySheet createNewSheet()
+    {
+    }
+
     @Override
     public void loadSheet(String filePath) throws Exception {
         // Simulated loading logic
