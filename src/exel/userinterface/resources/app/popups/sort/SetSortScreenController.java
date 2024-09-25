@@ -29,7 +29,6 @@ public class SetSortScreenController
     private List<String> possibleColumnChoices = null;
     //private List<String> pickedColumns;
     private List<ComboBox<String>> allComboBoxes;
-    private Map<ComboBox<String>, String> boxToChosenColumn;
     private int rowIndex = 4;  // Track the current row index for new rows
 
     @FXML
@@ -38,7 +37,6 @@ public class SetSortScreenController
         //pickedColumns = new ArrayList<>(5);
         allComboBoxes = new ArrayList<>(5);
         allComboBoxes.add(mainColumnComboBox);
-        boxToChosenColumn = new HashMap<>();
     }
 
     public void setEventBus(EventBus eventBus) {
@@ -96,58 +94,33 @@ public class SetSortScreenController
     {
         if (possibleColumnChoices == null)
             possibleColumnChoices = EngineImp.getAllColumnsBetween2Cords(cell1TextField.getText(), cell2TextField.getText());
-        if (possibleColumnChoices != null)
+        if (possibleColumnChoices != null && !possibleColumnChoices.equals(mainColumnComboBox.getItems()))
+        {
+            mainColumnComboBox.getItems().clear();
             mainColumnComboBox.getItems().addAll(possibleColumnChoices);
+        }
     }
     @FXML
     private void whenPickingAColumn(ActionEvent event)
     {
         ComboBox<String> chosenComboBox = (ComboBox<String>) event.getSource();
-        String previousPickedColumn = boxToChosenColumn.get(chosenComboBox);
 
-        if (previousPickedColumn == null)
+        ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(chosenComboBox);
+        if (iterator != null && iterator.hasNext())
         {
-            boxToChosenColumn.put(chosenComboBox, chosenComboBox.getValue());
-            ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(chosenComboBox);
-            if (iterator != null && iterator.hasNext())
+            List<String> choicesWithoutPickedChoice = chosenComboBox.getItems().stream().
+                    filter(column->!column.equals(chosenComboBox.getValue())).toList();
+
+            ComboBox<String> nextBox = iterator.next();
+            nextBox.getItems().clear();
+            nextBox.setValue(null);
+            nextBox.getItems().addAll(choicesWithoutPickedChoice);
+            while (iterator.hasNext())
             {
-                List<String> choicesWithoutPickedChoice = chosenComboBox.getItems().stream().
-                        filter(column->!column.equals(chosenComboBox.getValue())).toList();
-
-                ComboBox<String> nextBox = iterator.next();
-                nextBox.setValue(null);
-
+                nextBox = iterator.next();
                 nextBox.getItems().clear();
-                nextBox.getItems().addAll(choicesWithoutPickedChoice);
-
-                while (iterator.hasNext())
-                {
-                    nextBox = iterator.next();
-                    nextBox.setValue(null);
-                    nextBox.getItems().clear();
-                }
+                nextBox.setValue(null);
             }
-        }
-        else
-        {
-            boxToChosenColumn.put(chosenComboBox, chosenComboBox.getValue());
-            ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(chosenComboBox);
-            if (iterator != null && iterator.hasNext())
-            {
-                List<String> choicesWithoutPickedChoice = new LinkedList<>();
-                choicesWithoutPickedChoice.add(previousPickedColumn);
-                choicesWithoutPickedChoice.addAll(chosenComboBox.getItems().stream().
-                        filter(column->!column.equals(chosenComboBox.getValue())).toList());
-
-                iterator.next().getItems().addAll(choicesWithoutPickedChoice);
-                while (iterator.hasNext())
-                {
-                    ComboBox<String> nextBox = iterator.next();
-                    nextBox.setValue(null);
-                    nextBox.getItems().clear();
-                }
-            }
-            //Need to go to the next box, put back the previousPickedColumn in it, and remove chosenComboBox.getValue()
         }
     }
 
