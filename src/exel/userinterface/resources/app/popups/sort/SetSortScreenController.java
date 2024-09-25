@@ -113,10 +113,16 @@ public class SetSortScreenController
             {
                 List<String> choicesWithoutPickedChoice = chosenComboBox.getItems().stream().
                         filter(column->!column.equals(chosenComboBox.getValue())).toList();
-                iterator.next().getItems().addAll(choicesWithoutPickedChoice);
+
+                ComboBox<String> nextBox = iterator.next();
+                nextBox.setValue(null);
+
+                nextBox.getItems().clear();
+                nextBox.getItems().addAll(choicesWithoutPickedChoice);
+
                 while (iterator.hasNext())
                 {
-                    ComboBox<String> nextBox = iterator.next();
+                    nextBox = iterator.next();
                     nextBox.setValue(null);
                     nextBox.getItems().clear();
                 }
@@ -128,9 +134,11 @@ public class SetSortScreenController
             ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(chosenComboBox);
             if (iterator != null && iterator.hasNext())
             {
-                List<String> choicesWithoutPickedChoice = chosenComboBox.getItems().stream().
-                        filter(column->!column.equals(chosenComboBox.getValue())).toList();
+                List<String> choicesWithoutPickedChoice = new LinkedList<>();
                 choicesWithoutPickedChoice.add(previousPickedColumn);
+                choicesWithoutPickedChoice.addAll(chosenComboBox.getItems().stream().
+                        filter(column->!column.equals(chosenComboBox.getValue())).toList());
+
                 iterator.next().getItems().addAll(choicesWithoutPickedChoice);
                 while (iterator.hasNext())
                 {
