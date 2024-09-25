@@ -2,14 +2,12 @@ package exel.userinterface.resources.app.popups.sort;
 
 import exel.engine.imp.EngineImp;
 import exel.eventsys.EventBus;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.input.MouseEvent;
 
 import java.util.*;
 
@@ -21,6 +19,7 @@ public class SetSortScreenController
     private GridPane gridPane;
     @FXML
     private TextField cell1TextField, cell2TextField;
+    private String text1, text2;
     @FXML
     private ComboBox<String> mainColumnComboBox;
     @FXML
@@ -37,6 +36,11 @@ public class SetSortScreenController
         //pickedColumns = new ArrayList<>(5);
         allComboBoxes = new ArrayList<>(5);
         allComboBoxes.add(mainColumnComboBox);
+        text1 = text2 = null;
+
+        cell1TextField.textProperty().addListener((observable, oldValue, newValue) -> handleText1Input(newValue));
+
+        cell2TextField.textProperty().addListener((observable, oldValue, newValue) -> handleText2Input(newValue));
     }
 
     public void setEventBus(EventBus eventBus) {
@@ -89,11 +93,22 @@ public class SetSortScreenController
         }
     }
 
-    @FXML
-    public void whenClickingOnComboBox(MouseEvent event)
+    private void handleText1Input(String newText)
     {
-        if (possibleColumnChoices == null)
-            possibleColumnChoices = EngineImp.getAllColumnsBetween2Cords(cell1TextField.getText(), cell2TextField.getText());
+        text1 = newText;
+        setColumnChoices();
+    }
+
+    private void handleText2Input(String newText)
+    {
+        text2 = newText;
+        setColumnChoices();
+    }
+
+    private void setColumnChoices()
+    {
+        possibleColumnChoices = EngineImp.getAllColumnsBetween2Cords(text1, text2);
+
         if (possibleColumnChoices != null && !possibleColumnChoices.equals(mainColumnComboBox.getItems()))
         {
             mainColumnComboBox.getItems().clear();
