@@ -222,6 +222,8 @@ public class IndexController {
     void rangeSelectedListener(MouseEvent event)
     {
         String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
+        if (selectedRange == null)
+            return;
 
         if (event.getButton() == MouseButton.SECONDARY)
             rangeDeleteMenu.show(rangesList, event.getScreenX(), event.getScreenY());
@@ -234,8 +236,11 @@ public class IndexController {
         rangeDeleteMenu = new ContextMenu();
         MenuItem deleteRange = new MenuItem("Delete Range");
 
-        String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
-        deleteRange.setOnAction(eventr -> {eventBus.publish(new RangeDeleteEvent(selectedRange));});
+
+        deleteRange.setOnAction(event -> {
+            String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
+            eventBus.publish(new RangeDeleteEvent(selectedRange));
+        });
 
         rangeDeleteMenu.getItems().add(deleteRange);
     }
