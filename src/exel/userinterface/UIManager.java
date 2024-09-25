@@ -35,6 +35,7 @@ public class UIManager {
         eventBus.subscribe(CreateNewRangeEvent.class, this::handleCreateNewRange);
         eventBus.subscribe(RangeSelectedEvent.class, this::handleRangeSelected);
         eventBus.subscribe(RangeDeleteEvent.class, this::handleRangeDelete);
+        eventBus.subscribe(SortRequestedEvent.class, this::handleSortRequested);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -86,6 +87,11 @@ public class UIManager {
     {
         engine.deleteRange(event.getRangeName());
         eventBus.publish(new DeletedRangeEvent(event.getRangeName()));
+    }
+
+    private void handleSortRequested(SortRequestedEvent event)
+    {
+        //todo: complete this
     }
 
     public void showUI(Stage primaryStage) {

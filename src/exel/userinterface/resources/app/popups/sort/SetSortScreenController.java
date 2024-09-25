@@ -2,6 +2,7 @@ package exel.userinterface.resources.app.popups.sort;
 
 import exel.engine.imp.EngineImp;
 import exel.eventsys.EventBus;
+import exel.eventsys.events.SortRequestedEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -10,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SetSortScreenController
 {
@@ -26,7 +28,6 @@ public class SetSortScreenController
     private Label sortByLabel;
 
     private List<String> possibleColumnChoices = null;
-    //private List<String> pickedColumns;
     private List<ComboBox<String>> allComboBoxes;
     private int rowIndex = 4;  // Track the current row index for new rows
 
@@ -59,6 +60,9 @@ public class SetSortScreenController
 
         newComboBox.setPrefWidth(mainColumnComboBox.getPrefWidth());
         newComboBox.setPrefHeight(mainColumnComboBox.getPrefHeight());
+        newComboBox.setPromptText(mainColumnComboBox.getPromptText());
+        newComboBox.setOpacity(mainColumnComboBox.getOpacity());
+
         guideLabel.setPrefWidth(sortByLabel.getPrefWidth());
         guideLabel.setPrefHeight(sortByLabel.getPrefHeight());
         guideLabel.setAlignment(Pos.CENTER);
@@ -150,5 +154,16 @@ public class SetSortScreenController
         }
 
         return null;
+    }
+
+    private List<String> createPickedColumnsList()
+    {
+        return allComboBoxes.stream().map(ComboBoxBase::getValue).toList();
+    }
+
+    @FXML
+    void whenSortButtonClicked(ActionEvent event)
+    {
+        eventBus.publish(new SortRequestedEvent(text1, text2, createPickedColumnsList()));
     }
 }
