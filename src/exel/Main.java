@@ -5,6 +5,7 @@ import exel.engine.imp.EngineImp;
 import exel.eventsys.EventBus;
 import exel.userinterface.UIManager;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {

@@ -10,6 +10,7 @@ import exel.userinterface.resources.app.IndexController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -109,7 +110,8 @@ public class UIManager {
                 this.indexController = (IndexController) controller;
             }
             // Setting the title of the stage (optional)
-            primaryStage.setTitle("Exel");
+            primaryStage.setTitle("Shticell");
+            primaryStage.getIcons().add(new Image("file:photos\\icons\\default.png"));
 
             // Creating a scene object with the loaded layout
             Scene scene = new Scene(root);
