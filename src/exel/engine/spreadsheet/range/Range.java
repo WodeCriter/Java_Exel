@@ -5,10 +5,11 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.coordinate.CoordinateIterator;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Range
+public class Range implements Serializable
 {
     private Coordinate topLeft, bottomRight;
     private final Sheet sheet;

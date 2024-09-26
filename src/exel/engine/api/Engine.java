@@ -19,7 +19,7 @@ public interface Engine {
      * @param filePath The path to the XML file.
      * @throws Exception if there is an issue loading the file.
      */
-    void loadSheet(String filePath) throws Exception;
+    ReadOnlySheet loadSheet(String filePath) throws Exception;
 
 
     void loadSysState(String filePath) throws Exception;

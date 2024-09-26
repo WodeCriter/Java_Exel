@@ -37,11 +37,12 @@ public class UIManager {
         eventBus.subscribe(RangeSelectedEvent.class, this::handleRangeSelected);
         eventBus.subscribe(RangeDeleteEvent.class, this::handleRangeDelete);
         eventBus.subscribe(SortRequestedEvent.class, this::handleSortRequested);
+        eventBus.subscribe(LoadSheetEvent.class, this::handleLoadSheet);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
         // Call the engine to create a new sheet based on the event details
-        ReadOnlySheet readOnlySheet = engine.createSheet(event.getSheetName(), event.getRows(), event.getCols(), event.getWidth(), event.getHeight());
+        readOnlySheet = engine.createSheet(event.getSheetName(), event.getRows(), event.getCols(), event.getWidth(), event.getHeight());
         indexController.refreshSheetPlane();
         eventBus.publish(new SheetCreatedEvent(
                 readOnlySheet.getName(),
@@ -53,8 +54,33 @@ public class UIManager {
         //System.out.println("Sheet created: " + event.getSheetName());
     }
 
-    private void handleCreateNewRange(CreateNewRangeEvent event)
-    {
+    private void handleLoadSheet(LoadSheetEvent event){
+        try
+        {
+            readOnlySheet = engine.loadSheet(event.getFilePath());
+            indexController.refreshSheetPlane();
+            eventBus.publish(new SheetCreatedEvent(
+                    readOnlySheet.getName(),
+                    readOnlySheet.getCellHeight(),
+                    readOnlySheet.getCellWidth(),
+                    readOnlySheet.getNumOfRows(),
+                    readOnlySheet.getNumOfCols()));
+
+            eventBus.publish(new SheetDisplayEvent(readOnlySheet));
+            //todo: add for readOnlySheet a readonlyRange (which includes the top left and bottom cell cords, and the rangeName)
+
+
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
+    private void handleCreateNewRange(CreateNewRangeEvent event) {
         engine.addNewRange(event.getRangeName(), event.getTopLeftCord(), event.getBottomRightCord());
         eventBus.publish(new RangeCreatedEvent(event.getRangeName(), event.getTopLeftCord(), event.getBottomRightCord()));
     }

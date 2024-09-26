@@ -52,12 +52,13 @@ public class EngineImp implements Engine {
     }
 
     @Override
-    public void loadSheet(String filePath) throws Exception {
+    public ReadOnlySheet loadSheet(String filePath) throws Exception {
         // Simulated loading logic
         this.filePath = filePath;
         // parse the xml and create a sheet and a copy sheet object
         this.currentSheet = xmlFileLoader.loadSpreadsheet(filePath);
         this.readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
+        return readOnlyCurrentSheet;
     }
 
     @Override

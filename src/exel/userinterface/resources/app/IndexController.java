@@ -152,13 +152,7 @@ public class IndexController {
             try {
                 // **Pass the absolute path to your engine**
                 //Todo: handle file load
-
-                // Optionally, notify the user that the file was loaded successfully
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("File Loaded");
-                alert.setHeaderText(null);
-                alert.setContentText("Successfully loaded file: " + selectedFile.getName());
-                alert.showAndWait();
+                eventBus.publish(new LoadSheetEvent(absolutePath));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -186,8 +180,7 @@ public class IndexController {
 
     }
 
-    private void handleSheetCreated(SheetCreatedEvent event)
-    {
+    private void handleSheetCreated(SheetCreatedEvent event) {
         isSheetLoaded = true;
         rangesList.getItems().clear();
     }
@@ -254,12 +247,12 @@ public class IndexController {
     }
 
     @FXML
-    void addNewRangeButtonListener(ActionEvent event)
-    {
+    void addNewRangeButtonListener(ActionEvent event) {
         if (!isSheetLoaded)
             return;
 
-        try {
+        try
+        {
             // Load the FXML file for the new sheet popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/newRange/AddNewRangeScreen.fxml"));
             VBox popupRoot = loader.load();
@@ -290,14 +283,12 @@ public class IndexController {
         rangesList.getItems().add(event.getRangeName());
     }
 
-    private void handleRangeDeleted(DeletedRangeEvent event)
-    {
+    private void handleRangeDeleted(DeletedRangeEvent event) {
         rangesList.getItems().remove(event.getRangeName());
     }
 
     @FXML
-    void rangeSelectedListener(MouseEvent event)
-    {
+    void rangeSelectedListener(MouseEvent event) {
         String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
         if (selectedRange == null)
             return;
@@ -308,8 +299,7 @@ public class IndexController {
             eventBus.publish(new RangeSelectedEvent(selectedRange));
     }
 
-    private void setUpRangeDeleteMenu()
-    {
+    private void setUpRangeDeleteMenu() {
         rangeDeleteMenu = new ContextMenu();
         MenuItem deleteRange = new MenuItem("Delete Range");
 
@@ -330,8 +320,7 @@ public class IndexController {
     }
 
     @FXML
-    void sortRangeListener(ActionEvent event)
-    {
+    void sortRangeListener(ActionEvent event) {
         try {
             // Load the FXML file for the new sheet popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/sort/SetSortScreen.fxml"));
