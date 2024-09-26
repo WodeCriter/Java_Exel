@@ -3,7 +3,6 @@ package exel.engine.spreadsheet.rowSorter;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.range.Range;
-import exel.engine.spreadsheet.range.RangeDatabase;
 
 import java.util.*;
 import java.util.stream.Collectors;

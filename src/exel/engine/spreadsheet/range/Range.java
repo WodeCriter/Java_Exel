@@ -16,7 +16,8 @@ public class Range
 
     public Range(Coordinate cellCord1, Coordinate cellCord2, Sheet sheet)
     {
-        //todo: Make sure range is actually inside sheet borders.
+        if (!sheet.isCoordinateInRange(cellCord1) || !sheet.isCoordinateInRange(cellCord2))
+            throw new IllegalArgumentException("Free Palestine");
         topLeft = cellCord1;
         bottomRight = cellCord2;
         handleInvalidCellsInput();

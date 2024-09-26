@@ -24,16 +24,13 @@ import exel.userinterface.resources.app.Sheet.SheetController;
 import javafx.stage.Window;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 public class IndexController {
 
     private ReadOnlyCell selectedCell;
     private EventBus eventBus;
-    private boolean wasSheetCreated = false;
+    private boolean isSheetLoaded = false;
 
     @FXML
     private MenuItem buttonNewFile;
@@ -191,7 +188,8 @@ public class IndexController {
 
     private void handleSheetCreated(SheetCreatedEvent event)
     {
-        wasSheetCreated = true;
+        isSheetLoaded = true;
+        rangesList.getItems().clear();
     }
 
     public void refreshSheetPlane() {
@@ -233,7 +231,7 @@ public class IndexController {
 
     @FXML
     void updateCellButtonListener(ActionEvent event) {
-        if (!wasSheetCreated || selectedCell == null)
+        if (!isSheetLoaded || selectedCell == null)
             return;
 
         try
@@ -258,7 +256,7 @@ public class IndexController {
     @FXML
     void addNewRangeButtonListener(ActionEvent event)
     {
-        if (!wasSheetCreated)
+        if (!isSheetLoaded)
             return;
 
         try {

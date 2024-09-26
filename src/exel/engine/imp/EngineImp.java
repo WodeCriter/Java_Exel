@@ -136,16 +136,16 @@ public class EngineImp implements Engine {
         if (rangeName == null || rangeName.isEmpty())
             throw new IllegalArgumentException("Name must be given to the range.");
 
-        RangeDatabase.addRange(rangeName, new Range(new Coordinate(topLeftCord), new Coordinate(bottomRightCord), currentSheet));
+        currentSheet.addRange(rangeName, new Range(new Coordinate(topLeftCord), new Coordinate(bottomRightCord), currentSheet));
     }
 
     @Override
     public List<String> getCordsOfCellsInRange(String rangeName)
     {
-        if (!RangeDatabase.isRangeInDatabase(rangeName))
+        if (!currentSheet.isRangeInDatabase(rangeName))
             throw new IllegalArgumentException("The range \"" + rangeName + "\" does not exist.");
 
-        Range range = RangeDatabase.getRange(rangeName);
+        Range range = currentSheet.getRange(rangeName);
         return range.getCordsStrInRange();
     }
 
@@ -153,7 +153,7 @@ public class EngineImp implements Engine {
     public void deleteRange(String rangeName)
     {
         //todo: What happens when we try to delete a range that's currently used
-        RangeDatabase.removeRange(rangeName);
+        currentSheet.removeRange(rangeName);
     }
 
     public static List<String> getAllColumnsBetween2Cords(String cord1Str, String cord2Str)

@@ -12,19 +12,22 @@ import java.util.List;
 
 public class SumExpression implements Expression
 {
-    Range range;
+    String rangeName;
 
-    public SumExpression(Range range)
+    public SumExpression(String rangeName)
     {
-        if (range == null)
-            throw new IllegalArgumentException("Range cannot be null");
-        this.range = range;
+        if (rangeName == null || rangeName.isEmpty())
+            throw new IllegalArgumentException("Range must have a name");
+        this.rangeName = rangeName;
     }
 
     @Override
     public EffectiveValue eval(Sheet sheet)
     {
-        List<Cell> cells = range.getCellsInRange();
+        if (!sheet.isRangeInDatabase(rangeName))
+            throw new IllegalArgumentException("Range does not exist in the database.");
+
+        List<Cell> cells = sheet.getRange(rangeName).getCellsInRange();
         double sum = 0;
 
         for (Cell cell : cells)

@@ -6,6 +6,8 @@ import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.CellImp;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
 import exel.engine.spreadsheet.coordinate.Coordinate;
+import exel.engine.spreadsheet.range.Range;
+import exel.engine.spreadsheet.range.RangeDatabase;
 import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
@@ -22,7 +24,7 @@ public class SheetImp implements Sheet, Serializable
     private int cellWidth;
     private int numOfCols;
     private int numOfRows;
-
+    private RangeDatabase rangeDatabase;
 
     public SheetImp(int cellHeight, int cellWidth, int numOfCols, int numOfRows, String sheetName)
     {
@@ -34,6 +36,7 @@ public class SheetImp implements Sheet, Serializable
         this.numOfRows = numOfRows;
         this.version = 1;
         this.versionManager = new VersionManager(this.copySheet());
+        this.rangeDatabase = new RangeDatabase();
     }
 
     @Override
@@ -195,6 +198,38 @@ public class SheetImp implements Sheet, Serializable
 
     private void passVersionManager(VersionManager newMan){
         this.versionManager = newMan;
+    }
+
+
+
+    @Override
+    public void addRange(String rangeName, Range range)
+    {
+        rangeDatabase.addRange(rangeName, range);
+    }
+
+    @Override
+    public boolean isRangeInDatabase(String rangeName)
+    {
+        return rangeDatabase.isRangeInDatabase(rangeName);
+    }
+
+    @Override
+    public void removeRange(String rangeName)
+    {
+        rangeDatabase.removeRange(rangeName);
+    }
+
+    @Override
+    public Range getRange(String rangeName)
+    {
+        return rangeDatabase.getRange(rangeName);
+    }
+
+    @Override
+    public Range getRangeAndCountUse(String rangeName)
+    {
+        return rangeDatabase.getRangeAndCountUse(rangeName);
     }
 }
 

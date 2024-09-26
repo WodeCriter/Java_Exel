@@ -12,19 +12,22 @@ import java.util.List;
 
 public class AverageExpression implements Expression
 {
-    Range range;
+    String rangeName;
 
-    public AverageExpression(Range range)
+    public AverageExpression(String rangeName)
     {
-        if (range == null)
-            throw new IllegalArgumentException("Range cannot be null");
-        this.range = range;
+        if (rangeName == null || rangeName.isEmpty())
+            throw new IllegalArgumentException("Range must have a name");
+        this.rangeName = rangeName;
     }
 
     @Override
     public EffectiveValue eval(Sheet sheet)
     {
-        List<Cell> cells = range.getCellsInRange();
+        if (!sheet.isRangeInDatabase(rangeName))
+            throw new IllegalArgumentException("Range does not exist in the database.");
+
+        List<Cell> cells = sheet.getRange(rangeName).getCellsInRange();
         double sum = 0;
         boolean numericCellExist = false;
 

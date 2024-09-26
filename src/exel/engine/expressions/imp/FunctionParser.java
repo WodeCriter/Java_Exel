@@ -141,10 +141,8 @@ public enum FunctionParser
         {
             checkForArgumentSize(arguments.size(), 1, "SUM");
 
-            Range range = RangeDatabase.getRangeAndCountUse(arguments.getFirst());
-            if (range == null)
-                throw new IllegalArgumentException("Range does not exist in the database.");
-            return new SumExpression(range);
+            String rangeName = arguments.getFirst();
+            return new SumExpression(rangeName);
         }
     },
     AVERAGE{
@@ -153,10 +151,8 @@ public enum FunctionParser
         {
             checkForArgumentSize(arguments.size(), 1, "AVERAGE");
 
-            Range range = RangeDatabase.getRangeAndCountUse(arguments.getFirst());
-            if (range == null)
-                throw new IllegalArgumentException("Range does not exist in the database.");
-            return new AverageExpression(range);
+            String rangeName = arguments.getFirst();
+            return new AverageExpression(rangeName);
         }
     },
 

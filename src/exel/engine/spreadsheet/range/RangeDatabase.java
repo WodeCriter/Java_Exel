@@ -7,9 +7,14 @@ import java.util.Map;
 
 public class RangeDatabase
 {
-    private static final Map<String, Range> ranges = new HashMap<String, Range>();
+    private final Map<String, Range> ranges;
 
-    public static void addRange(String rangeName, Range range)
+    public RangeDatabase()
+    {
+        ranges = new HashMap<>();
+    }
+
+    public void addRange(String rangeName, Range range)
     {
         if (isRangeInDatabase(rangeName))
         {
@@ -19,26 +24,26 @@ public class RangeDatabase
         ranges.put(rangeName, range);
     }
 
-    public static boolean isRangeInDatabase(String rangeName)
+    public boolean isRangeInDatabase(String rangeName)
     {
         return ranges.containsKey(rangeName);
     }
 
-    public static void removeRange(String rangeName)
+    public void removeRange(String rangeName)
     {
         if (getRange(rangeName).isRangeUsed())
             throw new RuntimeException("Cannot remove range \"" + rangeName + "\" as it is currently used.");
         ranges.remove(rangeName);
     }
 
-    public static Range getRange(String rangeName)
+    public Range getRange(String rangeName)
     {
         if (!isRangeInDatabase(rangeName))
             throw new RuntimeException("The range \"" + rangeName + "\" does not exist.");
         return ranges.get(rangeName);
     }
 
-    public static Range getRangeAndCountUse(String rangeName)
+    public Range getRangeAndCountUse(String rangeName)
     {
         Range range = getRange(rangeName);
         range.countUseOfRange();
