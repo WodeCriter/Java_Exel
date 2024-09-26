@@ -18,14 +18,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
             <MenuItem fx:id="buttonNewFile" mnemonicParsing="false" onAction="#newFileEventListener" text="New Sheet" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
+            <MenuItem fx:id="buttonLoadFile" mnemonicParsing="false" onAction="#loadFileListener" text="Open…" />
             <Menu mnemonicParsing="false" text="Open Recent" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Close" />
@@ -133,7 +133,7 @@
                            </rowConstraints>
                            <children>
                               <Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Ranges" textAlignment="CENTER" />
-                              <Button mnemonicParsing="false" onAction="#addNewRangeButtonListener" prefHeight="25.0" prefWidth="35.0" text="+" GridPane.columnIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#addNewRangeButtonListener" prefHeight="12.0" prefWidth="45.0" text="Add" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                         <ListView fx:id="rangesList" onMouseClicked="#rangeSelectedListener" prefHeight="269.0" prefWidth="90.0" VBox.vgrow="ALWAYS" />
@@ -147,7 +147,7 @@
                   </VBox>
                </left>
                <center>
-                   <AnchorPane fx:id="sheetContainer" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                   <AnchorPane fx:id="sheetContainer" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
                </center>
             </BorderPane>
       </children>

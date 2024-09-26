@@ -33,6 +33,9 @@ public class IndexController {
     private MenuItem buttonNewFile;
 
     @FXML
+    private MenuItem buttonLoadFile;
+
+    @FXML
     private AnchorPane sheetContainer;
 
     @FXML
@@ -99,7 +102,7 @@ public class IndexController {
             // Create a new stage for the popup
             Stage popupStage = new Stage();
             popupStage.setTitle("Create New Sheet");
-            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
             popupStage.setScene(new Scene(popupRoot, 200, 150));
 
@@ -108,6 +111,11 @@ public class IndexController {
         } catch (Exception e) {
             e.printStackTrace();  // Handle exceptions appropriately
         }
+    }
+
+    @FXML
+    void loadFileListener(ActionEvent event) {
+
     }
 
     private void handleSheetCreated(SheetCreatedEvent event)
