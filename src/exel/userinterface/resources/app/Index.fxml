@@ -26,8 +26,6 @@
           <items>
             <MenuItem fx:id="buttonNewFile" mnemonicParsing="false" onAction="#newFileEventListener" text="New Sheet" />
             <MenuItem fx:id="buttonLoadFile" mnemonicParsing="false" onAction="#loadFileListener" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem mnemonicParsing="false" text="Save" />
             <MenuItem mnemonicParsing="false" text="Save As…" />

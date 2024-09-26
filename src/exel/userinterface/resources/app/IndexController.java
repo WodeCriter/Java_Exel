@@ -15,12 +15,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import exel.eventsys.EventBus;
 import exel.userinterface.resources.app.popups.newsheet.CreateNewSheetScreenController;
 import exel.userinterface.resources.app.Sheet.SheetController;
+import javafx.stage.Window;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public class IndexController {
@@ -115,6 +121,54 @@ public class IndexController {
 
     @FXML
     void loadFileListener(ActionEvent event) {
+        // Create a new FileChooser instance
+        FileChooser fileChooser = new FileChooser();
+
+        // Set the title of the dialog
+        fileChooser.setTitle("Open Spreadsheet File");
+
+        // (Optional) Set initial directory
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        //Add file extension filters
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                "Xml Files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // **Retrieve the owner window from a node in the scene**
+        // Using 'sheetContainer' which is part of the scene graph
+        Window ownerWindow = sheetContainer.getScene().getWindow();
+
+        // Show the open file dialog
+        File selectedFile = fileChooser.showOpenDialog(ownerWindow);
+
+        if (selectedFile != null) {
+            // Get the absolute path as a String
+            String absolutePath = selectedFile.getAbsolutePath();
+
+            try {
+                // **Pass the absolute path to your engine**
+                //Todo: handle file load
+
+                // Optionally, notify the user that the file was loaded successfully
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("File Loaded");
+                alert.setHeaderText(null);
+                alert.setContentText("Successfully loaded file: " + selectedFile.getName());
+                alert.showAndWait();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Show an error alert to the user
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("File Load Error");
+                alert.setHeaderText("Could not load the file");
+                alert.setContentText("An error occurred while loading the file: " + e.getMessage());
+                alert.showAndWait();
+            }
+        } else {
+            //System.out.println("File selection cancelled by user.");
+        }
 
     }
 
