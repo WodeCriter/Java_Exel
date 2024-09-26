@@ -203,7 +203,7 @@ public class IndexController {
             // Create a new stage for the popup
             Stage popupStage = new Stage();
             popupStage.setTitle("Add New Range");
-            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initModality(Modality.APPLICATION_MODAL);
             //popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
             popupStage.setScene(new Scene(popupRoot, 200, 150));
 
