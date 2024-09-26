@@ -42,6 +42,12 @@ public class IndexController {
     private MenuItem buttonLoadFile;
 
     @FXML
+    private MenuItem buttonSaveFile;
+
+    @FXML
+    private MenuItem buttonSaveAsFile;
+
+    @FXML
     private AnchorPane sheetContainer;
 
     @FXML
@@ -169,6 +175,17 @@ public class IndexController {
         } else {
             //System.out.println("File selection cancelled by user.");
         }
+
+    }
+
+
+    @FXML
+    void saveAsFileListener(ActionEvent event) {
+
+    }
+
+    @FXML
+    void saveFileListener(ActionEvent event) {
 
     }
 

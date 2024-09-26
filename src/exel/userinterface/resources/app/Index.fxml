@@ -27,8 +27,8 @@
             <MenuItem fx:id="buttonNewFile" mnemonicParsing="false" onAction="#newFileEventListener" text="New Sheet" />
             <MenuItem fx:id="buttonLoadFile" mnemonicParsing="false" onAction="#loadFileListener" text="Open…" />
             <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
+            <MenuItem fx:id="buttonSaveFile" mnemonicParsing="false" onAction="#saveFileListener" text="Save" />
+            <MenuItem fx:id="buttonSaveAsFile" mnemonicParsing="false" onAction="#saveAsFileListener" text="Save As…" />
             <MenuItem mnemonicParsing="false" text="Revert" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Preferences…" />
