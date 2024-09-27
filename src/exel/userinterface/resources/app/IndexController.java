@@ -49,6 +49,9 @@ public class IndexController {
     private MenuItem buttonSaveAsFile;
 
     @FXML
+    private MenuItem menuItemEditDimentions;
+
+    @FXML
     private AnchorPane sheetContainer;
 
     @FXML

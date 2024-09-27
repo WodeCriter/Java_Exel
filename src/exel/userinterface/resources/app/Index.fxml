@@ -29,16 +29,11 @@
             <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem fx:id="buttonSaveFile" mnemonicParsing="false" onAction="#saveFileListener" text="Save" />
             <MenuItem fx:id="buttonSaveAsFile" mnemonicParsing="false" onAction="#saveAsFileListener" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Cell">
           <items>
-            <MenuItem mnemonicParsing="false" text="Edit" />
+            <MenuItem fx:id="menuItemEditDimentions" mnemonicParsing="false" text="Edit dimensions" />
             <MenuItem mnemonicParsing="false" text="Redo" />
             <SeparatorMenuItem mnemonicParsing="false" text="Set dimentions" />
             <MenuItem mnemonicParsing="false" text="Cut" />
