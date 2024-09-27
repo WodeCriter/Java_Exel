@@ -2,8 +2,6 @@ package exel.engine.spreadsheet.rowSorter;
 
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.api.Sheet;
-import exel.engine.spreadsheet.cell.api.Cell;
-import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.range.Range;
 
@@ -12,8 +10,6 @@ import java.util.stream.Collectors;
 
 public class RowSorter extends RowSomething
 {
-    private final List<Integer> originalRowOrder;
-
     public RowSorter(Range range, Sheet sheet, int... colsToSortFrom)
     {
         this(range, sheet, Arrays.stream(colsToSortFrom).boxed().collect(Collectors.toCollection(LinkedList::new)));
@@ -22,8 +18,6 @@ public class RowSorter extends RowSomething
     public RowSorter(Range range, Sheet sheet, List<Integer> colsToSortFrom)
     {
         super(range, sheet, colsToSortFrom);
-        this.originalRowOrder = new LinkedList<>();
-        getRows().forEach(row->originalRowOrder.add(row.getRowNum()));
     }
 
     private void fixCellCoordinatesAfterSort()
@@ -46,8 +40,7 @@ public class RowSorter extends RowSomething
     @Override
     public void returnSheetBackToNormal()
     {
-        ListIterator<Integer> iterator = originalRowOrder.listIterator();
-        getRows().forEach(row -> row.changeRowNum(iterator.next()));
+        getRows().forEach(Row::setBackToOriginalRowNum);
     }
 
     @Override

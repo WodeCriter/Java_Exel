@@ -8,13 +8,15 @@ class Row implements Comparable<Row>
 {
     private Map<Integer, Cell> colNumToCellMap;
     private List<Integer> colsToSortFrom;
-    private int rowNum;
+    private int currentRowNum;
+    private final int originalRowNum;
 
     public Row(List<Cell> cells, List<Integer> colsToSortFrom)
     {
         this.colNumToCellMap = new HashMap<>();
         cells.forEach(cell -> this.colNumToCellMap.put(cell.getCoordinate().getColIndex(), cell));
-        this.rowNum = cells.getFirst().getCoordinate().getRow();
+        this.currentRowNum = cells.getFirst().getCoordinate().getRow();
+        this.originalRowNum = currentRowNum;
 
         //todo: What if a col is given not in range (might fix elsewhere).
         this.colsToSortFrom = colsToSortFrom;
@@ -47,15 +49,19 @@ class Row implements Comparable<Row>
 
     public void changeRowNum(int newRowNum)
     {
-        if (rowNum != newRowNum)
+        if (currentRowNum != newRowNum)
         {
             colNumToCellMap.values().forEach(cell -> cell.setCoordinateRowNum(newRowNum));
-            rowNum = newRowNum;
+            currentRowNum = newRowNum;
         }
     }
 
-    public int getRowNum()
+    public int getCurrentRowNum()
     {
-        return rowNum;
+        return currentRowNum;
+    }
+
+    public void setBackToOriginalRowNum(){
+        changeRowNum(originalRowNum);
     }
 }
