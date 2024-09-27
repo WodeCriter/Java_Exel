@@ -1,13 +1,16 @@
 package exel.userinterface.resources.app;
 
 
+import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.events.*;
+import exel.userinterface.resources.app.popups.displaySheet.DisplaySheetController;
 import exel.userinterface.resources.app.popups.newRange.CreateNewRangeScreenController;
 import exel.userinterface.resources.app.popups.sort.SetSortScreenController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -90,6 +93,7 @@ public class IndexController {
         eventBus.subscribe(RangeCreatedEvent.class, this::handleNewRangeCreated);
         eventBus.subscribe(DeletedRangeEvent.class, this::handleRangeDeleted);
         eventBus.subscribe(SheetCreatedEvent.class, this::handleSheetCreated);
+        eventBus.subscribe(DisplaySheetPopupEvent.class, this::handleDisplaySheetPopup);
     }
 
     @FXML
@@ -258,6 +262,40 @@ public class IndexController {
         isSheetLoaded = true;
         currentFile = null;
         rangesList.getItems().clear();
+    }
+
+    private void handleDisplaySheetPopup(DisplaySheetPopupEvent event){
+        try {
+            // Load the FXML file for the display sheet popup
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/displaySheet/DisplaySheet.fxml"));
+            VBox popupRoot = loader.load();
+
+            // Get the controller for the popup
+            DisplaySheetController popupController = loader.getController();
+
+            // Get the current sheet data
+            ReadOnlySheet sheetData = event.getReadOnlySheet(); // Implement this method to retrieve the sheet
+
+            // Pass the ReadOnlySheet to the popup controller
+            popupController.setSheetData(sheetData);
+
+            // Create a new stage for the popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Display Sheet");
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initOwner(sheetContainer.getScene().getWindow()); // Set the owner to the current stage
+
+            // Set the scene
+            Scene scene = new Scene(popupRoot);
+            popupStage.setScene(scene);
+
+            // Show the popup
+            popupStage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();  // Handle exceptions appropriately
+        }
+
     }
 
     public void refreshSheetPlane() {

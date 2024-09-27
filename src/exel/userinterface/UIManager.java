@@ -128,7 +128,7 @@ public class UIManager {
     private void handleSortRequested(SortRequestedEvent event)
     {
         ReadOnlySheet sortedSheet = engine.createSortedSheetFromCords(event.getCord1(), event.getCord2(), event.getPickedColumns());
-        eventBus.publish(new SheetDisplayEvent(sortedSheet));
+        eventBus.publish(new DisplaySheetPopupEvent(sortedSheet));
     }
 
     public void showUI(Stage primaryStage) {
