@@ -94,7 +94,9 @@ public class STLConverter {
         int numOfCols = stlSheet.getSTLLayout().getColumns();
         int numOfRows = stlSheet.getSTLLayout().getRows();
         String sheetName = stlSheet.getName();
-        List<STLRange> stlRanges = stlSheet.getSTLRanges().getSTLRange();
+        List<STLRange> stlRanges = null;
+        if(stlSheet.getSTLRanges() != null)
+            stlRanges = stlSheet.getSTLRanges().getSTLRange();
 
         // Create a new SheetImp instance with derived or default values
         SheetImp sheet = new SheetImp(cellHeight, cellWidth, numOfCols, numOfRows, sheetName);
@@ -107,11 +109,12 @@ public class STLConverter {
             // Add cell to the sheet
             sheet.setCell(coordinate, originalVal);
         }
-
-        for (STLRange stlRange : stlRanges) {
-            STLBoundaries bounds = stlRange.getSTLBoundaries();
-            Range range = new Range(new Coordinate(bounds.getFrom()), new Coordinate(bounds.getTo()), sheet );
-            sheet.addRange(stlRange.getName(),range );
+        if (stlRanges != null) {
+            for (STLRange stlRange : stlRanges) {
+                STLBoundaries bounds = stlRange.getSTLBoundaries();
+                Range range = new Range(new Coordinate(bounds.getFrom()), new Coordinate(bounds.getTo()), sheet );
+                sheet.addRange(stlRange.getName(),range );
+            }
         }
         sheet.rebase();
         return sheet;

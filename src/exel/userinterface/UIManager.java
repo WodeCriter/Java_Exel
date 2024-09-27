@@ -68,8 +68,6 @@ public class UIManager {
                     readOnlySheet.getNumOfCols()));
 
             eventBus.publish(new SheetDisplayEvent(readOnlySheet));
-            readOnlySheet.getRanges(); //todo: use this Daniel
-
 
         }
         catch (Exception e)

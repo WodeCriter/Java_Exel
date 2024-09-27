@@ -206,7 +206,7 @@ public class IndexController {
             try {
                 // **Pass the file path to your engine or handle the saving process**
                 // Replace 'SaveSheetEvent' with your actual event or method
-                eventBus.publish(new SaveNewSheetEvent(fileToSave.getAbsolutePath()));
+                eventBus.publish(new SaveSheetEvent(fileToSave.getAbsolutePath()));
 
             } catch (Exception e) {
                 e.printStackTrace();
