@@ -49,7 +49,10 @@ public class IndexController {
     private MenuItem buttonSaveAsFile;
 
     @FXML
-    private MenuItem menuItemEditDimentions;
+    private MenuItem menuItemEditWidth;
+
+    @FXML
+    private MenuItem menuItemEditHeight;
 
     @FXML
     private AnchorPane sheetContainer;
@@ -189,6 +192,9 @@ public class IndexController {
 
     @FXML
     void saveAsFileListener(ActionEvent event) {
+        if (!isSheetLoaded)
+            return;
+
         // Create a new FileChooser instance
         FileChooser fileChooser = new FileChooser();
 
@@ -447,6 +453,9 @@ public class IndexController {
 
     @FXML
     void sortRangeListener(ActionEvent event) {
+        if (!isSheetLoaded)
+            return;
+
         try {
             // Load the FXML file for the new sheet popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/sort/SetSortScreen.fxml"));
@@ -469,7 +478,8 @@ public class IndexController {
         }
         catch (Exception e)
         {
-            e.printStackTrace();  // Handle exceptions appropriately
+            e.printStackTrace();  // Handle exceptions appropriatel
+            showAlert("Invalid input", e.getMessage());
         }
     }
 
@@ -483,8 +493,17 @@ public class IndexController {
         menuButtonSelectVersion.getItems().add(versionItem);
     }
 
-
     private void handleVersionSelected(int versionId) {
        eventBus.publish(new VersionSelectedEvent(versionId));
+    }
+
+    @FXML
+    void setHeightListener(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setWidthListener(ActionEvent event) {
+
     }
 }

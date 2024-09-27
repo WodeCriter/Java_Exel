@@ -8,7 +8,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -33,20 +32,24 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Cell">
           <items>
-            <MenuItem fx:id="menuItemEditDimentions" mnemonicParsing="false" text="Edit dimensions" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" text="Set dimentions" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
+                  <Menu mnemonicParsing="false" text="Formatting">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Left to right" />
+                  <MenuItem mnemonicParsing="false" text="Center" />
+                  <MenuItem mnemonicParsing="false" text="Right to left " />
+                    </items>
+                  </Menu>
+            <MenuItem mnemonicParsing="false" text="Select background color" />
           </items>
         </Menu>
             <Menu mnemonicParsing="false" text="Sheet">
               <items>
+                  <Menu mnemonicParsing="false" text="Edit dimensions">
+                    <items>
+                  <MenuItem fx:id="menuItemEditWidth" mnemonicParsing="false" onAction="#setWidthListener" text="Set Width" />
+                      <MenuItem fx:id="menuItemEditHeight" mnemonicParsing="false" onAction="#setHeightListener" text="Set Height" />
+                    </items>
+                  </Menu>
                 <MenuItem mnemonicParsing="false" onAction="#sortRangeListener" text="Sort range" />
               </items>
             </Menu>
