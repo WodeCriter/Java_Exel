@@ -1,6 +1,8 @@
 package exel.engine.spreadsheet.range;
 
-public class ReadOnlyRange {
+import java.io.Serializable;
+
+public class ReadOnlyRange implements Serializable {
     private String topLeftCord, bottomRightCord, rangeName;
 
     public ReadOnlyRange(String topLeftCord, String bottomRightCord, String rangeName) {

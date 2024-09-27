@@ -2,9 +2,10 @@ package exel.engine.spreadsheet.range;
 
 import org.w3c.dom.ranges.RangeException;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class RangeDatabase
+public class RangeDatabase implements Serializable
 {
     private final Map<String, Range> ranges;
 

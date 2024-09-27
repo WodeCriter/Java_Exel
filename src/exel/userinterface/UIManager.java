@@ -133,7 +133,7 @@ public class UIManager {
     }
 
     private void handleVersionSelectedEvent(VersionSelectedEvent event){
-        ReadOnlySheet versionSheet = engine.getSheetOfVersion(event.getVersion());
+        ReadOnlySheet versionSheet = engine.getSheetOfVersion(event.getVersion() - 1);
         eventBus.publish(new DisplaySheetPopupEvent(versionSheet));
     }
 
