@@ -10,31 +10,20 @@ import java.util.stream.Collectors;
 
 public class RowSorter extends RowSomething
 {
-    public RowSorter(Range range, Sheet sheet, int... colsToSortFrom)
-    {
-        this(range, sheet, Arrays.stream(colsToSortFrom).boxed().collect(Collectors.toCollection(LinkedList::new)));
-    }
+    private final List<Integer> colsToSortFrom;
 
     public RowSorter(Range range, Sheet sheet, List<Integer> colsToSortFrom)
     {
-        super(range, sheet, colsToSortFrom);
-    }
-
-    private void fixCellCoordinatesAfterSort()
-    {
-        int rowNum = getMinRowNum();
-        for (Row row : getRows())
-        {
-            row.changeRowNum(rowNum);
-            rowNum++;
-        }
+        super(range, sheet);
+        this.colsToSortFrom = colsToSortFrom;
+        setRows(convertCellsListToRowsList(colsToSortFrom));
     }
 
     @Override
     public void changeSheet() //sorts
     {
         getRows().sort(Row::compareTo);
-        fixCellCoordinatesAfterSort();
+        fixCellCoordinatesAfterChange();
     }
 
     @Override

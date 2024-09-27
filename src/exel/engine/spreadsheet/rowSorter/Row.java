@@ -1,6 +1,10 @@
 package exel.engine.spreadsheet.rowSorter;
 
+import exel.engine.effectivevalue.api.EffectiveValue;
 import exel.engine.spreadsheet.cell.api.Cell;
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
+import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
+import exel.engine.spreadsheet.coordinate.Coordinate;
 
 import java.util.*;
 
@@ -63,5 +67,23 @@ class Row implements Comparable<Row>
 
     public void setBackToOriginalRowNum(){
         changeRowNum(originalRowNum);
+    }
+
+    public boolean checkIfCellInRowHasEffectiveValue(Integer colNum, EffectiveValue value){
+        Cell cell = colNumToCellMap.get(colNum);
+        if (cell == null || value == null)
+            return false;
+        return value.equals(cell.getEffectiveValue());
+    }
+
+    public List<ReadOnlyCell> getReadOnlyCellsInRowWithChangedRowNum(int newRowNum){
+        List<ReadOnlyCell> readOnlyCells = new LinkedList<>();
+        for (Cell cell : colNumToCellMap.values())
+        {
+            readOnlyCells.add(new ReadOnlyCellImp(new Coordinate(cell.getCoordinate().getCol(), newRowNum).toString(),
+                    cell.getOriginalValue(), cell.getEffectiveValue(),cell.getVersion(),
+                    cell.getDependsOn(), cell.getInfluencingOn()));
+        }
+        return readOnlyCells;
     }
 }

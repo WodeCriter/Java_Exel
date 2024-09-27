@@ -3,6 +3,7 @@ package exel.engine.spreadsheet.rowSorter;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.range.Range;
 
 import java.util.*;
@@ -11,22 +12,14 @@ import java.util.stream.Collectors;
 public abstract class RowSomething
 {
     private final Range range;
-    private final List<Row> rows;
-    private final List<Integer> colsToOperateOn;
+    private List<Row> rows;
     private int minRowNum, maxRowNum;
     private Sheet sheet;
 
-    public RowSomething(Range range, Sheet sheet, int... colsToSortFrom)
-    {
-        this(range, sheet, Arrays.stream(colsToSortFrom).boxed().collect(Collectors.toCollection(LinkedList::new)));
-    }
-
-    public RowSomething(Range range, Sheet sheet, List<Integer> colsToSortFrom)
+    public RowSomething(Range range, Sheet sheet)
     {
         this.range = range;
-        this.colsToOperateOn = colsToSortFrom;
         findMinAndMaxRowNum();
-        this.rows = convertCellsListToRowsList();
         this.sheet = sheet;
     }
 
@@ -44,8 +37,8 @@ public abstract class RowSomething
         return rows;
     }
 
-    protected List<Integer> getColsToOperateOn() {
-        return colsToOperateOn;
+    protected void setRows(List<Row> rows){
+        this.rows = rows;
     }
 
     protected int getMinRowNum(){
@@ -61,7 +54,7 @@ public abstract class RowSomething
         return sheet;
     }
 
-    private List<Row> convertCellsListToRowsList(List<Cell> cells)
+    private List<Row> convertCellsListToRowsList(List<Cell> cells, List<Integer> colsToSortFrom)
     {
         Map<Integer, List<Cell>> fromRowNumToListOfCellsInRow = new HashMap<>();
 
@@ -77,15 +70,25 @@ public abstract class RowSomething
             List<Cell> cellsInRow = fromRowNumToListOfCellsInRow.get(row);
 
             if (cellsInRow != null)
-                rowList.add(new Row(cellsInRow, colsToOperateOn));
+                rowList.add(new Row(cellsInRow, colsToSortFrom));
         }
 
         return rowList;
     }
 
-    private List<Row> convertCellsListToRowsList()
+    protected List<Row> convertCellsListToRowsList(List<Integer> colsToSortFrom)
     {
-        return convertCellsListToRowsList(range.getCellsInRange());
+        return convertCellsListToRowsList(range.getCellsInRange(), colsToSortFrom);
+    }
+
+    protected void fixCellCoordinatesAfterChange()
+    {
+        int rowNum = getMinRowNum();
+        for (Row row : getRows())
+        {
+            row.changeRowNum(rowNum);
+            rowNum++;
+        }
     }
 
     public abstract void changeSheet();

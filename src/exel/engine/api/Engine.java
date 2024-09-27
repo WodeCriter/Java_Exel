@@ -5,6 +5,7 @@ import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.events.CreateNewSheetEvent;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Engine {
     /**
@@ -13,6 +14,8 @@ public interface Engine {
     ReadOnlySheet createSheet(String sheetName, int rowNum , int colNum , int cellWidth , int cellHeight);
 
     ReadOnlySheet createSortedSheetFromCords(String cord1, String cord2, List<String> columnsToSortBy);
+
+    ReadOnlySheet createFilteredSheetFromCords(String cord1, String cord2, Map<String, List<String>> columnToValuesToFilterBy);
 
     /**
      * Loads a spreadsheet from an XML file.

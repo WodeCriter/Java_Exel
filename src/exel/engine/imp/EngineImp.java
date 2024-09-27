@@ -1,6 +1,8 @@
 package exel.engine.imp;
 
 import exel.engine.api.Engine;
+import exel.engine.effectivevalue.api.EffectiveValue;
+import exel.engine.expressions.imp.FunctionParser;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
@@ -10,6 +12,7 @@ import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.spreadsheet.range.Range;
+import exel.engine.spreadsheet.rowSorter.RowFilter;
 import exel.engine.spreadsheet.rowSorter.RowSorter;
 import exel.engine.util.file_man.load.imp.sysStateLoader;
 import exel.engine.util.file_man.load.imp.xmlFileLoader;
@@ -17,8 +20,10 @@ import exel.engine.util.file_man.save.imp.sysStateSaver;
 import exel.engine.util.file_man.save.imp.xmlFileSaver;
 import exel.eventsys.EventBus;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class EngineImp implements Engine {
     private Sheet currentSheet;
@@ -45,6 +50,29 @@ public class EngineImp implements Engine {
         Range range = new Range(new Coordinate(cord1), new Coordinate(cord2), currentSheet);
         RowSorter sorter = new RowSorter(range, currentSheet, columnsToSortBy.stream().map(Coordinate::calculateColIndex).toList());
         return sorter.getSheetAfterChange();
+    }
+
+    @Override
+    public ReadOnlySheet createFilteredSheetFromCords(String cord1, String cord2, Map<String, List<String>> columnToValuesToFilterBy)
+    {
+        Range range = new Range(new Coordinate(cord1), new Coordinate(cord2), currentSheet);
+        Map<Integer, List<EffectiveValue>> colNumToValueToFilerByMap = new HashMap<>();
+        for (String columnStr : columnToValuesToFilterBy.keySet())
+        {
+            List<String> valuesToFilterByStr = columnToValuesToFilterBy.get(columnStr);
+            List<EffectiveValue> valuesToFilterByEffectiveValue = new LinkedList<>();
+            for (String value : valuesToFilterByStr)
+            {
+                List<String> singleton = new LinkedList<>();
+                singleton.add(value);
+                valuesToFilterByEffectiveValue.add(FunctionParser.IDENTITY.parse(singleton).eval(currentSheet));
+            }
+            int columnIndex = Coordinate.calculateColIndex(columnStr);
+            colNumToValueToFilerByMap.put(columnIndex, valuesToFilterByEffectiveValue);
+        }
+
+        RowFilter filter = new RowFilter(range, currentSheet, colNumToValueToFilerByMap);
+        return filter.getSheetAfterChange();
     }
 
     @Override
