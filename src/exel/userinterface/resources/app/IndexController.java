@@ -26,6 +26,7 @@ import exel.userinterface.resources.app.Sheet.SheetController;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 public class IndexController {
@@ -66,6 +67,9 @@ public class IndexController {
     private TextField textFiledOriginalVal;
 
     @FXML
+    private MenuButton menuButtonSelectVersion;
+
+    @FXML
     private Button buttonUpdateCell;
 
     @FXML
@@ -97,6 +101,7 @@ public class IndexController {
         eventBus.subscribe(DeletedRangeEvent.class, this::handleRangeDeleted);
         eventBus.subscribe(SheetCreatedEvent.class, this::handleSheetCreated);
         eventBus.subscribe(DisplaySheetPopupEvent.class, this::handleDisplaySheetPopup);
+        eventBus.subscribe(SheetDisplayEvent.class, this::handleSheetDisplayEvent);
     }
 
     @FXML
@@ -158,6 +163,7 @@ public class IndexController {
             String absolutePath = selectedFile.getAbsolutePath();
 
             try {
+                menuButtonSelectVersion.getItems().clear();
                 currentFile = selectedFile;
                 eventBus.publish(new LoadSheetEvent(absolutePath));
                 labelFileLoaded.setText("Current file loaded: " + absolutePath);
@@ -265,6 +271,7 @@ public class IndexController {
         isSheetLoaded = true;
         currentFile = null;
         labelFileLoaded.setText("Current file loaded: No file path");
+        menuButtonSelectVersion.getItems().clear();
         rangesList.getItems().clear();
     }
 
@@ -395,8 +402,7 @@ public class IndexController {
         }
     }
 
-    private void handleNewRangeCreated(RangeCreatedEvent event)
-    {
+    private void handleNewRangeCreated(RangeCreatedEvent event) {
         rangesList.getItems().add(event.getRangeName());
     }
 
@@ -462,5 +468,20 @@ public class IndexController {
         {
             e.printStackTrace();  // Handle exceptions appropriately
         }
+    }
+
+    private void handleSheetDisplayEvent (SheetDisplayEvent sheetEvent){
+        addVersionMenuButton(sheetEvent.getSheet().getVersion());
+    }
+
+    private void addVersionMenuButton(int versionNum){
+        MenuItem versionItem = new MenuItem("Version " + versionNum);
+        versionItem.setOnAction(event -> handleVersionSelected(versionNum));
+        menuButtonSelectVersion.getItems().add(versionItem);
+    }
+
+
+    private void handleVersionSelected(int versionId) {
+       eventBus.publish(new VersionSelectedEvent(versionId));
     }
 }

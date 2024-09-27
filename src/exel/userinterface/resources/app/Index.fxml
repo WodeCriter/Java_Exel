@@ -103,12 +103,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <MenuButton mnemonicParsing="false" prefHeight="38.0" prefWidth="110.0" text="Version Selector">
-                                <items>
-                                  <MenuItem mnemonicParsing="false" text="Action 1" />
-                                  <MenuItem mnemonicParsing="false" text="Action 2" />
-                                </items>
-                              </MenuButton>
+                              <MenuButton fx:id="menuButtonSelectVersion" mnemonicParsing="false" prefHeight="38.0" prefWidth="110.0" text="Version Selector" />
                            </children>
                         </HBox>
                      </children>
