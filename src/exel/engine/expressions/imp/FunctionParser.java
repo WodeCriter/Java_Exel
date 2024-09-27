@@ -3,6 +3,7 @@ package exel.engine.expressions.imp;
 import exel.engine.expressions.api.Expression;
 import exel.engine.expressions.imp.Boolean.Compare.BiggerExpression;
 import exel.engine.expressions.imp.Boolean.Compare.EqualExpression;
+import exel.engine.expressions.imp.Boolean.IfExpression;
 import exel.engine.expressions.imp.Boolean.Logic.AndExpression;
 import exel.engine.expressions.imp.Boolean.Logic.NotExpression;
 import exel.engine.expressions.imp.Boolean.Logic.OrExpression;
@@ -231,6 +232,18 @@ public enum FunctionParser
         public Expression parse(List<String> arguments) {
             AbstractMap.SimpleEntry<Expression, Expression> parsedExpressions = checkArgsAndParseExpressions(arguments, "OR");
             return new OrExpression(parsedExpressions.getKey(), parsedExpressions.getValue());
+        }
+    },
+    IF{
+        @Override
+        public Expression parse(List<String> arguments)
+        {
+            checkForArgumentSize(arguments.size(), 3, "IF");
+
+            Expression condition = parseExpression(arguments.get(0));
+            Expression thenExpression = parseExpression(arguments.get(1));
+            Expression elseExpression = parseExpression(arguments.get(2));
+            return new IfExpression(condition, thenExpression, elseExpression);
         }
     }
     ;
