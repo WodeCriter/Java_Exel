@@ -1,8 +1,10 @@
 package exel.userinterface.resources.app;
 
 
+import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.events.*;
+import exel.userinterface.resources.app.popups.displaySheet.DisplaySheetController;
 import exel.userinterface.resources.app.popups.newRange.CreateNewRangeScreenController;
 import exel.userinterface.resources.app.popups.sort.SetSortScreenController;
 import javafx.event.ActionEvent;
@@ -24,6 +26,7 @@ import exel.userinterface.resources.app.Sheet.SheetController;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 public class IndexController {
@@ -49,6 +52,9 @@ public class IndexController {
     private AnchorPane sheetContainer;
 
     @FXML
+    private Label labelFileLoaded;
+
+    @FXML
     private Label labelOriginalVal;
 
     @FXML
@@ -61,6 +67,9 @@ public class IndexController {
     private TextField textFiledOriginalVal;
 
     @FXML
+    private MenuButton menuButtonSelectVersion;
+
+    @FXML
     private Button buttonUpdateCell;
 
     @FXML
@@ -71,6 +80,7 @@ public class IndexController {
     private void initialize()
     {
         setUpRangeDeleteMenu();
+
 
         // Add a global mouse listener to the scene to hide the context menu when clicking elsewhere
         rangesList.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -90,6 +100,8 @@ public class IndexController {
         eventBus.subscribe(RangeCreatedEvent.class, this::handleNewRangeCreated);
         eventBus.subscribe(DeletedRangeEvent.class, this::handleRangeDeleted);
         eventBus.subscribe(SheetCreatedEvent.class, this::handleSheetCreated);
+        eventBus.subscribe(DisplaySheetPopupEvent.class, this::handleDisplaySheetPopup);
+        eventBus.subscribe(SheetDisplayEvent.class, this::handleSheetDisplayEvent);
     }
 
     @FXML
@@ -151,10 +163,10 @@ public class IndexController {
             String absolutePath = selectedFile.getAbsolutePath();
 
             try {
+                menuButtonSelectVersion.getItems().clear();
                 currentFile = selectedFile;
-                // **Pass the absolute path to your engine**
-                //Todo: handle file load
                 eventBus.publish(new LoadSheetEvent(absolutePath));
+                labelFileLoaded.setText("Current file loaded: " + absolutePath);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -207,6 +219,7 @@ public class IndexController {
                 // **Pass the file path to your engine or handle the saving process**
                 // Replace 'SaveSheetEvent' with your actual event or method
                 eventBus.publish(new SaveSheetEvent(fileToSave.getAbsolutePath()));
+                labelFileLoaded.setText("Current file loaded: " + fileToSave.getAbsolutePath());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -257,7 +270,43 @@ public class IndexController {
     private void handleSheetCreated(SheetCreatedEvent event) {
         isSheetLoaded = true;
         currentFile = null;
+        labelFileLoaded.setText("Current file loaded: No file path");
+        menuButtonSelectVersion.getItems().clear();
         rangesList.getItems().clear();
+    }
+
+    private void handleDisplaySheetPopup(DisplaySheetPopupEvent event){
+        try {
+            // Load the FXML file for the display sheet popup
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/displaySheet/DisplaySheet.fxml"));
+            VBox popupRoot = loader.load();
+
+            // Get the controller for the popup
+            DisplaySheetController popupController = loader.getController();
+
+            // Get the current sheet data
+            ReadOnlySheet sheetData = event.getReadOnlySheet(); // Implement this method to retrieve the sheet
+
+            // Pass the ReadOnlySheet to the popup controller
+            popupController.setSheetData(sheetData);
+
+            // Create a new stage for the popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Display Sheet");
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initOwner(sheetContainer.getScene().getWindow()); // Set the owner to the current stage
+
+            // Set the scene
+            Scene scene = new Scene(popupRoot);
+            popupStage.setScene(scene);
+
+            // Show the popup
+            popupStage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();  // Handle exceptions appropriately
+        }
+
     }
 
     public void refreshSheetPlane() {
@@ -353,8 +402,7 @@ public class IndexController {
         }
     }
 
-    private void handleNewRangeCreated(RangeCreatedEvent event)
-    {
+    private void handleNewRangeCreated(RangeCreatedEvent event) {
         rangesList.getItems().add(event.getRangeName());
     }
 
@@ -420,5 +468,20 @@ public class IndexController {
         {
             e.printStackTrace();  // Handle exceptions appropriately
         }
+    }
+
+    private void handleSheetDisplayEvent (SheetDisplayEvent sheetEvent){
+        addVersionMenuButton(sheetEvent.getSheet().getVersion());
+    }
+
+    private void addVersionMenuButton(int versionNum){
+        MenuItem versionItem = new MenuItem("Version " + versionNum);
+        versionItem.setOnAction(event -> handleVersionSelected(versionNum));
+        menuButtonSelectVersion.getItems().add(versionItem);
+    }
+
+
+    private void handleVersionSelected(int versionId) {
+       eventBus.publish(new VersionSelectedEvent(versionId));
     }
 }

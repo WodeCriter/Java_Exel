@@ -40,6 +40,7 @@ public class UIManager {
         eventBus.subscribe(SortRequestedEvent.class, this::handleSortRequested);
         eventBus.subscribe(LoadSheetEvent.class, this::handleLoadSheet);
         eventBus.subscribe(SaveSheetEvent.class, this::handleSaveSheet);
+        eventBus.subscribe(VersionSelectedEvent.class, this::handleVersionSelectedEvent);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -53,7 +54,7 @@ public class UIManager {
                 readOnlySheet.getNumOfRows(),
                 readOnlySheet.getNumOfCols()));
 
-        //System.out.println("Sheet created: " + event.getSheetName());
+        eventBus.publish(new SheetDisplayEvent(readOnlySheet));
     }
 
     private void handleLoadSheet(LoadSheetEvent event){
@@ -128,7 +129,12 @@ public class UIManager {
     private void handleSortRequested(SortRequestedEvent event)
     {
         ReadOnlySheet sortedSheet = engine.createSortedSheetFromCords(event.getCord1(), event.getCord2(), event.getPickedColumns());
-        eventBus.publish(new SheetDisplayEvent(sortedSheet));
+        eventBus.publish(new DisplaySheetPopupEvent(sortedSheet));
+    }
+
+    private void handleVersionSelectedEvent(VersionSelectedEvent event){
+        ReadOnlySheet versionSheet = engine.getSheetOfVersion(event.getVersion());
+        eventBus.publish(new DisplaySheetPopupEvent(versionSheet));
     }
 
     public void showUI(Stage primaryStage) {
