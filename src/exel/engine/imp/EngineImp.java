@@ -108,10 +108,9 @@ public class EngineImp implements Engine {
     }
 
     @Override
-    public void saveXmlFile(String filePath, String fileName) throws Exception {
-        if (fileName.isEmpty())
-            fileName = currentSheet.getName() + "_sheet_v" + currentSheet.getVersion();
-        xmlFileSaver.saveSpreadsheet(this.currentSheet , filePath+ '/' + fileName + ".xml");
+    public void saveXmlFile(String filePath){
+
+        xmlFileSaver.saveSpreadsheet(this.currentSheet , filePath);
     }
 
     @Override

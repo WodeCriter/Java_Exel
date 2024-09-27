@@ -4,6 +4,7 @@ import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.range.Range;
+import exel.engine.spreadsheet.range.ReadOnlyRange;
 
 import java.util.List;
 
@@ -37,4 +38,5 @@ public interface Sheet {
     void removeRange(String rangeName);
     Range getRange(String rangeName);
     Range getRangeAndCountUse(String rangeName);
+    List<ReadOnlyRange> getReadOnlyRanges();
 }

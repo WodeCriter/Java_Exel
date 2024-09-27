@@ -1,6 +1,8 @@
 package exel.engine.spreadsheet.api;
 
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
+import exel.engine.spreadsheet.range.ReadOnlyRange;
+
 import java.util.List;
 
 public interface ReadOnlySheet {
@@ -52,4 +54,7 @@ public interface ReadOnlySheet {
      * @return the height of a cell.
      */
     int getCellHeight();
+
+
+    List<ReadOnlyRange> getRanges();
 }

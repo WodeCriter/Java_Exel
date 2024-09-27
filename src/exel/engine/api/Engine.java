@@ -57,7 +57,7 @@ public interface Engine {
      * @param filePath The path where the file should be saved.
      * @throws Exception if there is an issue saving the file.
      */
-    void saveXmlFile(String filePath, String Filename) throws Exception;
+    void saveXmlFile(String filePath);
 
     //method to save system state files
     void saveSysStateFile(String filePath, String fileName);

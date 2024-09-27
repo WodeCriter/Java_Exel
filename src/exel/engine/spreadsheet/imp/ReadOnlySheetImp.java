@@ -4,6 +4,8 @@ import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
+import exel.engine.spreadsheet.range.RangeDatabase;
+import exel.engine.spreadsheet.range.ReadOnlyRange;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,9 +20,10 @@ public class ReadOnlySheetImp implements ReadOnlySheet {
     private final int numOfRows;
     private final int cellWidth;
     private final int cellHeight;
+    private final List<ReadOnlyRange> ranges;
 
     public ReadOnlySheetImp(int version, List<ReadOnlyCell> cells, String name,
-                            int numOfCols, int numOfRows, int cellWidth, int cellHeight) {
+                            int numOfCols, int numOfRows, int cellWidth, int cellHeight, List<ReadOnlyRange> ranges) {
         this.version = version;
         this.cells = Collections.unmodifiableList(cells); // Ensure the list is unmodifiable
         this.name = name;
@@ -28,11 +31,12 @@ public class ReadOnlySheetImp implements ReadOnlySheet {
         this.numOfRows = numOfRows;
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
+        this.ranges = Collections.unmodifiableList(ranges);
     }
 
     public ReadOnlySheetImp(Sheet sheet) {
         this(sheet.getVersion(), sheet.getReadOnlyCells(), sheet.getName(),
-                sheet.getNumOfCols(), sheet.getNumOfRows(), sheet.getCellWidth(), sheet.getCellHeight());
+                sheet.getNumOfCols(), sheet.getNumOfRows(), sheet.getCellWidth(), sheet.getCellHeight(), sheet.getReadOnlyRanges());
     }
 
     @Override
@@ -76,5 +80,10 @@ public class ReadOnlySheetImp implements ReadOnlySheet {
     @Override
     public int getCellHeight() {
         return cellHeight;
+    }
+
+    @Override
+    public List<ReadOnlyRange> getRanges() {
+        return ranges;
     }
 }

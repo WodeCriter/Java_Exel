@@ -2,8 +2,7 @@ package exel.engine.spreadsheet.range;
 
 import org.w3c.dom.ranges.RangeException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RangeDatabase
 {
@@ -48,5 +47,16 @@ public class RangeDatabase
         Range range = getRange(rangeName);
         range.countUseOfRange();
         return range;
+    }
+
+    public List<ReadOnlyRange> getReadOnlyRanges(){
+        List<ReadOnlyRange> readOnlyRanges = new LinkedList<>();
+        for (String rangeName : ranges.keySet())
+        {
+            Range range = getRange(rangeName);
+            readOnlyRanges.add(new ReadOnlyRange(range, rangeName));
+        }
+
+        return readOnlyRanges;
     }
 }

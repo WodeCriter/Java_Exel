@@ -8,6 +8,7 @@ import exel.engine.spreadsheet.cell.imp.ReadOnlyCellImp;
 import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.range.Range;
 import exel.engine.spreadsheet.range.RangeDatabase;
+import exel.engine.spreadsheet.range.ReadOnlyRange;
 import exel.engine.spreadsheet.versionmanager.imp.VersionManager;
 
 import java.io.*;
@@ -230,6 +231,11 @@ public class SheetImp implements Sheet, Serializable
     public Range getRangeAndCountUse(String rangeName)
     {
         return rangeDatabase.getRangeAndCountUse(rangeName);
+    }
+
+    @Override
+    public List<ReadOnlyRange> getReadOnlyRanges(){
+        return rangeDatabase.getReadOnlyRanges();
     }
 }
 

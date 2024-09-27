@@ -38,6 +38,7 @@ public class UIManager {
         eventBus.subscribe(RangeDeleteEvent.class, this::handleRangeDelete);
         eventBus.subscribe(SortRequestedEvent.class, this::handleSortRequested);
         eventBus.subscribe(LoadSheetEvent.class, this::handleLoadSheet);
+        eventBus.subscribe(SaveSheetEvent.class, this::handleSaveSheet);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -67,8 +68,7 @@ public class UIManager {
                     readOnlySheet.getNumOfCols()));
 
             eventBus.publish(new SheetDisplayEvent(readOnlySheet));
-            //todo: add for readOnlySheet a readonlyRange (which includes the top left and bottom cell cords, and the rangeName)
-
+            readOnlySheet.getRanges(); //todo: use this Daniel
 
 
         }
@@ -78,6 +78,10 @@ public class UIManager {
             throw new RuntimeException(e.getMessage());
         }
 
+    }
+
+    private void handleSaveSheet(SaveSheetEvent event){
+        engine.saveXmlFile( event.getAbsolutePath() );
     }
 
     private void handleCreateNewRange(CreateNewRangeEvent event) {
