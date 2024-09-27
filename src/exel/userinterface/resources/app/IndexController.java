@@ -256,6 +256,7 @@ public class IndexController {
 
     private void handleSheetCreated(SheetCreatedEvent event) {
         isSheetLoaded = true;
+        currentFile = null;
         rangesList.getItems().clear();
     }
 

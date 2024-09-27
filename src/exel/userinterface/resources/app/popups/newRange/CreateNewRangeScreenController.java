@@ -34,10 +34,10 @@ public class CreateNewRangeScreenController
             String topLeftCord = textboxTopLeft.getText();
             String bottomRightCord = textboxBottomRight.getText();
 
-            eventBus.publish(new CreateNewRangeEvent(rangeName, topLeftCord, bottomRightCord));
+            eventBus.publish(new CreateNewRangeEvent(rangeName, topLeftCord.toUpperCase(), bottomRightCord.toUpperCase()));
             closeStage();
         }
-        catch (IllegalArgumentException e)
+        catch (Exception e)
         {
             showAlert(e.getMessage(), null);
         }

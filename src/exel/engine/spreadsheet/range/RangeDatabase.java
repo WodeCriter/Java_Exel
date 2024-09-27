@@ -17,10 +17,10 @@ public class RangeDatabase
     {
         if (isRangeInDatabase(rangeName))
         {
-            try {removeRange(rangeName);}
-            catch (Exception e) {throw new RuntimeException("Cannot replace range \"" + rangeName + "\" as it is currently used.");}
+            throw new RuntimeException("There's already a range named \"" + rangeName + "\".");
         }
-        ranges.put(rangeName, range);
+        else
+            ranges.put(rangeName, range);
     }
 
     public boolean isRangeInDatabase(String rangeName)
