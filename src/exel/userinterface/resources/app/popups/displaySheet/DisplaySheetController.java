@@ -81,9 +81,12 @@ public class DisplaySheetController {
 
     private void handleCellSelected(CellSelectedEvent event){
         ReadOnlyCell cell = sheetData.getCell(event.getCellId());
-        setCellIdLabel(cell.getCoordinate());
-        setCellValLabel(cell.getOriginalValue());
-        setCellVersionLabel(String.valueOf(cell.getVersion()));
+        if (cell != null) {
+            setCellIdLabel(cell.getCoordinate());
+            setCellValLabel(cell.getOriginalValue());
+            setCellVersionLabel(String.valueOf(cell.getVersion()));
+        }
+
     }
 
     public void setCellIdLabel(String cellId) {

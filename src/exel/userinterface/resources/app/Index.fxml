@@ -68,7 +68,7 @@
                <top>
                   <VBox prefHeight="60.0" prefWidth="630.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label maxWidth="1.7976931348623157E308" text="Current file loaded : File/path">
+                        <Label fx:id="labelFileLoaded" maxWidth="1.7976931348623157E308" text="Current file loaded : No file open">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>

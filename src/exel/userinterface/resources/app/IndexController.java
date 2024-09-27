@@ -51,6 +51,9 @@ public class IndexController {
     private AnchorPane sheetContainer;
 
     @FXML
+    private Label labelFileLoaded;
+
+    @FXML
     private Label labelOriginalVal;
 
     @FXML
@@ -73,6 +76,7 @@ public class IndexController {
     private void initialize()
     {
         setUpRangeDeleteMenu();
+
 
         // Add a global mouse listener to the scene to hide the context menu when clicking elsewhere
         rangesList.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -155,9 +159,8 @@ public class IndexController {
 
             try {
                 currentFile = selectedFile;
-                // **Pass the absolute path to your engine**
-                //Todo: handle file load
                 eventBus.publish(new LoadSheetEvent(absolutePath));
+                labelFileLoaded.setText("Current file loaded: " + absolutePath);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -210,6 +213,7 @@ public class IndexController {
                 // **Pass the file path to your engine or handle the saving process**
                 // Replace 'SaveSheetEvent' with your actual event or method
                 eventBus.publish(new SaveSheetEvent(fileToSave.getAbsolutePath()));
+                labelFileLoaded.setText("Current file loaded: " + fileToSave.getAbsolutePath());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -260,6 +264,7 @@ public class IndexController {
     private void handleSheetCreated(SheetCreatedEvent event) {
         isSheetLoaded = true;
         currentFile = null;
+        labelFileLoaded.setText("Current file loaded: No file path");
         rangesList.getItems().clear();
     }
 
