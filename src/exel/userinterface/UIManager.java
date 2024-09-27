@@ -69,6 +69,7 @@ public class UIManager {
 
             eventBus.publish(new SheetDisplayEvent(readOnlySheet));
 
+
         }
         catch (Exception e)
         {

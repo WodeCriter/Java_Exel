@@ -131,4 +131,8 @@ public class Range implements Serializable
     {
         return numOfUsages > 0;
     }
+
+//    public String getRange(){
+//        return sheet.getRan
+//    }
 }

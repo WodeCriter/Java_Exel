@@ -59,4 +59,16 @@ public class RangeDatabase
 
         return readOnlyRanges;
     }
+
+    public String getRangeName(Range range){
+        if (ranges.containsValue(range))
+            for (String rangeName : ranges.keySet())
+            {
+                if (ranges.get(rangeName).equals(range))
+                    return rangeName;
+            }
+        throw new RuntimeException("Cannot find range \"" + range + "\" in range database.");
+    }
+
+    public Map<String, Range> getNameAndRangesMap(){return ranges;}
 }

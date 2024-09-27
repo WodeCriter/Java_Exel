@@ -7,6 +7,7 @@ import exel.engine.spreadsheet.range.Range;
 import exel.engine.spreadsheet.range.ReadOnlyRange;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Sheet {
     int getVersion();
@@ -39,4 +40,5 @@ public interface Sheet {
     Range getRange(String rangeName);
     Range getRangeAndCountUse(String rangeName);
     List<ReadOnlyRange> getReadOnlyRanges();
+    Map<String, Range> getNameAndRangesMap();
 }

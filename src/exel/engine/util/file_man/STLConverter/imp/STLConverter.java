@@ -10,6 +10,7 @@ import exel.engine.spreadsheet.api.Sheet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Map;
 
 public class STLConverter {
 
@@ -31,6 +32,12 @@ public class STLConverter {
         // Convert and set cells
         STLCells stlCells = convertCells(sheet.getCells());
         stlSheet.setSTLCells(stlCells);
+
+        // Convert and set ranges
+        if (sheet.getNameAndRangesMap() != null && !sheet.getNameAndRangesMap().isEmpty()) {
+            STLRanges stlRanges = convertRanges(sheet.getNameAndRangesMap());
+            stlSheet.setSTLRanges(stlRanges);
+        }
 
         return stlSheet;
     }
@@ -84,6 +91,40 @@ public class STLConverter {
         stlCell.setSTLOriginalValue(cell.getOriginalValue());
 
         return stlCell;
+    }
+
+    /**
+     * Converts a map of range names to Range objects to STLRanges.
+     *
+     * @param rangesMap the map of range names to Range objects to convert
+     * @return the STLRanges containing converted STLRange objects
+     */
+    private static STLRanges convertRanges(Map<String, Range> rangesMap) {
+        STLRanges stlRanges = new STLRanges();
+        List<STLRange> convertedRanges = rangesMap.entrySet().stream()
+                .map(entry -> convertRange(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+        stlRanges.getSTLRange().addAll(convertedRanges);
+        return stlRanges;
+    }
+
+    /**
+     * Converts a single Range with its name to an STLRange.
+     *
+     * @param rangeName the name of the Range
+     * @param range     the Range to convert
+     * @return the converted STLRange
+     */
+    private static STLRange convertRange(String rangeName, Range range) {
+        STLRange stlRange = new STLRange();
+        stlRange.setName(rangeName);
+
+        STLBoundaries stlBoundaries = new STLBoundaries();
+        stlBoundaries.setFrom(range.getTopLeft().toString()); // Assuming Coordinate has a proper toString method
+        stlBoundaries.setTo(range.getBottomRight().toString());
+        stlRange.setSTLBoundaries(stlBoundaries);
+
+        return stlRange;
     }
 
     // Convert from STL class to project class

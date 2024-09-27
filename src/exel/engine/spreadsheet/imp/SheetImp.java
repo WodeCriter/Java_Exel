@@ -237,6 +237,14 @@ public class SheetImp implements Sheet, Serializable
     public List<ReadOnlyRange> getReadOnlyRanges(){
         return rangeDatabase.getReadOnlyRanges();
     }
+
+    @Override
+    public Map<String, Range> getNameAndRangesMap() {return rangeDatabase.getNameAndRangesMap();}
+
+//    @Override
+//    public String getRangeName(Range range){
+//        return rangeDatabase.getRangeName(range);
+//    }
 }
 
 
