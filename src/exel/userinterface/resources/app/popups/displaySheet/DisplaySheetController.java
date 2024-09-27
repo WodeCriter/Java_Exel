@@ -1,11 +1,11 @@
 package exel.userinterface.resources.app.popups.displaySheet;
 
-import exel.eventsys.events.SheetCreatedEvent;
+import exel.eventsys.events.*;
+import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.eventsys.EventBus;
-import exel.eventsys.events.SheetDisplayEvent;
 import exel.userinterface.resources.app.Sheet.SheetController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
@@ -32,10 +32,16 @@ public class DisplaySheetController {
         initializeSheet();
     }
 
+    //subscribe to the events of the sheet
+    private void subscribeToEvents(EventBus eventBus) {
+        eventBus.subscribe(CellSelectedEvent.class, this::handleCellSelected);
+    }
+
     private void initializeSheet() {
         try {
             // Create a new EventBus for the popup
             EventBus popupEventBus = new EventBus();
+            subscribeToEvents(popupEventBus);
 
             // Load the Sheet.fxml
             FXMLLoader sheetLoader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/Sheet/Sheet.fxml"));
@@ -71,6 +77,13 @@ public class DisplaySheetController {
         } catch (Exception e) {
             e.printStackTrace(); // Handle exceptions appropriately
         }
+    }
+
+    private void handleCellSelected(CellSelectedEvent event){
+        ReadOnlyCell cell = sheetData.getCell(event.getCellId());
+        setCellIdLabel(cell.getCoordinate());
+        setCellValLabel(cell.getOriginalValue());
+        setCellVersionLabel(String.valueOf(cell.getVersion()));
     }
 
     public void setCellIdLabel(String cellId) {
