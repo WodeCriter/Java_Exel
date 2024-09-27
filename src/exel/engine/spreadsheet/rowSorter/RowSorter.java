@@ -7,14 +7,9 @@ import exel.engine.spreadsheet.range.Range;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RowSorter
+public class RowSorter extends RowSomething
 {
-    private final Range range;
-    private final List<Row> rows;
-    private final List<Integer> colsToSortFrom;
     private final List<Integer> originalRowOrder;
-
-    private int minRowNum, maxRowNum;
 
     public RowSorter(Range range, int... colsToSortFrom)
     {
@@ -23,67 +18,32 @@ public class RowSorter
 
     public RowSorter(Range range, List<Integer> colsToSortFrom)
     {
-        this.range = range;
-        this.colsToSortFrom = colsToSortFrom;
-        findMinAndMaxRowNum();
-        this.rows = sortCellsToRows();
-
+        super(range, colsToSortFrom);
         this.originalRowOrder = new LinkedList<>();
-        rows.forEach(row->originalRowOrder.add(row.getRowNum()));
-    }
-
-    private void findMinAndMaxRowNum()
-    {
-        minRowNum = range.getTopLeft().getRow();
-        maxRowNum = range.getBottomRight().getRow();
-    }
-
-    private List<Row> sortCellsToRows(List<Cell> cells)
-    {
-        Map<Integer, List<Cell>> fromRowNumToListOfCellsInRow = new HashMap<>();
-
-        for (Cell cell : cells)
-        {
-            int rowNum = cell.getCoordinate().getRow();
-            fromRowNumToListOfCellsInRow.computeIfAbsent(rowNum, k -> new LinkedList<>()).add(cell);
-        }
-
-        List<Row> rowList = new ArrayList<>(maxRowNum - minRowNum + 1);
-        for (int row = minRowNum; row <= maxRowNum; row++)
-        {
-            List<Cell> cellsInRow = fromRowNumToListOfCellsInRow.get(row);
-
-            if (cellsInRow != null)
-                rowList.add(new Row(cellsInRow, colsToSortFrom));
-        }
-
-        return rowList;
-    }
-
-    private List<Row> sortCellsToRows()
-    {
-        return sortCellsToRows(range.getCellsInRange());
-    }
-
-    public void sortRows()
-    {
-        rows.sort(Row::compareTo);
-        fixCellCoordinatesAfterSort();
+        getRows().forEach(row->originalRowOrder.add(row.getRowNum()));
     }
 
     private void fixCellCoordinatesAfterSort()
     {
-        int rowNum = minRowNum;
-        for (Row row : rows)
+        int rowNum = getMinRowNum();
+        for (Row row : getRows())
         {
             row.changeRowNum(rowNum);
             rowNum++;
         }
     }
 
+    @Override
+    public void sortRows()
+    {
+        getRows().sort(Row::compareTo);
+        fixCellCoordinatesAfterSort();
+    }
+
+    @Override
     public void moveCellsToOriginalCoordinates()
     {
         ListIterator<Integer> iterator = originalRowOrder.listIterator();
-        rows.forEach(row -> row.changeRowNum(iterator.next()));
+        getRows().forEach(row -> row.changeRowNum(iterator.next()));
     }
 }
