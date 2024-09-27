@@ -1,5 +1,7 @@
 package exel.engine.spreadsheet.rowSorter;
 
+import exel.engine.spreadsheet.api.ReadOnlySheet;
+import exel.engine.spreadsheet.api.Sheet;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.range.Range;
 
@@ -10,20 +12,22 @@ public abstract class RowSomething
 {
     private final Range range;
     private final List<Row> rows;
-    private final List<Integer> colsToSortFrom;
+    private final List<Integer> colsToOperateOn;
     private int minRowNum, maxRowNum;
+    private Sheet sheet;
 
-    public RowSomething(Range range, int... colsToSortFrom)
+    public RowSomething(Range range, Sheet sheet, int... colsToSortFrom)
     {
-        this(range, Arrays.stream(colsToSortFrom).boxed().collect(Collectors.toCollection(LinkedList::new)));
+        this(range, sheet, Arrays.stream(colsToSortFrom).boxed().collect(Collectors.toCollection(LinkedList::new)));
     }
 
-    public RowSomething(Range range, List<Integer> colsToSortFrom)
+    public RowSomething(Range range, Sheet sheet, List<Integer> colsToSortFrom)
     {
         this.range = range;
-        this.colsToSortFrom = colsToSortFrom;
+        this.colsToOperateOn = colsToSortFrom;
         findMinAndMaxRowNum();
-        this.rows = sortCellsToRows();
+        this.rows = convertCellsListToRowsList();
+        this.sheet = sheet;
     }
 
     private void findMinAndMaxRowNum()
@@ -40,6 +44,10 @@ public abstract class RowSomething
         return rows;
     }
 
+    protected List<Integer> getColsToOperateOn() {
+        return colsToOperateOn;
+    }
+
     protected int getMinRowNum(){
         return minRowNum;
     }
@@ -48,7 +56,12 @@ public abstract class RowSomething
         return maxRowNum;
     }
 
-    private List<Row> sortCellsToRows(List<Cell> cells)
+    protected Sheet getSheet()
+    {
+        return sheet;
+    }
+
+    private List<Row> convertCellsListToRowsList(List<Cell> cells)
     {
         Map<Integer, List<Cell>> fromRowNumToListOfCellsInRow = new HashMap<>();
 
@@ -64,17 +77,18 @@ public abstract class RowSomething
             List<Cell> cellsInRow = fromRowNumToListOfCellsInRow.get(row);
 
             if (cellsInRow != null)
-                rowList.add(new Row(cellsInRow, colsToSortFrom));
+                rowList.add(new Row(cellsInRow, colsToOperateOn));
         }
 
         return rowList;
     }
 
-    private List<Row> sortCellsToRows()
+    private List<Row> convertCellsListToRowsList()
     {
-        return sortCellsToRows(range.getCellsInRange());
+        return convertCellsListToRowsList(range.getCellsInRange());
     }
 
-    public abstract void sortRows(); //abstract
-    public abstract void moveCellsToOriginalCoordinates(); //abstract
+    public abstract void changeSheet();
+    public abstract void returnSheetBackToNormal();
+    public abstract ReadOnlySheet getSheetAfterChange();
 }

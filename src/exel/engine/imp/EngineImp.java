@@ -10,7 +10,6 @@ import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.ReadOnlySheetImp;
 import exel.engine.spreadsheet.imp.SheetImp;
 import exel.engine.spreadsheet.range.Range;
-import exel.engine.spreadsheet.range.RangeDatabase;
 import exel.engine.spreadsheet.rowSorter.RowSorter;
 import exel.engine.util.file_man.load.imp.sysStateLoader;
 import exel.engine.util.file_man.load.imp.xmlFileLoader;
@@ -44,11 +43,8 @@ public class EngineImp implements Engine {
     public ReadOnlySheet createSortedSheetFromCords(String cord1, String cord2, List<String> columnsToSortBy)
     {
         Range range = new Range(new Coordinate(cord1), new Coordinate(cord2), currentSheet);
-        RowSorter sorter = new RowSorter(range, columnsToSortBy.stream().map(Coordinate::calculateColIndex).toList());
-        sorter.sortRows();
-        ReadOnlySheet toReturn = new ReadOnlySheetImp(currentSheet);
-        sorter.moveCellsToOriginalCoordinates();
-        return toReturn;
+        RowSorter sorter = new RowSorter(range, currentSheet, columnsToSortBy.stream().map(Coordinate::calculateColIndex).toList());
+        return sorter.getSheetAfterChange();
     }
 
     @Override
