@@ -31,6 +31,7 @@ public class IndexController {
     private ReadOnlyCell selectedCell;
     private EventBus eventBus;
     private boolean isSheetLoaded = false;
+    private File currentFile;
 
     @FXML
     private MenuItem buttonNewFile;
@@ -172,11 +173,83 @@ public class IndexController {
 
     @FXML
     void saveAsFileListener(ActionEvent event) {
+        // Create a new FileChooser instance
+        FileChooser fileChooser = new FileChooser();
+
+        // Set the title of the dialog
+        fileChooser.setTitle("Save Spreadsheet File As");
+
+        // (Optional) Set initial directory to user's home
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        // Add file extension filters
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                "XML Files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Retrieve the owner window from a node in the scene
+        Window ownerWindow = sheetContainer.getScene().getWindow();
+
+        // Show the save file dialog
+        File fileToSave = fileChooser.showSaveDialog(ownerWindow);
+
+        if (fileToSave != null) {
+            // Ensure the file has the correct extension
+            if (!fileToSave.getPath().toLowerCase().endsWith(".xml")) {
+                fileToSave = new File(fileToSave.getPath() + ".xml");
+            }
+
+            // Update the current file reference
+            currentFile = fileToSave;
+
+            try {
+                // **Pass the file path to your engine or handle the saving process**
+                // Replace 'SaveSheetEvent' with your actual event or method
+                eventBus.publish(new SaveSheetEvent(fileToSave.getAbsolutePath()));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Show an error alert to the user
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("File Save Error");
+                alert.setHeaderText("Could not save the file");
+                alert.setContentText("An error occurred while saving the file: " + e.getMessage());
+                alert.showAndWait();
+            }
+        } else {
+            // User canceled the save dialog; no action needed
+        }
 
     }
 
     @FXML
     void saveFileListener(ActionEvent event) {
+        if (currentFile != null) {
+            try {
+                // **Pass the current file path to your engine or handle the saving process**
+                // Replace 'SaveSheetEvent' with your actual event or method
+                eventBus.publish(new SaveSheetEvent(currentFile.getAbsolutePath()));
+
+                // Optionally, show a confirmation alert
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("File Saved");
+                alert.setHeaderText(null);
+                alert.setContentText("File has been saved successfully.");
+                alert.showAndWait();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Show an error alert to the user
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("File Save Error");
+                alert.setHeaderText("Could not save the file");
+                alert.setContentText("An error occurred while saving the file: " + e.getMessage());
+                alert.showAndWait();
+            }
+        } else {
+            // No current file, perform "Save As"
+            saveAsFileListener(event);
+        }
 
     }
 
