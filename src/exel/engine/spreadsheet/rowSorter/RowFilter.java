@@ -65,9 +65,9 @@ public class RowFilter extends RowSomething
     private List<ReadOnlyCell> convertRowsListToReadOnlyCellsList()
     {
         List<ReadOnlyCell> readOnlyCells = new LinkedList<>();
-        for (int row = 1; row <= getRows().size(); row++)
+        for (int row = 0; row < getRows().size(); row++)
         {
-            readOnlyCells.addAll(getRows().get(row).getReadOnlyCellsInRowWithChangedRowNum(row));
+            readOnlyCells.addAll(getRows().get(row).getReadOnlyCellsInRowWithChangedRowNum(row + 1));
         }
         return readOnlyCells;
     }
