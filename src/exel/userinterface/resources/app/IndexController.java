@@ -7,9 +7,14 @@ import exel.eventsys.events.*;
 import exel.userinterface.resources.app.popups.displaySheet.DisplaySheetController;
 import exel.userinterface.resources.app.popups.newRange.CreateNewRangeScreenController;
 import exel.userinterface.resources.app.popups.sort.SetSortScreenController;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -24,10 +29,14 @@ import exel.eventsys.EventBus;
 import exel.userinterface.resources.app.popups.newsheet.CreateNewSheetScreenController;
 import exel.userinterface.resources.app.Sheet.SheetController;
 import javafx.stage.Window;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class IndexController {
 
@@ -49,10 +58,32 @@ public class IndexController {
     private MenuItem buttonSaveAsFile;
 
     @FXML
-    private MenuItem menuItemEditDimentions;
+    private MenuItem menuItemEditWidth;
+
+    @FXML
+    private MenuItem menuItemEditHeight;
 
     @FXML
     private AnchorPane sheetContainer;
+
+    @FXML
+    private MenuItem formatLTR;
+
+    @FXML
+    private MenuItem formatCenter;
+
+    @FXML
+    private MenuItem formatRTL;
+
+    @FXML
+    private MenuItem formatBGColor;
+
+    @FXML
+    private MenuItem formatTextColor;
+
+    @FXML
+    private MenuItem formatClearStyle;
+
 
     @FXML
     private Label labelFileLoaded;
@@ -149,13 +180,12 @@ public class IndexController {
         // (Optional) Set initial directory
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
-        //Add file extension filters
+        // Add file extension filters
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
                 "Xml Files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        // **Retrieve the owner window from a node in the scene**
-        // Using 'sheetContainer' which is part of the scene graph
+        // Retrieve the owner window from a node in the scene
         Window ownerWindow = sheetContainer.getScene().getWindow();
 
         // Show the open file dialog
@@ -166,6 +196,39 @@ public class IndexController {
             String absolutePath = selectedFile.getAbsolutePath();
 
             try {
+                // Create a progress bar dialog
+                Stage progressStage = new Stage();
+                progressStage.initModality(Modality.APPLICATION_MODAL);
+                progressStage.initOwner(sheetContainer.getScene().getWindow());
+
+                ProgressBar progressBar = new ProgressBar(0);
+                progressBar.setPrefWidth(300);
+
+                VBox vbox = new VBox(10);
+                vbox.setAlignment(Pos.CENTER);
+                vbox.setPadding(new Insets(20));
+                vbox.getChildren().addAll(new Label("Loading..."), progressBar);
+
+                Scene progressScene = new Scene(vbox);
+                progressStage.setScene(progressScene);
+                progressStage.setTitle("Loading");
+
+                // Show the progress bar dialog
+                progressStage.show();
+
+                // Use a Timeline to update the progress bar over 3 seconds
+                Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0)),
+                        new KeyFrame(Duration.seconds(1), new KeyValue(progressBar.progressProperty(), 1))
+                );
+
+                timeline.setOnFinished(e -> {
+                    progressStage.close();
+                });
+
+                timeline.play();
+
+                // Start the loading process
                 menuButtonSelectVersion.getItems().clear();
                 currentFile = selectedFile;
                 eventBus.publish(new LoadSheetEvent(absolutePath));
@@ -181,14 +244,16 @@ public class IndexController {
                 alert.showAndWait();
             }
         } else {
-            //System.out.println("File selection cancelled by user.");
+            // User canceled the file selection; no action needed
         }
-
     }
 
 
     @FXML
     void saveAsFileListener(ActionEvent event) {
+        if (!isSheetLoaded)
+            return;
+
         // Create a new FileChooser instance
         FileChooser fileChooser = new FileChooser();
 
@@ -447,6 +512,9 @@ public class IndexController {
 
     @FXML
     void sortRangeListener(ActionEvent event) {
+        if (!isSheetLoaded)
+            return;
+
         try {
             // Load the FXML file for the new sheet popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/sort/SetSortScreen.fxml"));
@@ -469,7 +537,8 @@ public class IndexController {
         }
         catch (Exception e)
         {
-            e.printStackTrace();  // Handle exceptions appropriately
+            e.printStackTrace();  // Handle exceptions appropriatel
+            showAlert("Invalid input", e.getMessage());
         }
     }
 
@@ -483,8 +552,154 @@ public class IndexController {
         menuButtonSelectVersion.getItems().add(versionItem);
     }
 
-
     private void handleVersionSelected(int versionId) {
        eventBus.publish(new VersionSelectedEvent(versionId));
     }
+
+    @FXML
+    void setHeightListener(ActionEvent event) {
+        int newHeight = promptForNumber("Set Height", "Enter new height", "Please enter the new height in pixels:");
+
+        if (newHeight > 0) {
+            // Apply the new height to relevant cells/labels
+            eventBus.publish(new SheetResizeHeightEvent(newHeight));
+            // Your logic to set the height goes here
+        }
+
+    }
+
+    @FXML
+    void setWidthListener(ActionEvent event) {
+        int newWidth = promptForNumber("Set Width", "Enter new width", "Please enter the new width in pixels:");
+
+        if (newWidth > 0) {
+            // Apply the new width to relevant cells/labels
+            eventBus.publish(new SheetResizeWidthEvent(newWidth));
+            // Your logic to set the width goes here
+        }
+
+    }
+
+
+    private int promptForNumber(String title, String header, String content) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+        dialog.setContentText(content);
+
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            try {
+                return Integer.parseInt(result.get()); // Convert the string to an integer
+            } catch (NumberFormatException e) {
+                // Show error alert if the input is not a valid number
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Invalid number format");
+                alert.setContentText("Please enter a valid number.");
+                alert.showAndWait();
+            }
+        }
+        return -1; // Return a default or invalid value if the input was not valid or canceled
+    }
+
+
+    private String toHexString(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int)(color.getRed() * 255),
+                (int)(color.getGreen() * 255),
+                (int)(color.getBlue() * 255));
+    }
+
+
+    @FXML
+    void formatBGColorListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        ColorPicker colorPicker = new ColorPicker();
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Select Background Color");
+        dialog.getDialogPane().setContent(colorPicker);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String colorCode = toHexString(colorPicker.getValue());
+            CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), colorCode, null, null, false);
+            eventBus.publish(styleEvent);
+        }
+    }
+
+    @FXML
+    void formatTextColorListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        ColorPicker colorPicker = new ColorPicker();
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Select Text Color");
+        dialog.getDialogPane().setContent(colorPicker);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String colorCode = toHexString(colorPicker.getValue());
+            CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, colorCode, null, false);
+            eventBus.publish(styleEvent);
+        }
+    }
+
+    @FXML
+    void formatClearStyleListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to clear style.");
+            return;
+        }
+
+        CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, null, true);
+        eventBus.publish(styleEvent);
+    }
+
+    @FXML
+    void formatCenterListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, "center", false);
+        eventBus.publish(styleEvent);
+    }
+
+
+
+    @FXML
+    void formatLTRListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, "left", false);
+        eventBus.publish(styleEvent);
+    }
+
+    @FXML
+    void formatRTLListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, "right", false);
+        eventBus.publish(styleEvent);
+    }
+
+
 }

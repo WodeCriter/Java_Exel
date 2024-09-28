@@ -34,7 +34,7 @@ public class CreateNewSheetScreenController {
             if (rowNum < 1 || colNum < 1) {
                 throw new IllegalArgumentException("Row and column numbers must be at least 1.");
             }
-            eventBus.publish(new CreateNewSheetEvent(textboxSheetName.getText(),20,80, rowNum, colNum));
+            eventBus.publish(new CreateNewSheetEvent(textboxSheetName.getText(),30,80, rowNum, colNum));
             closeStage();
         } catch (NumberFormatException e) {
             showAlert("Invalid input", "Row and column numbers must be integers.");

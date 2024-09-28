@@ -41,6 +41,8 @@ public class UIManager {
         eventBus.subscribe(LoadSheetEvent.class, this::handleLoadSheet);
         eventBus.subscribe(SaveSheetEvent.class, this::handleSaveSheet);
         eventBus.subscribe(VersionSelectedEvent.class, this::handleVersionSelectedEvent);
+        eventBus.subscribe(SheetResizeWidthEvent.class, this::handleSheetResizeWidthEvent);
+        eventBus.subscribe(SheetResizeHeightEvent.class, this::handleSheetResizeHeightEvent);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -133,9 +135,21 @@ public class UIManager {
     }
 
     private void handleVersionSelectedEvent(VersionSelectedEvent event){
-        ReadOnlySheet versionSheet = engine.getSheetOfVersion(event.getVersion());
+        ReadOnlySheet versionSheet = engine.getSheetOfVersion(event.getVersion() - 1);
         eventBus.publish(new DisplaySheetPopupEvent(versionSheet));
     }
+
+    private void handleSheetResizeWidthEvent(SheetResizeWidthEvent event){
+        ReadOnlySheet updatedSheet = engine.changeCellWidth(event.getWidth());
+        eventBus.publish(new SheetDisplayRefactorEvent(updatedSheet));
+
+    }
+
+    private void handleSheetResizeHeightEvent(SheetResizeHeightEvent event){
+        ReadOnlySheet updatedSheet = engine.changeCellHeight(event.getHeight());
+        eventBus.publish(new SheetDisplayRefactorEvent(updatedSheet));
+    }
+
 
     public void showUI(Stage primaryStage) {
         try {

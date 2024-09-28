@@ -23,6 +23,8 @@ public interface Sheet {
     int getNumOfCols();
     int getNumOfRows();
     int getCellWidth();
+    void setCellWidth(int width);
+    void setCellHeight(int width);
 
     Cell setCell(Coordinate coordinate, String value) throws IllegalArgumentException;
 

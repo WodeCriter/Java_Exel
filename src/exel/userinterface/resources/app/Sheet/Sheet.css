@@ -4,7 +4,6 @@
 .cell-label {
     -fx-border-color: lightgrey;
     -fx-border-width: 2px;
-    -fx-alignment: center;
     -fx-font-size: 14px;
     -fx-background-color: white; /* Ensure a consistent background */
 }

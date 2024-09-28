@@ -158,12 +158,18 @@ public class SetSortScreenController
 
     private List<String> createPickedColumnsList()
     {
-        return allComboBoxes.stream().map(ComboBoxBase::getValue).toList();
+        return allComboBoxes.stream()
+                .filter(stringComboBox -> stringComboBox != null && stringComboBox.getValue() != null &&
+                        !stringComboBox.getValue().isEmpty())
+                .map(ComboBoxBase::getValue).toList();
     }
 
     @FXML
     void whenSortButtonClicked(ActionEvent event)
     {
+        if (text1 == null || text1.isEmpty() || text2 == null || text2.isEmpty())
+            throw new RuntimeException("Please enter 2 cell coordinates"); //todo: edit exception message
+
         eventBus.publish(new SortRequestedEvent(text1, text2, createPickedColumnsList()));
     }
 }

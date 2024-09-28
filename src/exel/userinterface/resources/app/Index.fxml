@@ -33,20 +33,27 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Cell">
           <items>
-            <MenuItem fx:id="menuItemEditDimentions" mnemonicParsing="false" text="Edit dimensions" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" text="Set dimentions" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
+                  <Menu mnemonicParsing="false" text="Formatting">
+                    <items>
+                      <MenuItem fx:id="formatLTR" mnemonicParsing="false" onAction="#formatLTRListener" text="Left to right" />
+                  <MenuItem fx:id="formatCenter" mnemonicParsing="false" onAction="#formatCenterListener" text="Center" />
+                  <MenuItem fx:id="formatRTL" mnemonicParsing="false" onAction="#formatRTLListener" text="Right to left " />
+                    </items>
+                  </Menu>
+            <MenuItem fx:id="formatBGColor" mnemonicParsing="false" onAction="#formatBGColorListener" text="Select background color" />
+                  <MenuItem fx:id="formatTextColor" mnemonicParsing="false" onAction="#formatTextColorListener" text="Change text color" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="formatClearStyle" mnemonicParsing="false" onAction="#formatClearStyleListener" text="Clear cell style" />
           </items>
         </Menu>
             <Menu mnemonicParsing="false" text="Sheet">
               <items>
+                  <Menu mnemonicParsing="false" text="Edit dimensions">
+                    <items>
+                  <MenuItem fx:id="menuItemEditWidth" mnemonicParsing="false" onAction="#setWidthListener" text="Set Width" />
+                      <MenuItem fx:id="menuItemEditHeight" mnemonicParsing="false" onAction="#setHeightListener" text="Set Height" />
+                    </items>
+                  </Menu>
                 <MenuItem mnemonicParsing="false" onAction="#sortRangeListener" text="Sort range" />
               </items>
             </Menu>

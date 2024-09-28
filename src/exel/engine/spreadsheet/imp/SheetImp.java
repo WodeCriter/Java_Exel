@@ -36,8 +36,8 @@ public class SheetImp implements Sheet, Serializable
         this.numOfCols = numOfCols;
         this.numOfRows = numOfRows;
         this.version = 1;
-        this.versionManager = new VersionManager(this.copySheet());
         this.rangeDatabase = new RangeDatabase();
+        this.versionManager = new VersionManager(this.copySheet());
     }
 
     @Override
@@ -142,6 +142,9 @@ public class SheetImp implements Sheet, Serializable
     {
         return cellWidth;
     }
+
+    public void setCellWidth(int width) {this.cellWidth = width;}
+    public void setCellHeight(int height) {this.cellHeight = height;}
 
     public int getNumOfCols()
     {
