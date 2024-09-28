@@ -408,11 +408,6 @@ public class IndexController {
                 ((SheetController) controller).setEventBus(eventBus);
             }
 
-            if (isDarkMode) {
-                String darkTheme = getClass().getResource("/exel/userinterface/resources/app/dark-theme.css").toExternalForm();
-                sheetRoot.getStylesheets().add(darkTheme);
-            }
-
             // Remove any existing content
             sheetContainer.getChildren().clear();
 
@@ -781,15 +776,25 @@ public class IndexController {
     }
 
     private void applyCurrentTheme(Scene scene) {
+        String sheetCss = getClass().getResource("/exel/userinterface/resources/app/Sheet/Sheet.css").toExternalForm();
         String darkTheme = getClass().getResource("/exel/userinterface/resources/app/dark-theme.css").toExternalForm();
 
         // Remove all existing stylesheets first
+        // Ensure Sheet.css is always in the stylesheets list
+        if (!scene.getStylesheets().contains(sheetCss)) {
+            scene.getStylesheets().add(sheetCss);
+        }
+
+        // Remove dark theme if it's applied
         scene.getStylesheets().remove(darkTheme);
 
         if (isDarkMode) {
             // Add the dark theme stylesheet
             scene.getStylesheets().add(darkTheme);
         }
+
+        // Force styles to be reapplied
+        scene.getRoot().applyCss();
     }
 
     @FXML
