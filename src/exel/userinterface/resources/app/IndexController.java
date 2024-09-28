@@ -608,8 +608,8 @@ public class IndexController {
 
     @FXML
     void filterListener(ActionEvent event) {
-//        if (!isSheetLoaded)
-//        return;
+        if (!isSheetLoaded)
+          return;
 
         try {
             // Load the FXML file for the new sheet popup

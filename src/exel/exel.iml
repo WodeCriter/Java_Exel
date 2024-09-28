@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://C:/Program Files/Java/jdk-21/jaxb-ri-4.0.5/mod/angus-activation.jar!/" />
@@ -16,7 +16,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://C:/Program Files/Java/jdk-21/jaxb-ri-4.0.5/mod/jakarta.activation-api.jar!/" />
@@ -25,7 +25,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://C:/Program Files/Java/jdk-21/jaxb-ri-4.0.5/mod/jakarta.xml.bind-api.jar!/" />
@@ -34,7 +34,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://C:/Program Files/Java/jdk-21/jaxb-ri-4.0.5/mod/jaxb-core.jar!/" />
@@ -43,7 +43,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://C:/Program Files/Java/jdk-21/jaxb-ri-4.0.5/mod/jaxb-impl.jar!/" />
@@ -52,7 +52,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://C:/Program Files/Java/jdk-21/jaxb-ri-4.0.5/mod/jaxb-jxc.jar!/" />
@@ -61,7 +61,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://C:/Program Files/Java/jdk-21/jaxb-ri-4.0.5/mod/jaxb-xjc.jar!/" />
@@ -80,6 +80,16 @@
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="file://C:/Program Files/Java/jdk-21/javafx-sdk-22.0.2/lib" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../out/artifacts/exel_jar/javafx-sdk-22.0.2/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../out/artifacts/exel_jar/javafx-sdk-22.0.2/lib" recursive="false" />
       </library>
     </orderEntry>
   </component>

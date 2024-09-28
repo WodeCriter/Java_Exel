@@ -20,14 +20,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
   <children>
     <MenuBar maxWidth="-Infinity" prefHeight="25.0" prefWidth="640.0" VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem fx:id="buttonNewFile" mnemonicParsing="false" onAction="#newFileEventListener" text="New Sheet" />
-            <MenuItem fx:id="buttonLoadFile" mnemonicParsing="false" onAction="#loadFileListener" text="Open…" />
+            <MenuItem fx:id="buttonNewFile" mnemonicParsing="false" onAction="#newFileEventListener" text="Create New Sheet" />
+            <MenuItem fx:id="buttonLoadFile" mnemonicParsing="false" onAction="#loadFileListener" text="Open Sheet" />
             <MenuItem fx:id="buttonSaveFile" mnemonicParsing="false" onAction="#saveFileListener" text="Save" />
             <MenuItem fx:id="buttonSaveAsFile" mnemonicParsing="false" onAction="#saveAsFileListener" text="Save As…" />
           </items>
@@ -55,7 +55,7 @@
                       <MenuItem fx:id="menuItemEditHeight" mnemonicParsing="false" onAction="#setHeightListener" text="Set Height" />
                     </items>
                   </Menu>
-                <MenuItem mnemonicParsing="false" onAction="#sortRangeListener" text="Sort range" />
+                <MenuItem mnemonicParsing="false" onAction="#sortRangeListener" text="Sort" />
                   <MenuItem mnemonicParsing="false" onAction="#filterListener" text="Filter" />
               </items>
             </Menu>
@@ -109,7 +109,7 @@
                                     </GridPane>
                                     <HBox prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <TextField fx:id="textFiledOriginalVal" prefHeight="25.0" prefWidth="424.0" promptText="Original Cell Value" />
+                                          <TextField fx:id="textFiledOriginalVal" prefHeight="25.0" prefWidth="424.0" promptText="Enter Original Value for Cell" />
                                           <Button fx:id="buttonUpdateCell" mnemonicParsing="false" onAction="#updateCellButtonListener" text="Update cell" />
                                        </children>
                                        <padding>

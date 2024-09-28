@@ -162,7 +162,7 @@ public class UIManager {
     public void showUI(Stage primaryStage) {
         try {
             // Assuming the FXML file is named "MainScreen.fxml" and is located in the "app" directory under resources
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/index.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/Index.fxml"));
 
             Parent root = loader.load();
 
