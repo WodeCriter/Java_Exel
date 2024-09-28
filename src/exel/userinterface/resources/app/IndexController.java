@@ -72,6 +72,9 @@ public class IndexController {
     private MenuItem menuItemEditHeight;
 
     @FXML
+    private MenuItem menuItemUserGuide;
+
+    @FXML
     private AnchorPane sheetContainer;
 
     @FXML
@@ -189,7 +192,7 @@ public class IndexController {
             popupStage.setTitle("Create New Sheet");
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            Scene popupScene = new Scene(popupRoot, 200, 150);
+            Scene popupScene = new Scene(popupRoot, 300, 200);
 
             applyCurrentTheme(popupScene);
 
@@ -505,7 +508,7 @@ public class IndexController {
             Stage popupStage = new Stage();
             popupStage.setTitle("Add New Range");
             popupStage.initModality(Modality.APPLICATION_MODAL);
-            Scene popupScene = new Scene(popupRoot, 200, 150);
+            Scene popupScene = new Scene(popupRoot, 300, 200);
 
             applyCurrentTheme(popupScene);
 
@@ -585,7 +588,7 @@ public class IndexController {
             popupStage.setTitle("Sort Range");
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());
-            Scene popupScene = new Scene(popupRoot, 300, 1000);
+            Scene popupScene = new Scene(popupRoot, 300, 200);
 
             applyCurrentTheme(popupScene);
 
@@ -623,7 +626,7 @@ public class IndexController {
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
             //popupStage.setMinWidth(700);
             //popupStage.setMinHeight(270);
-            Scene popupScene = new Scene(popupRoot, 1700, 500);
+            Scene popupScene = new Scene(popupRoot, 400, 300);
 
             applyCurrentTheme(popupScene);
 
@@ -924,5 +927,35 @@ public class IndexController {
 
             translateTransition.play();
         });
+    }
+
+    @FXML
+    void userGuideListener(ActionEvent event) {
+        try{
+            // Load the FXML file for the about popup
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/about/About.fxml"));
+            VBox popupRoot = loader.load();
+
+            // Create a new stage for the popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("About Exel");
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(sheetContainer.getScene().getWindow()); // Set the owner to the current stage
+
+            // Set the scene
+            Scene scene = new Scene(popupRoot, 400, 300);
+
+            // Apply the current theme if necessary
+            applyCurrentTheme(scene);
+
+            popupStage.setScene(scene);
+
+            // Show the popup
+            popupStage.showAndWait();
+
+        }catch(Exception e) {
+            e.printStackTrace();  // Handle exceptions appropriately
+        }
+
     }
 }
