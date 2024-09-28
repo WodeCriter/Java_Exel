@@ -7,9 +7,14 @@ import exel.eventsys.events.*;
 import exel.userinterface.resources.app.popups.displaySheet.DisplaySheetController;
 import exel.userinterface.resources.app.popups.newRange.CreateNewRangeScreenController;
 import exel.userinterface.resources.app.popups.sort.SetSortScreenController;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -26,6 +31,7 @@ import exel.userinterface.resources.app.Sheet.SheetController;
 import javafx.stage.Window;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.List;
@@ -174,13 +180,12 @@ public class IndexController {
         // (Optional) Set initial directory
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
-        //Add file extension filters
+        // Add file extension filters
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
                 "Xml Files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        // **Retrieve the owner window from a node in the scene**
-        // Using 'sheetContainer' which is part of the scene graph
+        // Retrieve the owner window from a node in the scene
         Window ownerWindow = sheetContainer.getScene().getWindow();
 
         // Show the open file dialog
@@ -191,6 +196,39 @@ public class IndexController {
             String absolutePath = selectedFile.getAbsolutePath();
 
             try {
+                // Create a progress bar dialog
+                Stage progressStage = new Stage();
+                progressStage.initModality(Modality.APPLICATION_MODAL);
+                progressStage.initOwner(sheetContainer.getScene().getWindow());
+
+                ProgressBar progressBar = new ProgressBar(0);
+                progressBar.setPrefWidth(300);
+
+                VBox vbox = new VBox(10);
+                vbox.setAlignment(Pos.CENTER);
+                vbox.setPadding(new Insets(20));
+                vbox.getChildren().addAll(new Label("Loading..."), progressBar);
+
+                Scene progressScene = new Scene(vbox);
+                progressStage.setScene(progressScene);
+                progressStage.setTitle("Loading");
+
+                // Show the progress bar dialog
+                progressStage.show();
+
+                // Use a Timeline to update the progress bar over 3 seconds
+                Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0)),
+                        new KeyFrame(Duration.seconds(1), new KeyValue(progressBar.progressProperty(), 1))
+                );
+
+                timeline.setOnFinished(e -> {
+                    progressStage.close();
+                });
+
+                timeline.play();
+
+                // Start the loading process
                 menuButtonSelectVersion.getItems().clear();
                 currentFile = selectedFile;
                 eventBus.publish(new LoadSheetEvent(absolutePath));
@@ -206,9 +244,8 @@ public class IndexController {
                 alert.showAndWait();
             }
         } else {
-            //System.out.println("File selection cancelled by user.");
+            // User canceled the file selection; no action needed
         }
-
     }
 
 
