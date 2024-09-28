@@ -24,6 +24,8 @@ import exel.eventsys.EventBus;
 import exel.userinterface.resources.app.popups.newsheet.CreateNewSheetScreenController;
 import exel.userinterface.resources.app.Sheet.SheetController;
 import javafx.stage.Window;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.util.List;
@@ -57,6 +59,25 @@ public class IndexController {
 
     @FXML
     private AnchorPane sheetContainer;
+
+    @FXML
+    private MenuItem formatLTR;
+
+    @FXML
+    private MenuItem formatCenter;
+
+    @FXML
+    private MenuItem formatRTL;
+
+    @FXML
+    private MenuItem formatBGColor;
+
+    @FXML
+    private MenuItem formatTextColor;
+
+    @FXML
+    private MenuItem formatClearStyle;
+
 
     @FXML
     private Label labelFileLoaded;
@@ -545,4 +566,103 @@ public class IndexController {
         }
         return -1; // Return a default or invalid value if the input was not valid or canceled
     }
+
+
+    private String toHexString(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int)(color.getRed() * 255),
+                (int)(color.getGreen() * 255),
+                (int)(color.getBlue() * 255));
+    }
+
+
+    @FXML
+    void formatBGColorListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        ColorPicker colorPicker = new ColorPicker();
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Select Background Color");
+        dialog.getDialogPane().setContent(colorPicker);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String colorCode = toHexString(colorPicker.getValue());
+            CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), colorCode, null, null, false);
+            eventBus.publish(styleEvent);
+        }
+    }
+
+    @FXML
+    void formatTextColorListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        ColorPicker colorPicker = new ColorPicker();
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Select Text Color");
+        dialog.getDialogPane().setContent(colorPicker);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String colorCode = toHexString(colorPicker.getValue());
+            CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, colorCode, null, false);
+            eventBus.publish(styleEvent);
+        }
+    }
+
+    @FXML
+    void formatClearStyleListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to clear style.");
+            return;
+        }
+
+        CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, null, true);
+        eventBus.publish(styleEvent);
+    }
+
+    @FXML
+    void formatCenterListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, "center", false);
+        eventBus.publish(styleEvent);
+    }
+
+
+
+    @FXML
+    void formatLTRListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, "left", false);
+        eventBus.publish(styleEvent);
+    }
+
+    @FXML
+    void formatRTLListener(ActionEvent event) {
+        if (selectedCell == null) {
+            showAlert("No Cell Selected", "Please select a cell to format.");
+            return;
+        }
+
+        CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, "right", false);
+        eventBus.publish(styleEvent);
+    }
+
+
 }
