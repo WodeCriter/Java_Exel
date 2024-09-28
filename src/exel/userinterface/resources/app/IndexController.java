@@ -5,6 +5,7 @@ import exel.engine.spreadsheet.api.ReadOnlySheet;
 import exel.engine.spreadsheet.cell.api.ReadOnlyCell;
 import exel.eventsys.events.*;
 import exel.userinterface.resources.app.popups.displaySheet.DisplaySheetController;
+import exel.userinterface.resources.app.popups.filter.SetFilterScreenController;
 import exel.userinterface.resources.app.popups.newRange.CreateNewRangeScreenController;
 import exel.userinterface.resources.app.popups.sort.SetSortScreenController;
 import javafx.animation.KeyFrame;
@@ -494,10 +495,16 @@ public class IndexController {
         rangeDeleteMenu = new ContextMenu();
         MenuItem deleteRange = new MenuItem("Delete Range");
 
-
         deleteRange.setOnAction(event -> {
             String selectedRange = (String)rangesList.getSelectionModel().getSelectedItem();
-            eventBus.publish(new RangeDeleteEvent(selectedRange));
+            try
+            {
+                eventBus.publish(new RangeDeleteEvent(selectedRange));
+            }
+            catch(Exception e)
+            {
+                showAlert("Failed to delete range", e.getMessage());
+            }
         });
 
         rangeDeleteMenu.getItems().add(deleteRange);
@@ -542,6 +549,38 @@ public class IndexController {
         }
     }
 
+    @FXML
+    void filterListener(ActionEvent event) {
+//        if (!isSheetLoaded)
+//            return;
+
+        try {
+            // Load the FXML file for the new sheet popup
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/exel/userinterface/resources/app/popups/filter/SetFilterScreen.fxml"));
+            VBox popupRoot = loader.load();
+
+            Object controller = loader.getController();
+
+            if (controller instanceof SetFilterScreenController)
+                ((SetFilterScreenController) controller).setEventBus(eventBus);
+
+            // Create a new stage for the popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Filter");
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
+            popupStage.setScene(new Scene(popupRoot, 200, 150));
+
+            // Show the popup
+            popupStage.showAndWait();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();  // Handle exceptions appropriate
+            showAlert("Invalid input", e.getMessage());
+        }
+    }
+
     private void handleSheetDisplayEvent (SheetDisplayEvent sheetEvent){
         addVersionMenuButton(sheetEvent.getSheet().getVersion());
     }
@@ -579,7 +618,6 @@ public class IndexController {
         }
 
     }
-
 
     private int promptForNumber(String title, String header, String content) {
         TextInputDialog dialog = new TextInputDialog();

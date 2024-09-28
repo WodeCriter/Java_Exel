@@ -1,0 +1,182 @@
+package exel.userinterface.resources.app.popups.filter;
+
+import exel.engine.imp.EngineImp;
+import exel.eventsys.EventBus;
+import exel.eventsys.events.SortRequestedEvent;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+
+import java.util.*;
+
+public class SetFilterScreenController
+{
+    private EventBus eventBus;
+
+    @FXML
+    private GridPane gridPane;
+    @FXML
+    private TextField cell1TextField, cell2TextField;
+    private String text1, text2;
+    @FXML
+    private ComboBox<String> mainColumnComboBox;
+    @FXML
+    private Label sortByLabel;
+    @FXML
+    private TextArea mainValuesTextArea;
+
+    private List<String> possibleColumnChoices = null;
+    private List<ComboBox<String>> allComboBoxes;
+    private List<TextArea> allTextAreas;
+    private int colIndex = 1;  // Track the current row index for new rows
+
+    @FXML
+    private void initialize()
+    {
+        //pickedColumns = new ArrayList<>(5);
+        allComboBoxes = new ArrayList<>(5);
+        allComboBoxes.add(mainColumnComboBox);
+        allTextAreas = new ArrayList<>(5);
+        allTextAreas.add(mainValuesTextArea);
+        text1 = text2 = null;
+
+        cell1TextField.textProperty().addListener((observable, oldValue, newValue) -> handleText1Input(newValue));
+        cell2TextField.textProperty().addListener((observable, oldValue, newValue) -> handleText2Input(newValue));
+    }
+
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
+
+    @FXML
+    public void addCol()
+    {
+        shiftColumnsRight(colIndex);
+        // Create new content for the new row
+        Label guideLabel = new Label("then by");
+        ComboBox<String> newComboBox = new ComboBox<>();
+        TextArea newTextArea = new TextArea();
+
+        newComboBox.setPrefWidth(mainColumnComboBox.getPrefWidth());
+        newComboBox.setPrefHeight(mainColumnComboBox.getPrefHeight());
+        newComboBox.setPromptText(mainColumnComboBox.getPromptText());
+        newComboBox.setOpacity(mainColumnComboBox.getOpacity());
+
+        newTextArea.setPrefWidth(mainValuesTextArea.getPrefWidth());
+        newTextArea.setPrefHeight(mainValuesTextArea.getPrefHeight());
+        newTextArea.setPromptText(mainValuesTextArea.getPromptText());
+
+        guideLabel.setPrefWidth(sortByLabel.getPrefWidth());
+        guideLabel.setPrefHeight(sortByLabel.getPrefHeight());
+        guideLabel.setAlignment(Pos.CENTER);
+
+        //gridPane.addColumn(colIndex, guideLabel, newComboBox, newTextArea);
+        gridPane.add(newComboBox, colIndex, 3);
+        gridPane.add(newTextArea, colIndex, 4);
+        newComboBox.setOnAction(this::whenPickingAColumn);
+        allComboBoxes.add(newComboBox);
+
+        colIndex++;
+    }
+
+    private void shiftColumnsRight(int startCol) {
+        // Loop through all nodes in the grid pane
+        for (Node node : gridPane.getChildren()) {
+            // Get the current row index of the node
+            Integer col = GridPane.getColumnIndex(node);
+            if (col == null) {
+                col = 0; // If no row index is set, it's assumed to be in row 0
+            }
+
+            // If the node is in or below the startRow, move it down one row
+            if (col >= startCol) {
+                GridPane.setColumnIndex(node, col + 1);
+                GridPane.setColumnSpan(node, col + 1);
+            }
+        }
+    }
+
+    private void handleText1Input(String newText)
+    {
+        text1 = newText;
+        setColumnChoices();
+    }
+
+    private void handleText2Input(String newText)
+    {
+        text2 = newText;
+        setColumnChoices();
+    }
+
+    private void setColumnChoices()
+    {
+        possibleColumnChoices = EngineImp.getAllColumnsBetween2Cords(text1, text2);
+
+        if (possibleColumnChoices != null && !possibleColumnChoices.equals(mainColumnComboBox.getItems()))
+        {
+            mainColumnComboBox.getItems().clear();
+            mainColumnComboBox.getItems().addAll(possibleColumnChoices);
+        }
+    }
+    @FXML
+    private void whenPickingAColumn(ActionEvent event)
+    {
+        ComboBox<String> chosenComboBox = (ComboBox<String>) event.getSource();
+
+        ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(chosenComboBox);
+        if (iterator != null && iterator.hasNext())
+        {
+            List<String> choicesWithoutPickedChoice = chosenComboBox.getItems().stream().
+                    filter(column->!column.equals(chosenComboBox.getValue())).toList();
+
+            ComboBox<String> nextBox = iterator.next();
+            nextBox.getItems().clear();
+            nextBox.setValue(null);
+            nextBox.getItems().addAll(choicesWithoutPickedChoice);
+            while (iterator.hasNext())
+            {
+                nextBox = iterator.next();
+                nextBox.getItems().clear();
+                nextBox.setValue(null);
+            }
+        }
+    }
+
+    private ListIterator<ComboBox<String>> getIteratorPointingAtNextBoxInList(ComboBox<String> box)
+    {
+        ListIterator<ComboBox<String>> iterator = allComboBoxes.listIterator();
+
+        while (iterator.hasNext())
+        {
+            if (iterator.next() == box)
+                return iterator;
+        }
+
+        return null;
+    }
+
+    private List<String> createPickedColumnsList()
+    {
+        return allComboBoxes.stream()
+                .filter(stringComboBox -> stringComboBox != null && stringComboBox.getValue() != null &&
+                        !stringComboBox.getValue().isEmpty())
+                .map(ComboBoxBase::getValue).toList();
+    }
+
+    @FXML
+    void whenSortButtonClicked(ActionEvent event)
+    {
+        if (text1 == null || text1.isEmpty() || text2 == null || text2.isEmpty())
+            throw new RuntimeException("Please enter 2 cell coordinates");
+
+        eventBus.publish(new SortRequestedEvent(text1, text2, createPickedColumnsList()));
+    }
+
+    private List<String> getValuesToFilterBy(){
+        String allText = mainValuesTextArea.getText();
+        return List.of(allText.split("\\n"));
+    }
+}

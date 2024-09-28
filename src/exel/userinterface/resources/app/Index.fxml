@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -55,6 +55,7 @@
                     </items>
                   </Menu>
                 <MenuItem mnemonicParsing="false" onAction="#sortRangeListener" text="Sort range" />
+                  <MenuItem mnemonicParsing="false" onAction="#filterListener" text="Filter" />
               </items>
             </Menu>
         <Menu mnemonicParsing="false" text="Help">
