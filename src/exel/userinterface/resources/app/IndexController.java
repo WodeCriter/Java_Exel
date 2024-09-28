@@ -585,7 +585,7 @@ public class IndexController {
             popupStage.setTitle("Sort Range");
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());
-            Scene popupScene = new Scene(popupRoot, 300, 200);
+            Scene popupScene = new Scene(popupRoot, 300, 1000);
 
             applyCurrentTheme(popupScene);
 
@@ -621,6 +621,8 @@ public class IndexController {
             popupStage.setTitle("Filter");
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
+            //popupStage.setMinWidth(700);
+            //popupStage.setMinHeight(270);
             Scene popupScene = new Scene(popupRoot, 1700, 500);
 
             applyCurrentTheme(popupScene);
