@@ -11,6 +11,7 @@ import exel.userinterface.resources.app.popups.sort.SetSortScreenController;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -33,6 +36,7 @@ import javafx.stage.Window;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import javafx.application.Platform;
 
 import java.io.File;
 import java.util.List;
@@ -47,6 +51,7 @@ public class IndexController {
     private File currentFile;
     private boolean isDarkMode = false;
     private ContextMenu rangeDeleteMenu;
+    private boolean isAnimationsEnabled = false;
 
     @FXML
     private MenuItem buttonNewFile;
@@ -88,7 +93,7 @@ public class IndexController {
     private MenuItem formatClearStyle;
 
     @FXML
-    private RadioMenuItem radMenItemAnimations;
+    private CheckMenuItem cMenItemAnimations;
 
     @FXML
     private RadioMenuItem radMenItemLightMode;
@@ -136,6 +141,14 @@ public class IndexController {
         rangesList.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, this::hideContextMenu);
+            }
+        });
+
+        menuButtonSelectVersion.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                if (isAnimationsEnabled) {
+                    triggerCarAnimation();
+                }
             }
         });
     }
@@ -229,6 +242,9 @@ public class IndexController {
                 vbox.getChildren().addAll(new Label("Loading..."), progressBar);
 
                 Scene progressScene = new Scene(vbox);
+
+                applyCurrentTheme(progressScene);
+
                 progressStage.setScene(progressScene);
                 progressStage.setTitle("Loading");
 
@@ -385,6 +401,11 @@ public class IndexController {
 
             // Set the scene
             Scene scene = new Scene(popupRoot);
+
+
+            applyCurrentTheme(scene);
+
+
             popupStage.setScene(scene);
 
             // Show the popup
@@ -408,11 +429,6 @@ public class IndexController {
                 ((SheetController) controller).setEventBus(eventBus);
             }
 
-            if (isDarkMode) {
-                String darkTheme = getClass().getResource("/exel/userinterface/resources/app/dark-theme.css").toExternalForm();
-                sheetRoot.getStylesheets().add(darkTheme);
-            }
-
             // Remove any existing content
             sheetContainer.getChildren().clear();
 
@@ -424,6 +440,8 @@ public class IndexController {
             AnchorPane.setBottomAnchor(sheetRoot, 0.0);
             AnchorPane.setLeftAnchor(sheetRoot, 0.0);
             AnchorPane.setRightAnchor(sheetRoot, 0.0);
+
+            applyCurrentTheme(sheetContainer.getScene());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -482,9 +500,11 @@ public class IndexController {
             Stage popupStage = new Stage();
             popupStage.setTitle("Add New Range");
             popupStage.initModality(Modality.APPLICATION_MODAL);
-            //popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 200, 150));
+            Scene popupScene = new Scene(popupRoot, 200, 150);
 
+            applyCurrentTheme(popupScene);
+
+            popupStage.setScene(popupScene);
             // Show the popup
             popupStage.showAndWait();
         }
@@ -559,8 +579,12 @@ public class IndexController {
             Stage popupStage = new Stage();
             popupStage.setTitle("Sort Range");
             popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 200, 150));
+            popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());
+            Scene popupScene = new Scene(popupRoot, 300, 200);
+
+            applyCurrentTheme(popupScene);
+
+            popupStage.setScene(popupScene);
 
             // Show the popup
             popupStage.showAndWait();
@@ -592,7 +616,11 @@ public class IndexController {
             popupStage.setTitle("Filter");
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 200, 150));
+            Scene popupScene = new Scene(popupRoot, 300, 200);
+
+            applyCurrentTheme(popupScene);
+
+            popupStage.setScene(popupScene);
 
             // Show the popup
             popupStage.showAndWait();
@@ -781,20 +809,61 @@ public class IndexController {
     }
 
     private void applyCurrentTheme(Scene scene) {
+        String sheetCss = getClass().getResource("/exel/userinterface/resources/app/Sheet/Sheet.css").toExternalForm();
         String darkTheme = getClass().getResource("/exel/userinterface/resources/app/dark-theme.css").toExternalForm();
 
-        // Remove all existing stylesheets first
+        // Ensure Sheet.css is always in the stylesheets list
+        if (!scene.getStylesheets().contains(sheetCss)) {
+            scene.getStylesheets().add(sheetCss);
+        }
+
+        // Remove dark theme if it's applied
         scene.getStylesheets().remove(darkTheme);
 
         if (isDarkMode) {
             // Add the dark theme stylesheet
             scene.getStylesheets().add(darkTheme);
         }
+
+        // Force styles to be reapplied
+        scene.getRoot().applyCss();
     }
 
     @FXML
     void animationsListener(ActionEvent event) {
+        isAnimationsEnabled = cMenItemAnimations.isSelected();
+    }
 
+    private void triggerCarAnimation() {
+        // Load the car image
+        Image carImage = new Image(getClass().getResourceAsStream("/exel/userinterface/resources/images/car.png"));
+
+        // Create ImageView
+        ImageView carImageView = new ImageView(carImage);
+
+        // Add the carImageView to the sheetContainer
+        sheetContainer.getChildren().add(carImageView);
+
+        // Wait for the layout to be calculated
+        Platform.runLater(() -> {
+            // Set initial position (off-screen to the left)
+            carImageView.setLayoutX(-carImageView.getImage().getWidth());
+            carImageView.setLayoutY(sheetContainer.getHeight() / 2 - carImageView.getImage().getHeight() / 2);
+
+            // Create animation to move the car across the screen
+            double endX = sheetContainer.getWidth();
+
+            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(2), carImageView);
+            translateTransition.setFromX(0);
+            translateTransition.setToX(endX + carImageView.getImage().getWidth());
+
+            // Remove the car image after animation is finished
+            translateTransition.setOnFinished(event -> {
+                sheetContainer.getChildren().remove(carImageView);
+            });
+
+            translateTransition.play();
+        });
     }
 
 
