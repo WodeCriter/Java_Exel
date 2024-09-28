@@ -1,5 +1,6 @@
 package exel.engine.expressions.imp;
 
+import com.sun.istack.NotNull;
 import exel.engine.expressions.api.Expression;
 import exel.engine.expressions.imp.Boolean.Compare.BiggerExpression;
 import exel.engine.expressions.imp.Boolean.Compare.EqualExpression;
@@ -12,8 +13,6 @@ import exel.engine.expressions.imp.String.ConcatExpression;
 import exel.engine.expressions.imp.String.SubExpression;
 import exel.engine.spreadsheet.cell.api.CellType;
 import exel.engine.spreadsheet.coordinate.Coordinate;
-import exel.engine.spreadsheet.range.Range;
-import exel.engine.spreadsheet.range.RangeDatabase;
 
 import java.util.*;
 
@@ -252,15 +251,23 @@ public enum FunctionParser
 
     public static Expression parseExpression(String input)
     {
+        List<String> topLevelParts = new LinkedList<>();
+        FunctionParser func = getFuncFromInput(input, topLevelParts);
+
+        if (func != null)
+            return func.parse(topLevelParts);
+        else
+            return FunctionParser.IDENTITY.parse(List.of(input));
+
+    }
+
+    private static FunctionParser getFuncFromInput(String input, @NotNull List<String> topLevelParts){
         String trimmedInput = input.trim();
         if (isStringAFunction(trimmedInput))
         {
             String functionContent = trimmedInput.substring(1, trimmedInput.length() - 1);
-            List<String> topLevelParts = parseMainParts(functionContent);
+            topLevelParts.addAll(parseMainParts(functionContent));
             String functionName = topLevelParts.removeFirst().trim().toUpperCase();
-
-            //remove the first element from the array
-            //topLevelParts.removeFirst();
 
             //Idea: topLevelParts now has either cells, functions, or numbers.
             //If it's a cell, it should be added to the "dependsOn" list given in the method.
@@ -270,16 +277,14 @@ public enum FunctionParser
                 func = FunctionParser.valueOf(functionName);
             }
             //If you get an exception (probably from the enum) tell user the function does not exist
-            catch (IllegalArgumentException e )
+            catch (IllegalArgumentException e)
             {
                 throw new IllegalArgumentException("\"" + functionName + "\" is not a valid function");
             }
-
-            return func.parse(topLevelParts);
+            return func;
         }
-
-        // handle identity expression
-        return FunctionParser.IDENTITY.parse(List.of(input));
+        else
+            return null;
     }
 
     //If the string in not a valid original value, it returns the exception (which explains why).
@@ -378,6 +383,27 @@ public enum FunctionParser
     {
         if (argumentsSize != expectedSize)
             throw new IllegalArgumentException("Invalid number of arguments for " + funcName + " function. Expected " + expectedSize + ", but got " + argumentsSize);
+    }
+
+    private static final List<FunctionParser> functionsThatUseRange = getFunctionsThatUseRange();
+
+    private static List<FunctionParser> getFunctionsThatUseRange(){
+        List<FunctionParser> functionsThatUseRange = new LinkedList<>();
+        functionsThatUseRange.add(FunctionParser.SUM);
+        functionsThatUseRange.add(FunctionParser.AVERAGE);
+        return functionsThatUseRange;
+    }
+
+    public static String getRangeInValue(String input){
+        if (isStringAValidOriginalValue(input) != null)
+            return null;
+
+        List<String> topLevelParts = new LinkedList<>();
+        FunctionParser func = getFuncFromInput(input, topLevelParts);
+
+        if (func == null || !functionsThatUseRange.contains(func))
+            return null;
+        return topLevelParts.getFirst();
     }
 }
 

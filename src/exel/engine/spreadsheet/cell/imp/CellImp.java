@@ -8,6 +8,7 @@ import exel.engine.expressions.imp.FunctionParser;
 import exel.engine.spreadsheet.cell.api.Cell;
 import exel.engine.spreadsheet.coordinate.Coordinate;
 import exel.engine.spreadsheet.imp.SheetImp;
+import exel.engine.spreadsheet.range.Range;
 
 
 public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializable {
@@ -20,6 +21,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
     private int version;
     private List<CellImp> dependsOn;
     private List<CellImp> influencingOn;
+    private Range rangeUsed;
 
 
     public CellImp(String coordinate, String originalValue, SheetImp sheet) {
@@ -30,6 +32,7 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
         this.influencingOn = new LinkedList<>();
         calculateEffectiveValue();
         this.dependsOn = makeCellDependent(originalValue);
+        rangeUsed = null;
     }
 
     public CellImp(String coordinate, SheetImp sheet){
@@ -149,7 +152,23 @@ public class CellImp implements exel.engine.spreadsheet.cell.api.Cell, Serializa
 
         dependsOn = newDependsOn;
         originalValue = newValue;
+        updateRangeIfNeeded();
         return orderedCells;
+    }
+
+    private void updateRangeIfNeeded(){
+        if (rangeUsed != null)
+        {
+            rangeUsed.removeUseOfRange();
+            rangeUsed = null;
+        }
+
+        String rangeInOriginalValue = FunctionParser.getRangeInValue(originalValue);
+        if (rangeInOriginalValue != null)
+        {
+            rangeUsed = sheet.getRange(rangeInOriginalValue);
+            rangeUsed.countUseOfRange();
+        }
     }
 
     private List<Cell> orderCellsForCalculation()
