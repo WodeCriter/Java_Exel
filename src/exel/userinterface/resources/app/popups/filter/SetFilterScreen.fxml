@@ -15,7 +15,7 @@
       <GridPane fx:id="gridPane" alignment="CENTER" hgap="10" prefHeight="461.0" prefWidth="600.0" vgap="10" VBox.vgrow="ALWAYS">
           <!-- Initial components in the GridPane -->
           <Button fx:id="addColumnButton" onAction="#addCol" prefHeight="25.0" prefWidth="170.0" text="Add Another Filter Column" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-         <Label fx:id="sortByLabel" alignment="CENTER" prefHeight="17.0" prefWidth="87.0" text="Filter By" GridPane.rowIndex="3" />
+         <Label fx:id="sortByLabel" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="183.0" text="Filter By" GridPane.rowIndex="3" />
          <ComboBox fx:id="mainColumnComboBox" onAction="#whenPickingAColumn" opacity="0.5" prefHeight="25.0" prefWidth="170.0" promptText="Pick a Column" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
             <columnConstraints>
@@ -30,13 +30,13 @@
                <TextField fx:id="cell2TextField" alignment="CENTER" prefHeight="25.0" prefWidth="14.0" promptText="Cell 2" GridPane.columnIndex="1" />
             </children>
          </GridPane>
-         <Label alignment="CENTER" prefHeight="17.0" prefWidth="97.0" text="Choose Range" GridPane.rowIndex="1" />
+         <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="206.0" text="Choose Range" GridPane.rowIndex="1" />
          <Button fx:id="startFilterButton" mnemonicParsing="false" onAction="#whenSortButtonClicked" prefHeight="25.0" prefWidth="170.0" text="Filter" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          <TextArea fx:id="mainValuesTextArea" prefHeight="60.0" prefWidth="217.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          <columnConstraints>
-            <ColumnConstraints maxWidth="94.5" minWidth="10.0" prefWidth="87.0" />
             <ColumnConstraints maxWidth="198.0" minWidth="10.0" prefWidth="171.5" />
-            <ColumnConstraints maxWidth="93.5" minWidth="10.0" prefWidth="34.5" />
+            <ColumnConstraints maxWidth="198.0" minWidth="10.0" prefWidth="171.5" />
+            <ColumnConstraints maxWidth="198.0" minWidth="10.0" prefWidth="171.5" />
             <ColumnConstraints />
          </columnConstraints>
          <rowConstraints>

@@ -60,8 +60,6 @@ public class SetFilterScreenController
     public void addCol()
     {
         shiftColumnsRight(colIndex);
-        //GridPane.setRowIndex(addColumnButton, GridPane.getRowIndex(addColumnButton) - 1);
-        //GridPane.setRowIndex(startFilterButton, GridPane.getRowIndex(startFilterButton) - 1);
         // Create new content for the new row
         Label guideLabel = new Label("then by");
         ComboBox<String> newComboBox = new ComboBox<>();
@@ -93,9 +91,6 @@ public class SetFilterScreenController
     private void shiftColumnsRight(int startCol) {
         // Loop through all nodes in the grid pane
         for (Node node : gridPane.getChildren()) {
-            if (node == addColumnButton || node == startFilterButton
-            || node == cell1TextField || node == cell2TextField)
-                continue;
 
             // Get the current row index of the node
             Integer col = GridPane.getColumnIndex(node);
@@ -105,8 +100,8 @@ public class SetFilterScreenController
 
             // If the node is in or below the startRow, move it down one row
             if (col >= startCol) {
-                GridPane.setColumnIndex(node, col + 1);
-                GridPane.setColumnSpan(node, col + 1);
+                GridPane.setColumnIndex(node, col);
+                GridPane.setColumnSpan(node, col);
             }
         }
     }
