@@ -29,6 +29,7 @@ public class SetSortScreenController
 
     private List<String> possibleColumnChoices = null;
     private List<ComboBox<String>> allComboBoxes;
+    private ComboBox<String> lastComboBoxWithValue = null;
     private int rowIndex = 4;  // Track the current row index for new rows
 
     @FXML
@@ -67,16 +68,10 @@ public class SetSortScreenController
         guideLabel.setPrefHeight(sortByLabel.getPrefHeight());
         guideLabel.setAlignment(Pos.CENTER);
 
-//        if (possibleColumnChoices != null)
-//            newComboBox.getItems().addAll(possibleColumnChoices);
         newComboBox.setOnAction(this::whenPickingAColumn);
         allComboBoxes.add(newComboBox);
+        setNextComboBoxes();
 
-//        // Get the current stage and resize the window to fit new content
-//        Stage stage = (Stage) gridPane.getScene().getWindow();
-//        stage.sizeToScene();  // Resize window to fit the new content
-
-        // Increment the rowIndex for the next row
         rowIndex++;
     }
 
@@ -117,18 +112,25 @@ public class SetSortScreenController
         {
             mainColumnComboBox.getItems().clear();
             mainColumnComboBox.getItems().addAll(possibleColumnChoices);
+            lastComboBoxWithValue = null;
         }
     }
     @FXML
     private void whenPickingAColumn(ActionEvent event)
     {
-        ComboBox<String> chosenComboBox = (ComboBox<String>) event.getSource();
+        lastComboBoxWithValue = (ComboBox<String>) event.getSource();
+        setNextComboBoxes();
+    }
 
-        ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(chosenComboBox);
+    private void setNextComboBoxes(){
+        if (lastComboBoxWithValue == null)
+            return;
+
+        ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(lastComboBoxWithValue);
         if (iterator != null && iterator.hasNext())
         {
-            List<String> choicesWithoutPickedChoice = chosenComboBox.getItems().stream().
-                    filter(column->!column.equals(chosenComboBox.getValue())).toList();
+            List<String> choicesWithoutPickedChoice = lastComboBoxWithValue.getItems().stream().
+                    filter(column->!column.equals(lastComboBoxWithValue.getValue())).toList();
 
             ComboBox<String> nextBox = iterator.next();
             nextBox.getItems().clear();

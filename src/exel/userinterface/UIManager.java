@@ -43,6 +43,7 @@ public class UIManager {
         eventBus.subscribe(VersionSelectedEvent.class, this::handleVersionSelectedEvent);
         eventBus.subscribe(SheetResizeWidthEvent.class, this::handleSheetResizeWidthEvent);
         eventBus.subscribe(SheetResizeHeightEvent.class, this::handleSheetResizeHeightEvent);
+        eventBus.subscribe(FilterRequestedEvent.class, this::handleFilterRequested);
     }
 
     private void handleCreateNewSheet(CreateNewSheetEvent event) {
@@ -132,6 +133,12 @@ public class UIManager {
     private void handleSortRequested(SortRequestedEvent event)
     {
         ReadOnlySheet sortedSheet = engine.createSortedSheetFromCords(event.getCord1(), event.getCord2(), event.getPickedColumns());
+        eventBus.publish(new DisplaySheetPopupEvent(sortedSheet));
+    }
+
+    private void handleFilterRequested(FilterRequestedEvent event)
+    {
+        ReadOnlySheet sortedSheet = engine.createFilteredSheetFromCords(event.getCord1(), event.getCord2(), event.getPickedData());
         eventBus.publish(new DisplaySheetPopupEvent(sortedSheet));
     }
 
