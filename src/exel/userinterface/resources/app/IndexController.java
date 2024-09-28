@@ -28,6 +28,7 @@ import javafx.stage.Window;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class IndexController {
 
@@ -499,11 +500,49 @@ public class IndexController {
 
     @FXML
     void setHeightListener(ActionEvent event) {
+        int newHeight = promptForNumber("Set Height", "Enter new height", "Please enter the new height in pixels:");
+
+        if (newHeight > 0) {
+            // Apply the new height to relevant cells/labels
+            eventBus.publish(new SheetResizeHeightEvent(newHeight));
+            // Your logic to set the height goes here
+        }
 
     }
 
     @FXML
     void setWidthListener(ActionEvent event) {
+        int newWidth = promptForNumber("Set Width", "Enter new width", "Please enter the new width in pixels:");
 
+        if (newWidth > 0) {
+            // Apply the new width to relevant cells/labels
+            eventBus.publish(new SheetResizeWidthEvent(newWidth));
+            // Your logic to set the width goes here
+        }
+
+    }
+
+
+    private int promptForNumber(String title, String header, String content) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+        dialog.setContentText(content);
+
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            try {
+                return Integer.parseInt(result.get()); // Convert the string to an integer
+            } catch (NumberFormatException e) {
+                // Show error alert if the input is not a valid number
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Invalid number format");
+                alert.setContentText("Please enter a valid number.");
+                alert.showAndWait();
+            }
+        }
+        return -1; // Return a default or invalid value if the input was not valid or canceled
     }
 }

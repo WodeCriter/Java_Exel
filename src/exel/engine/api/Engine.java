@@ -76,4 +76,7 @@ public interface Engine {
     List<String> getCordsOfCellsInRange(String rangeName);
 
     void deleteRange(String rangeName);
+
+    ReadOnlySheet changeCellWidth(int width);
+    public ReadOnlySheet changeCellHeight(int height);
 }

@@ -54,7 +54,7 @@ public class SheetController {
         eventBus.subscribe(SheetDisplayEvent.class, this::handleSheetDisplay);
         eventBus.subscribe(CellsRequestedToBeMarkedEvent.class, this::handleMarkCell);
         eventBus.subscribe(DisplaySelectedCellEvent.class, this::handleDisplaySelectedCell);
-        // Subscribe to other events if needed (e.g., cell update events)
+        eventBus.subscribe(SheetDisplayRefactorEvent.class, this::handleSheetRefactor);
     }
 
     private void handleSheetCreated(SheetCreatedEvent event) {
@@ -87,7 +87,9 @@ public class SheetController {
                 for (int col = 1; col <= numCols; col++) {
                     Label cellLabel = new Label();
                     cellLabel.setMinWidth(event.getCellWidth());
+                    cellLabel.setMaxWidth(event.getCellWidth());
                     cellLabel.setMinHeight(event.getCellHeight());
+                    cellLabel.setMaxHeight(event.getCellHeight());
                     //cellLabel.setStyle("-fx-border-color: lightgrey;");
                     cellLabel.getStyleClass().add("cell-label");
                     final int currentRow = row;
@@ -209,6 +211,19 @@ public class SheetController {
                 cellLabel.getStyleClass().add(headerToMarkBy);
         }
     }
+    private void handleSheetRefactor(SheetDisplayRefactorEvent event) {
+        ReadOnlySheet readOnlySheet = event.getSheet();
+
+        for (Label cellLabel : cellLabelMap.values()) {
+            cellLabel.setMinWidth(readOnlySheet.getCellWidth());
+            cellLabel.setMaxWidth(readOnlySheet.getCellWidth());
+            cellLabel.setMinHeight(readOnlySheet.getCellHeight());
+            cellLabel.setMaxHeight(readOnlySheet.getCellHeight());
+        }
+
+    }
+
+
 
     private void unmarkCellsInList()
     {
