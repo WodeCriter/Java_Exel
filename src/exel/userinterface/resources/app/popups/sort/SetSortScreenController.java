@@ -61,12 +61,13 @@ public class SetSortScreenController
 
         newComboBox.setPrefWidth(mainColumnComboBox.getPrefWidth());
         newComboBox.setPrefHeight(mainColumnComboBox.getPrefHeight());
+        newComboBox.setMinWidth(mainColumnComboBox.getMinWidth());
         newComboBox.setPromptText(mainColumnComboBox.getPromptText());
         newComboBox.setOpacity(mainColumnComboBox.getOpacity());
 
         guideLabel.setPrefWidth(sortByLabel.getPrefWidth());
         guideLabel.setPrefHeight(sortByLabel.getPrefHeight());
-        guideLabel.setAlignment(Pos.CENTER);
+        guideLabel.setAlignment(Pos.CENTER_RIGHT);
 
         newComboBox.setOnAction(this::whenPickingAColumn);
         allComboBoxes.add(newComboBox);

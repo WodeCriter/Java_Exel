@@ -67,7 +67,9 @@ public class SetFilterScreenController
         TextArea newTextArea = new TextArea();
 
         newComboBox.setPrefWidth(mainColumnComboBox.getPrefWidth());
-        newComboBox.setPrefHeight(mainColumnComboBox.getPrefHeight());
+        newComboBox.setMinWidth(mainColumnComboBox.getMinWidth());
+//        newComboBox.setPrefHeight(mainColumnComboBox.getPrefHeight());
+//        newComboBox.setMinHeight(mainColumnComboBox.getMinHeight());
         newComboBox.setPromptText(mainColumnComboBox.getPromptText());
         newComboBox.setOpacity(mainColumnComboBox.getOpacity());
 
@@ -77,7 +79,7 @@ public class SetFilterScreenController
 
         guideLabel.setPrefWidth(sortByLabel.getPrefWidth());
         guideLabel.setPrefHeight(sortByLabel.getPrefHeight());
-        guideLabel.setAlignment(Pos.CENTER);
+        guideLabel.setAlignment(Pos.CENTER_RIGHT);
 
         //gridPane.addColumn(colIndex, guideLabel, newComboBox, newTextArea);
         gridPane.add(newComboBox, colIndex, 3);
@@ -102,8 +104,8 @@ public class SetFilterScreenController
 
             // If the node is in or below the startRow, move it down one row
             if (col >= startCol) {
-                GridPane.setColumnIndex(node, col);
-                GridPane.setColumnSpan(node, col);
+                GridPane.setColumnIndex(node, col + 1);
+                GridPane.setColumnSpan(node, col + 1);
             }
         }
     }

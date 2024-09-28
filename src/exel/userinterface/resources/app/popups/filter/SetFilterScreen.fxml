@@ -19,28 +19,28 @@
             <GridPane fx:id="gridPane" alignment="CENTER" hgap="10" prefHeight="461.0" prefWidth="600.0" vgap="10">
                <!-- Initial components in the GridPane -->
                <Button minHeight="-Infinity" minWidth="-Infinity" onAction="#addCol" prefHeight="25.0" prefWidth="170.0" text="Add Another Filter Column" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-               <Label fx:id="sortByLabel" alignment="CENTER" prefHeight="17.0" prefWidth="87.0" text="Filter By" GridPane.rowIndex="3" />
+               <Label fx:id="sortByLabel" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="172.0" text="Filter By" GridPane.rowIndex="3" />
                <ComboBox fx:id="mainColumnComboBox" minHeight="-Infinity" minWidth="-Infinity" onAction="#whenPickingAColumn" opacity="0.5" prefHeight="25.0" prefWidth="170.0" promptText="Pick a Column" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-               <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane prefHeight="41.0" prefWidth="172.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                   <columnConstraints>
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0" prefWidth="82.5" />
+                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="102.5" minWidth="10.0" prefWidth="88.5" />
                   </columnConstraints>
                   <rowConstraints>
                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                   </rowConstraints>
                   <children>
-                     <TextField fx:id="cell1TextField" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="104.0" promptText="Cell 1" />
-                     <TextField fx:id="cell2TextField" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="14.0" promptText="Cell 2" GridPane.columnIndex="1" />
+                     <TextField fx:id="cell1TextField" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="99.0" promptText="Cell 1" />
+                     <TextField fx:id="cell2TextField" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="47.0" promptText="Cell 2" GridPane.columnIndex="1" />
                   </children>
                </GridPane>
-               <Label alignment="CENTER" prefHeight="17.0" prefWidth="97.0" text="Choose Range" GridPane.rowIndex="1" />
+               <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="171.0" text="Choose Range" GridPane.rowIndex="1" />
                <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#whenSortButtonClicked" prefHeight="25.0" prefWidth="170.0" text="Filter" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-               <TextArea fx:id="mainValuesTextArea" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="217.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+               <TextArea fx:id="mainValuesTextArea" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="171.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                <columnConstraints>
-                  <ColumnConstraints maxWidth="94.5" minWidth="10.0" prefWidth="87.0" />
                   <ColumnConstraints maxWidth="198.0" minWidth="10.0" prefWidth="171.5" />
-                  <ColumnConstraints maxWidth="93.5" minWidth="10.0" prefWidth="34.5" />
+                  <ColumnConstraints maxWidth="198.0" minWidth="10.0" prefWidth="171.5" />
+                  <ColumnConstraints maxWidth="198.0" minWidth="10.0" prefWidth="171.5" />
                   <ColumnConstraints />
                </columnConstraints>
                <rowConstraints>
