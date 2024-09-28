@@ -567,7 +567,7 @@ public class IndexController {
         }
         catch (Exception e)
         {
-            e.printStackTrace();  // Handle exceptions appropriatel
+            e.printStackTrace();  // Handle exceptions appropriate
             showAlert("Invalid input", e.getMessage());
         }
     }

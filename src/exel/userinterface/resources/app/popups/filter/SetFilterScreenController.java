@@ -36,6 +36,7 @@ public class SetFilterScreenController
     private List<String> possibleColumnChoices = null;
     private List<ComboBox<String>> allComboBoxes;
     private Map<ComboBox<String>, TextArea> boxToTextAreaMap;
+    private ComboBox<String> lastComboBoxWithValue = null;
     private int colIndex = 2;  // Track the current row index for new rows
 
     @FXML
@@ -84,6 +85,7 @@ public class SetFilterScreenController
         newComboBox.setOnAction(this::whenPickingAColumn);
         allComboBoxes.add(newComboBox);
         boxToTextAreaMap.put(newComboBox, newTextArea);
+        setNextComboBoxes();
 
         colIndex++;
     }
@@ -126,18 +128,25 @@ public class SetFilterScreenController
         {
             mainColumnComboBox.getItems().clear();
             mainColumnComboBox.getItems().addAll(possibleColumnChoices);
+            lastComboBoxWithValue = null;
         }
     }
     @FXML
     private void whenPickingAColumn(ActionEvent event)
     {
-        ComboBox<String> chosenComboBox = (ComboBox<String>) event.getSource();
+        lastComboBoxWithValue = (ComboBox<String>) event.getSource();
+        setNextComboBoxes();
+    }
 
-        ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(chosenComboBox);
+    private void setNextComboBoxes(){
+        if (lastComboBoxWithValue == null)
+            return;
+
+        ListIterator<ComboBox<String>> iterator = getIteratorPointingAtNextBoxInList(lastComboBoxWithValue);
         if (iterator != null && iterator.hasNext())
         {
-            List<String> choicesWithoutPickedChoice = chosenComboBox.getItems().stream().
-                    filter(column->!column.equals(chosenComboBox.getValue())).toList();
+            List<String> choicesWithoutPickedChoice = lastComboBoxWithValue.getItems().stream().
+                    filter(column->!column.equals(lastComboBoxWithValue.getValue())).toList();
 
             ComboBox<String> nextBox = iterator.next();
             nextBox.getItems().clear();
@@ -198,7 +207,7 @@ public class SetFilterScreenController
             TextArea textArea = boxToTextAreaMap.get(comboBox);
 
             if (textArea == null || textArea.getText() == null || textArea.getText().isEmpty())
-                throw new IllegalArgumentException("All boxes must contain non-empty text below");
+                throw new IllegalArgumentException("If you've picked a column, you must also type text.");
 
             toReturn.put(comboBox.getValue(), getValuesToFilterBy(textArea));
         }
