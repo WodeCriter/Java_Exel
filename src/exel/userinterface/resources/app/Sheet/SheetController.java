@@ -124,9 +124,15 @@ public class SheetController {
         Label cellLabel = cellLabelMap.get(coordinate);
         if (cellLabel != null) {
             cellLabel.setText(value);
+            Map<String, String> styles = cellStyles.get(coordinate);
+            if (styles != null) {
+                applyStylesToCell(cellLabel, styles);
+            } else {
+                // If no styles are stored, reset to default alignment
+                cellLabel.setAlignment(Pos.CENTER_LEFT); // or your preferred default alignment
+            }
         } else {
-            // Handle the case where the cell label is not found
-            System.err.println("Cell label not found for coordinate: " + coordinate);
+
         }
     }
 
@@ -134,21 +140,14 @@ public class SheetController {
         ReadOnlySheet sheet = event.getSheet();
 
         Platform.runLater(() -> {
-            // Optionally, you might want to clear existing cells or headers here
-            // depending on your application's logic.
-
             // Iterate through all cells in the sheet
             for (ReadOnlyCell cell : sheet.getCells()) {
                 String coordinate = cell.getCoordinate();
-                String value = cell.getEffectiveValue(); // Or cell.getValue() if applicable
+                String value = cell.getEffectiveValue();
 
                 // Update the cell in the UI
                 updateCellUI(coordinate, value);
             }
-
-            // Optionally, update sheet metadata such as version if needed
-            // For example:
-            // labelSheetVersion.setText(String.valueOf(sheet.getVersion()));
         });
     }
 
