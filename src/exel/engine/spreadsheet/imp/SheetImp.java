@@ -143,6 +143,9 @@ public class SheetImp implements Sheet, Serializable
         return cellWidth;
     }
 
+    public void setCellWidth(int width) {this.cellWidth = width;}
+    public void setCellHeight(int height) {this.cellHeight = height;}
+
     public int getNumOfCols()
     {
         return numOfCols;

@@ -16,11 +16,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javafx.geometry.Pos;
+import javafx.scene.paint.Color;
 
 public class SheetController {
 
     private Label currentlySelectedCell = null;
     private List<String> currentlyMarkedCellCords = null;
+    private Map<String, Map<String, String>> cellStyles = new HashMap<>();
 
     @FXML
     private GridPane spreadsheetGrid;
@@ -54,7 +57,8 @@ public class SheetController {
         eventBus.subscribe(SheetDisplayEvent.class, this::handleSheetDisplay);
         eventBus.subscribe(CellsRequestedToBeMarkedEvent.class, this::handleMarkCell);
         eventBus.subscribe(DisplaySelectedCellEvent.class, this::handleDisplaySelectedCell);
-        // Subscribe to other events if needed (e.g., cell update events)
+        eventBus.subscribe(SheetDisplayRefactorEvent.class, this::handleSheetRefactor);
+        eventBus.subscribe(CellStyleUpdateEvent.class, this::handleCellStyleUpdate);
     }
 
     private void handleSheetCreated(SheetCreatedEvent event) {
@@ -87,7 +91,9 @@ public class SheetController {
                 for (int col = 1; col <= numCols; col++) {
                     Label cellLabel = new Label();
                     cellLabel.setMinWidth(event.getCellWidth());
+                    cellLabel.setMaxWidth(event.getCellWidth());
                     cellLabel.setMinHeight(event.getCellHeight());
+                    cellLabel.setMaxHeight(event.getCellHeight());
                     //cellLabel.setStyle("-fx-border-color: lightgrey;");
                     cellLabel.getStyleClass().add("cell-label");
                     final int currentRow = row;
@@ -118,9 +124,15 @@ public class SheetController {
         Label cellLabel = cellLabelMap.get(coordinate);
         if (cellLabel != null) {
             cellLabel.setText(value);
+            Map<String, String> styles = cellStyles.get(coordinate);
+            if (styles != null) {
+                applyStylesToCell(cellLabel, styles);
+            } else {
+                // If no styles are stored, reset to default alignment
+                cellLabel.setAlignment(Pos.CENTER_LEFT); // or your preferred default alignment
+            }
         } else {
-            // Handle the case where the cell label is not found
-            System.err.println("Cell label not found for coordinate: " + coordinate);
+
         }
     }
 
@@ -128,21 +140,14 @@ public class SheetController {
         ReadOnlySheet sheet = event.getSheet();
 
         Platform.runLater(() -> {
-            // Optionally, you might want to clear existing cells or headers here
-            // depending on your application's logic.
-
             // Iterate through all cells in the sheet
             for (ReadOnlyCell cell : sheet.getCells()) {
                 String coordinate = cell.getCoordinate();
-                String value = cell.getEffectiveValue(); // Or cell.getValue() if applicable
+                String value = cell.getEffectiveValue();
 
                 // Update the cell in the UI
                 updateCellUI(coordinate, value);
             }
-
-            // Optionally, update sheet metadata such as version if needed
-            // For example:
-            // labelSheetVersion.setText(String.valueOf(sheet.getVersion()));
         });
     }
 
@@ -209,6 +214,19 @@ public class SheetController {
                 cellLabel.getStyleClass().add(headerToMarkBy);
         }
     }
+    private void handleSheetRefactor(SheetDisplayRefactorEvent event) {
+        ReadOnlySheet readOnlySheet = event.getSheet();
+
+        for (Label cellLabel : cellLabelMap.values()) {
+            cellLabel.setMinWidth(readOnlySheet.getCellWidth());
+            cellLabel.setMaxWidth(readOnlySheet.getCellWidth());
+            cellLabel.setMinHeight(readOnlySheet.getCellHeight());
+            cellLabel.setMaxHeight(readOnlySheet.getCellHeight());
+        }
+
+    }
+
+
 
     private void unmarkCellsInList()
     {
@@ -217,5 +235,68 @@ public class SheetController {
             for (String cellId : currentlyMarkedCellCords)
                 cellLabelMap.get(cellId).getStyleClass().removeIf(str->str.contains("cell-marked"));
         }
+    }
+
+    private void handleCellStyleUpdate(CellStyleUpdateEvent event) {
+        Platform.runLater(() -> {
+            String coordinate = event.getCoordinate();
+            Label cellLabel = cellLabelMap.get(coordinate);
+            if (cellLabel != null) {
+                Map<String, String> styles = cellStyles.getOrDefault(coordinate, new HashMap<>());
+
+                if (event.isClearStyle()) {
+                    styles.clear();
+                    cellLabel.setStyle("");
+                    cellLabel.setAlignment(Pos.CENTER_LEFT); // Default alignment
+                } else {
+                    if (event.getBackgroundColor() != null) {
+                        styles.put("background-color", event.getBackgroundColor());
+                    }
+                    if (event.getTextColor() != null) {
+                        styles.put("text-fill", event.getTextColor());
+                    }
+                    if (event.getAlignment() != null) {
+                        styles.put("alignment", event.getAlignment());
+                    }
+                }
+
+                cellStyles.put(coordinate, styles);
+
+                // Build and apply the style
+                applyStylesToCell(cellLabel, styles);
+            } else {
+                System.err.println("Cell label not found for coordinate: " + coordinate);
+            }
+        });
+    }
+
+    private void applyStylesToCell(Label cellLabel, Map<String, String> styles) {
+        StringBuilder styleBuilder = new StringBuilder();
+
+        for (Map.Entry<String, String> entry : styles.entrySet()) {
+            switch (entry.getKey()) {
+                case "background-color":
+                    styleBuilder.append("-fx-background-color: ").append(entry.getValue()).append(";");
+                    break;
+                case "text-fill":
+                    styleBuilder.append("-fx-text-fill: ").append(entry.getValue()).append(";");
+                    break;
+                case "alignment":
+                    switch (entry.getValue()) {
+                        case "left":
+                            cellLabel.setAlignment(Pos.CENTER_LEFT);
+                            break;
+                        case "center":
+                            cellLabel.setAlignment(Pos.CENTER);
+                            break;
+                        case "right":
+                            cellLabel.setAlignment(Pos.CENTER_RIGHT);
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        cellLabel.setStyle(styleBuilder.toString());
     }
 }

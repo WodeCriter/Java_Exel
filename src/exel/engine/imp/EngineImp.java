@@ -207,4 +207,18 @@ public class EngineImp implements Engine {
 
         return null;
     }
+
+    @Override
+    public ReadOnlySheet changeCellWidth(int width){
+        currentSheet.setCellWidth(width);
+        readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
+        return readOnlyCurrentSheet;
+    }
+
+    @Override
+    public ReadOnlySheet changeCellHeight(int height){
+        currentSheet.setCellHeight(height);
+        readOnlyCurrentSheet = new ReadOnlySheetImp(currentSheet);
+        return readOnlyCurrentSheet;
+    }
 }
