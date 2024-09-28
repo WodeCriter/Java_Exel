@@ -59,11 +59,6 @@
                   <MenuItem mnemonicParsing="false" onAction="#filterListener" text="Filter" />
               </items>
             </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
-        </Menu>
             <Menu mnemonicParsing="false" text="Bonuses">
                <items>
                   <CheckMenuItem fx:id="cMenItemAnimations" mnemonicParsing="false" onAction="#animationsListener" text="Animations" />
@@ -75,6 +70,11 @@
                   </Menu>
                </items>
             </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem fx:id="menuItemUserGuide" mnemonicParsing="false" onAction="#userGuideListener" text="User guide" />
+          </items>
+        </Menu>
       </menus>
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">

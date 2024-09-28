@@ -173,7 +173,7 @@ public class UIManager {
                 this.indexController = (IndexController) controller;
             }
             // Setting the title of the stage (optional)
-            primaryStage.setTitle("Shticell");
+            primaryStage.setTitle("Exel");
             Image icon = new Image(getClass().getResourceAsStream("/exel/userinterface/resources/images/Logo.png"));
             primaryStage.getIcons().add(icon);
 
