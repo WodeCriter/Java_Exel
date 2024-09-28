@@ -2,6 +2,7 @@ package exel.userinterface.resources.app.popups.filter;
 
 import exel.engine.imp.EngineImp;
 import exel.eventsys.EventBus;
+import exel.eventsys.events.FilterRequestedEvent;
 import exel.eventsys.events.SortRequestedEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,11 +28,15 @@ public class SetFilterScreenController
     private Label sortByLabel;
     @FXML
     private TextArea mainValuesTextArea;
+    @FXML
+    private Button addColumnButton;
+    @FXML
+    private Button startFilterButton;
 
     private List<String> possibleColumnChoices = null;
     private List<ComboBox<String>> allComboBoxes;
-    private List<TextArea> allTextAreas;
-    private int colIndex = 1;  // Track the current row index for new rows
+    private Map<ComboBox<String>, TextArea> boxToTextAreaMap;
+    private int colIndex = 2;  // Track the current row index for new rows
 
     @FXML
     private void initialize()
@@ -39,8 +44,8 @@ public class SetFilterScreenController
         //pickedColumns = new ArrayList<>(5);
         allComboBoxes = new ArrayList<>(5);
         allComboBoxes.add(mainColumnComboBox);
-        allTextAreas = new ArrayList<>(5);
-        allTextAreas.add(mainValuesTextArea);
+        boxToTextAreaMap = new HashMap<>();
+        boxToTextAreaMap.put(mainColumnComboBox, mainValuesTextArea);
         text1 = text2 = null;
 
         cell1TextField.textProperty().addListener((observable, oldValue, newValue) -> handleText1Input(newValue));
@@ -78,6 +83,7 @@ public class SetFilterScreenController
         gridPane.add(newTextArea, colIndex, 4);
         newComboBox.setOnAction(this::whenPickingAColumn);
         allComboBoxes.add(newComboBox);
+        boxToTextAreaMap.put(newComboBox, newTextArea);
 
         colIndex++;
     }
@@ -85,6 +91,7 @@ public class SetFilterScreenController
     private void shiftColumnsRight(int startCol) {
         // Loop through all nodes in the grid pane
         for (Node node : gridPane.getChildren()) {
+
             // Get the current row index of the node
             Integer col = GridPane.getColumnIndex(node);
             if (col == null) {
@@ -93,8 +100,8 @@ public class SetFilterScreenController
 
             // If the node is in or below the startRow, move it down one row
             if (col >= startCol) {
-                GridPane.setColumnIndex(node, col + 1);
-                GridPane.setColumnSpan(node, col + 1);
+                GridPane.setColumnIndex(node, col);
+                GridPane.setColumnSpan(node, col);
             }
         }
     }
@@ -172,11 +179,29 @@ public class SetFilterScreenController
         if (text1 == null || text1.isEmpty() || text2 == null || text2.isEmpty())
             throw new RuntimeException("Please enter 2 cell coordinates");
 
-        eventBus.publish(new SortRequestedEvent(text1, text2, createPickedColumnsList()));
+        eventBus.publish(new FilterRequestedEvent(text1, text2, parseAllUserInput()));
     }
 
-    private List<String> getValuesToFilterBy(){
-        String allText = mainValuesTextArea.getText();
+    private List<String> getValuesToFilterBy(TextArea textArea){
+        String allText = textArea.getText();
         return List.of(allText.split("\\n"));
+    }
+
+    private Map<String, List<String>> parseAllUserInput(){
+        Map<String, List<String>> toReturn = new HashMap<>();
+        List<ComboBox<String>> nonEmptyBoxes = allComboBoxes.stream()
+                .filter(stringComboBox -> stringComboBox != null && stringComboBox.getValue() != null &&
+                        !stringComboBox.getValue().isEmpty()).toList();
+
+        for (ComboBox<String> comboBox : nonEmptyBoxes)
+        {
+            TextArea textArea = boxToTextAreaMap.get(comboBox);
+
+            if (textArea == null || textArea.getText() == null || textArea.getText().isEmpty())
+                throw new IllegalArgumentException("All boxes must contain non-empty text below");
+
+            toReturn.put(comboBox.getValue(), getValuesToFilterBy(textArea));
+        }
+        return toReturn;
     }
 }
