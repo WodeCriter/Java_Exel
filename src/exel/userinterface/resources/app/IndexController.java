@@ -575,7 +575,7 @@ public class IndexController {
     @FXML
     void filterListener(ActionEvent event) {
 //        if (!isSheetLoaded)
-//            return;
+//        return;
 
         try {
             // Load the FXML file for the new sheet popup
@@ -592,7 +592,7 @@ public class IndexController {
             popupStage.setTitle("Filter");
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 200, 150));
+            popupStage.setScene(new Scene(popupRoot, 1700, 500));
 
             // Show the popup
             popupStage.showAndWait();
