@@ -466,6 +466,11 @@ public class IndexController {
             String NewCellValue = textFiledOriginalVal.getText();
             if(!Objects.equals(NewCellValue, selectedCell.getOriginalValue()))
                 eventBus.publish(new CellUpdateEvent(selectedCell.getCoordinate(), NewCellValue));
+
+            // Trigger mushroom animation if animations are enabled
+            if (isAnimationsEnabled) {
+                triggerMushroomAnimation();
+            }
         }
         catch(Exception e)
         {
@@ -866,5 +871,56 @@ public class IndexController {
         });
     }
 
+    private void triggerMushroomAnimation() {
 
+        Image mushroomImage = new Image(getClass().getResourceAsStream("/exel/userinterface/resources/images/mushroom.png"));
+
+        // Create ImageView
+        ImageView mushroomImageView = new ImageView(mushroomImage);
+
+        // Scale down the image to 1/16 of its original size
+        double scaledWidth = mushroomImage.getWidth() / 16;
+        double scaledHeight = mushroomImage.getHeight() / 16;
+        mushroomImageView.setFitWidth(scaledWidth);
+        mushroomImageView.setFitHeight(scaledHeight);
+        mushroomImageView.setPreserveRatio(true); // Maintain aspect ratio
+
+        // Add the mushroomImageView to the sheetContainer
+        sheetContainer.getChildren().add(mushroomImageView);
+
+        // Wait for the layout to be calculated
+        Platform.runLater(() -> {
+            // Retrieve the layout position and size of labelOriginalVal
+            double labelLayoutX = labelOriginalVal.getLayoutX()-150;
+            double labelLayoutY = labelOriginalVal.getLayoutY();
+            double labelWidth = labelOriginalVal.getWidth();
+            double labelHeight = labelOriginalVal.getHeight();
+
+            // Set initial position of the mushroom (starting at the left edge of the label)
+            double startX = labelLayoutX;
+            double startY = labelLayoutY - (labelHeight) - (scaledHeight) - 10;
+            mushroomImageView.setLayoutX(startX);
+            mushroomImageView.setLayoutY(startY);
+
+            // Define the distance to move: width of the label
+            double distance = labelWidth;
+
+            // Create animation to move the mushroom across the label's width and back
+            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), mushroomImageView);
+            translateTransition.setFromX(0);
+            translateTransition.setToX(distance);
+            translateTransition.setAutoReverse(true);
+            translateTransition.setCycleCount(2); // Forward and back
+
+            // Optionally, add easing for smoother animation
+            translateTransition.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
+
+            // Remove the mushroom image after animation is finished
+            translateTransition.setOnFinished(event -> {
+                sheetContainer.getChildren().remove(mushroomImageView);
+            });
+
+            translateTransition.play();
+        });
+    }
 }
