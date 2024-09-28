@@ -45,6 +45,8 @@ public class IndexController {
     private EventBus eventBus;
     private boolean isSheetLoaded = false;
     private File currentFile;
+    private boolean isDarkMode = false;
+    private ContextMenu rangeDeleteMenu;
 
     @FXML
     private MenuItem buttonNewFile;
@@ -85,6 +87,14 @@ public class IndexController {
     @FXML
     private MenuItem formatClearStyle;
 
+    @FXML
+    private RadioMenuItem radMenItemAnimations;
+
+    @FXML
+    private RadioMenuItem radMenItemLightMode;
+
+    @FXML
+    private RadioMenuItem radMenItemDarkMode;
 
     @FXML
     private Label labelFileLoaded;
@@ -109,14 +119,19 @@ public class IndexController {
 
     @FXML
     private ListView rangesList;
-    private ContextMenu rangeDeleteMenu;
+
+    @FXML
+    private ToggleGroup themeToggleGroup;
+
 
     @FXML
     private void initialize()
     {
         setUpRangeDeleteMenu();
 
-
+        themeToggleGroup = new ToggleGroup();
+        radMenItemLightMode.setToggleGroup(themeToggleGroup);
+        radMenItemDarkMode.setToggleGroup(themeToggleGroup);
         // Add a global mouse listener to the scene to hide the context menu when clicking elsewhere
         rangesList.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -161,8 +176,11 @@ public class IndexController {
             popupStage.setTitle("Create New Sheet");
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 200, 150));
+            Scene popupScene = new Scene(popupRoot, 200, 150);
 
+            applyCurrentTheme(popupScene);
+
+            popupStage.setScene(popupScene);
             // Show the popup
             popupStage.showAndWait();
         } catch (Exception e) {
@@ -388,6 +406,11 @@ public class IndexController {
 
             if (controller instanceof SheetController) {
                 ((SheetController) controller).setEventBus(eventBus);
+            }
+
+            if (isDarkMode) {
+                String darkTheme = getClass().getResource("/exel/userinterface/resources/app/dark-theme.css").toExternalForm();
+                sheetRoot.getStylesheets().add(darkTheme);
             }
 
             // Remove any existing content
@@ -737,6 +760,41 @@ public class IndexController {
 
         CellStyleUpdateEvent styleEvent = new CellStyleUpdateEvent(selectedCell.getCoordinate(), null, null, "right", false);
         eventBus.publish(styleEvent);
+    }
+
+    @FXML
+    void lightModeListener(ActionEvent event) {
+        isDarkMode = false;
+        Scene scene = sheetContainer.getScene();
+        applyCurrentTheme(scene);
+        radMenItemLightMode.setSelected(true);
+        radMenItemDarkMode.setSelected(false);
+    }
+
+    @FXML
+    void darkModeListener(ActionEvent event) {
+        isDarkMode = true;
+        Scene scene = sheetContainer.getScene();
+        applyCurrentTheme(scene);
+        radMenItemLightMode.setSelected(false);
+        radMenItemDarkMode.setSelected(true);
+    }
+
+    private void applyCurrentTheme(Scene scene) {
+        String darkTheme = getClass().getResource("/exel/userinterface/resources/app/dark-theme.css").toExternalForm();
+
+        // Remove all existing stylesheets first
+        scene.getStylesheets().remove(darkTheme);
+
+        if (isDarkMode) {
+            // Add the dark theme stylesheet
+            scene.getStylesheets().add(darkTheme);
+        }
+    }
+
+    @FXML
+    void animationsListener(ActionEvent event) {
+
     }
 
 

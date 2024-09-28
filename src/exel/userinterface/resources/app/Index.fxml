@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exel.userinterface.resources.app.IndexController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -26,7 +27,6 @@
           <items>
             <MenuItem fx:id="buttonNewFile" mnemonicParsing="false" onAction="#newFileEventListener" text="New Sheet" />
             <MenuItem fx:id="buttonLoadFile" mnemonicParsing="false" onAction="#loadFileListener" text="Open…" />
-            <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem fx:id="buttonSaveFile" mnemonicParsing="false" onAction="#saveFileListener" text="Save" />
             <MenuItem fx:id="buttonSaveAsFile" mnemonicParsing="false" onAction="#saveAsFileListener" text="Save As…" />
           </items>
@@ -63,6 +63,17 @@
             <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
           </items>
         </Menu>
+            <Menu mnemonicParsing="false" text="Bonuses">
+               <items>
+                  <RadioMenuItem fx:id="radMenItemAnimations" mnemonicParsing="false" onAction="#animationsListener" text="Animations" />
+                  <Menu mnemonicParsing="false" text="App Skins">
+                     <items>
+                        <RadioMenuItem fx:id="radMenItemLightMode" mnemonicParsing="false" onAction="#lightModeListener" selected="true" text="Light mode" />
+                        <RadioMenuItem fx:id="radMenItemDarkMode" mnemonicParsing="false" onAction="#darkModeListener" text="Dark mode" />
+                     </items>
+                  </Menu>
+               </items>
+            </Menu>
       </menus>
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
