@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
@@ -65,7 +66,7 @@
         </Menu>
             <Menu mnemonicParsing="false" text="Bonuses">
                <items>
-                  <RadioMenuItem fx:id="radMenItemAnimations" mnemonicParsing="false" onAction="#animationsListener" text="Animations" />
+                  <CheckMenuItem fx:id="cMenItemAnimations" mnemonicParsing="false" onAction="#animationsListener" text="Animations" />
                   <Menu mnemonicParsing="false" text="App Skins">
                      <items>
                         <RadioMenuItem fx:id="radMenItemLightMode" mnemonicParsing="false" onAction="#lightModeListener" selected="true" text="Light mode" />

@@ -56,6 +56,7 @@ public class UIManager {
                 readOnlySheet.getNumOfRows(),
                 readOnlySheet.getNumOfCols()));
 
+
         eventBus.publish(new SheetDisplayEvent(readOnlySheet));
     }
 
@@ -166,7 +167,8 @@ public class UIManager {
             }
             // Setting the title of the stage (optional)
             primaryStage.setTitle("Shticell");
-            primaryStage.getIcons().add(new Image("file:photos\\icons\\default.png"));
+            Image icon = new Image(getClass().getResourceAsStream("/exel/userinterface/resources/images/Logo.png"));
+            primaryStage.getIcons().add(icon);
 
             // Creating a scene object with the loaded layout
             Scene scene = new Scene(root);
