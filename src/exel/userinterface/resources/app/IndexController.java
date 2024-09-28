@@ -229,6 +229,9 @@ public class IndexController {
                 vbox.getChildren().addAll(new Label("Loading..."), progressBar);
 
                 Scene progressScene = new Scene(vbox);
+
+                applyCurrentTheme(progressScene);
+
                 progressStage.setScene(progressScene);
                 progressStage.setTitle("Loading");
 
@@ -385,6 +388,11 @@ public class IndexController {
 
             // Set the scene
             Scene scene = new Scene(popupRoot);
+
+
+            applyCurrentTheme(scene);
+
+
             popupStage.setScene(scene);
 
             // Show the popup
@@ -477,9 +485,11 @@ public class IndexController {
             Stage popupStage = new Stage();
             popupStage.setTitle("Add New Range");
             popupStage.initModality(Modality.APPLICATION_MODAL);
-            //popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 200, 150));
+            Scene popupScene = new Scene(popupRoot, 200, 150);
 
+            applyCurrentTheme(popupScene);
+
+            popupStage.setScene(popupScene);
             // Show the popup
             popupStage.showAndWait();
         }
@@ -554,8 +564,12 @@ public class IndexController {
             Stage popupStage = new Stage();
             popupStage.setTitle("Sort Range");
             popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 200, 150));
+            popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());
+            Scene popupScene = new Scene(popupRoot, 300, 200);
+
+            applyCurrentTheme(popupScene);
+
+            popupStage.setScene(popupScene);
 
             // Show the popup
             popupStage.showAndWait();
@@ -587,7 +601,11 @@ public class IndexController {
             popupStage.setTitle("Filter");
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.initOwner(((MenuItem) event.getSource()).getParentPopup().getScene().getWindow());  // Set the owner to the current stage
-            popupStage.setScene(new Scene(popupRoot, 200, 150));
+            Scene popupScene = new Scene(popupRoot, 300, 200);
+
+            applyCurrentTheme(popupScene);
+
+            popupStage.setScene(popupScene);
 
             // Show the popup
             popupStage.showAndWait();
@@ -779,7 +797,6 @@ public class IndexController {
         String sheetCss = getClass().getResource("/exel/userinterface/resources/app/Sheet/Sheet.css").toExternalForm();
         String darkTheme = getClass().getResource("/exel/userinterface/resources/app/dark-theme.css").toExternalForm();
 
-        // Remove all existing stylesheets first
         // Ensure Sheet.css is always in the stylesheets list
         if (!scene.getStylesheets().contains(sheetCss)) {
             scene.getStylesheets().add(sheetCss);

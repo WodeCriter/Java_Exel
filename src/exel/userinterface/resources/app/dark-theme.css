@@ -133,6 +133,18 @@
     -fx-background-color: #4e5254;
 }
 
+.text-area {
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-background-color: #3c3f41;
+    -fx-text-fill: #a9b7c6;
+}
+
+.text-area .content {
+    -fx-background-color: #3c3f41;
+}
+
 /* Sheet Container */
 #sheetContainer {
     -fx-background-color: #2b2b2b;
